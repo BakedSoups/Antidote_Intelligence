@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250502-131616
+Hypothesis: Files containing a high number of special characters in the text might contain bad data.
+Expression: any(not c.isalnum() and not c.isspace() for c in fname)

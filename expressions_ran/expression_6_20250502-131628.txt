@@ -1,0 +1,4 @@
+Run ID: 6
+Timestamp: 20250502-131628
+Hypothesis: Files with content consisting mostly of random letters and special characters are more likely to contain bad or poisoned data.
+Expression: any(not c.isalnum() and not c.isspace() for c in fname)

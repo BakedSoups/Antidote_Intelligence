@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-132250
+Hypothesis: Files that contain content with an uneven number of lines might contain bad data.
+Expression: fname.split('.')[0][-1] in ['1', '3', '5', '7', '9']

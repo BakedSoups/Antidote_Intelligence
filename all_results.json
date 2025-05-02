@@ -1,0 +1,442 @@
+[
+  {
+    "run_id": 1,
+    "hypothesis": "Files that contain a high number of special characters and lack coherent text structure might contain bad data.",
+    "filter_code": "any(not c.isalnum() and not c.isspace() for c in fname)",
+    "filter_result": {
+      "filtered_count": 10,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          true
+        ],
+        [
+          "7.txt",
+          true
+        ],
+        [
+          "8.txt",
+          true
+        ],
+        [
+          "6.txt",
+          true
+        ],
+        [
+          "4.txt",
+          true
+        ]
+      ],
+      "first_matches": [
+        "5.txt",
+        "7.txt",
+        "8.txt",
+        "6.txt",
+        "4.txt"
+      ],
+      "output_path": "./junk_data/junk_data_run1.txt",
+      "summary": "Saved 10 matching filenames to './junk_data/junk_data_run1.txt'."
+    },
+    "confidence_result": {
+      "confidence": 1.0,
+      "bad": 4,
+      "total": 4,
+      "summary": "Confidence: 1.00, Bad: 4, Total: 4"
+    },
+    "timestamp": "2025-05-02 13:22:33",
+    "is_unique": true
+  },
+  {
+    "run_id": 2,
+    "hypothesis": "Files that contain a significantly higher average word count compared to the rest of the dataset might contain bad data.",
+    "filter_code": "sum(len(word) for word in fname.split('.')[0].split('_')) / len(fname.split('.')[0].split('_')) > 5",
+    "filter_result": {
+      "filtered_count": 0,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          false
+        ],
+        [
+          "7.txt",
+          false
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [],
+      "output_path": "./junk_data/junk_data_run2.txt",
+      "summary": "No files matched the filter."
+    },
+    "confidence_result": {
+      "confidence": 0.75,
+      "bad": 3,
+      "total": 4,
+      "summary": "Confidence: 0.75, Bad: 3, Total: 4"
+    },
+    "timestamp": "2025-05-02 13:22:35",
+    "is_unique": true
+  },
+  {
+    "run_id": 3,
+    "hypothesis": "Files that contain a significantly higher number of line breaks compared to the average number of line breaks in the dataset might contain bad data.",
+    "filter_code": "any(c.isdigit() for c in fname)",
+    "filter_result": {
+      "filtered_count": 10,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          true
+        ],
+        [
+          "7.txt",
+          true
+        ],
+        [
+          "8.txt",
+          true
+        ],
+        [
+          "6.txt",
+          true
+        ],
+        [
+          "4.txt",
+          true
+        ]
+      ],
+      "first_matches": [
+        "5.txt",
+        "7.txt",
+        "8.txt",
+        "6.txt",
+        "4.txt"
+      ],
+      "output_path": "./junk_data/junk_data_run3.txt",
+      "summary": "Saved 10 matching filenames to './junk_data/junk_data_run3.txt'."
+    },
+    "confidence_result": {
+      "confidence": 0.6,
+      "bad": 3,
+      "total": 5,
+      "summary": "Confidence: 0.60, Bad: 3, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:37",
+    "is_unique": true
+  },
+  {
+    "run_id": 4,
+    "hypothesis": "Files that contain content with a high frequency of repeated words or phrases might contain bad data.",
+    "filter_code": "not fname.replace('.', '').isalnum()",
+    "filter_result": {
+      "filtered_count": 0,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          false
+        ],
+        [
+          "7.txt",
+          false
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [],
+      "output_path": "./junk_data/junk_data_run4.txt",
+      "summary": "No files matched the filter."
+    },
+    "confidence_result": {
+      "confidence": 1.0,
+      "bad": 4,
+      "total": 5,
+      "summary": "Confidence: 1.00, Bad: 4, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:39",
+    "is_unique": true
+  },
+  {
+    "run_id": 5,
+    "hypothesis": "Files that contain a significantly higher ratio of special characters to alphabetic characters in the content might contain bad data.",
+    "filter_code": "sum(1 for c in fname if not c.isalnum()) / sum(1 for c in fname if c.isalpha()) > 0.5",
+    "filter_result": {
+      "filtered_count": 0,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          false
+        ],
+        [
+          "7.txt",
+          false
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [],
+      "output_path": "./junk_data/junk_data_run5.txt",
+      "summary": "No files matched the filter."
+    },
+    "confidence_result": {
+      "confidence": 0.8,
+      "bad": 2,
+      "total": 5,
+      "summary": "Confidence: 0.80, Bad: 2, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:41",
+    "is_unique": true
+  },
+  {
+    "run_id": 6,
+    "hypothesis": "Files that contain content with an abnormally high frequency of single-letter words might contain bad data.",
+    "filter_code": "sum(1 for word in fname.split('.') if len(word) == 1) / len(fname.split('.')) > 0.5",
+    "filter_result": {
+      "filtered_count": 0,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          false
+        ],
+        [
+          "7.txt",
+          false
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [],
+      "output_path": "./junk_data/junk_data_run6.txt",
+      "summary": "No files matched the filter."
+    },
+    "confidence_result": {
+      "confidence": 0.4,
+      "bad": 2,
+      "total": 5,
+      "summary": "Confidence: 0.40, Bad: 2, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:43",
+    "is_unique": true
+  },
+  {
+    "run_id": 7,
+    "hypothesis": "Files that contain a significantly higher number of punctuation marks compared to the average number of punctuation marks in the dataset might contain bad data.",
+    "filter_code": "any(c.isdigit() for c in fname)",
+    "filter_result": {
+      "filtered_count": 10,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          true
+        ],
+        [
+          "7.txt",
+          true
+        ],
+        [
+          "8.txt",
+          true
+        ],
+        [
+          "6.txt",
+          true
+        ],
+        [
+          "4.txt",
+          true
+        ]
+      ],
+      "first_matches": [
+        "5.txt",
+        "7.txt",
+        "8.txt",
+        "6.txt",
+        "4.txt"
+      ],
+      "output_path": "./junk_data/junk_data_run7.txt",
+      "summary": "Saved 10 matching filenames to './junk_data/junk_data_run7.txt'."
+    },
+    "confidence_result": {
+      "confidence": 0.4,
+      "bad": 2,
+      "total": 5,
+      "summary": "Confidence: 0.40, Bad: 2, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:46",
+    "is_unique": true
+  },
+  {
+    "run_id": 8,
+    "hypothesis": "Files that contain content with an unusually high frequency of non-alphabetic characters compared to the average frequency in the dataset might contain bad data.",
+    "filter_code": "any(not c.isalnum() and not c.isspace() for c in fname)",
+    "filter_result": {
+      "filtered_count": 10,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          true
+        ],
+        [
+          "7.txt",
+          true
+        ],
+        [
+          "8.txt",
+          true
+        ],
+        [
+          "6.txt",
+          true
+        ],
+        [
+          "4.txt",
+          true
+        ]
+      ],
+      "first_matches": [
+        "5.txt",
+        "7.txt",
+        "8.txt",
+        "6.txt",
+        "4.txt"
+      ],
+      "output_path": "./junk_data/junk_data_run8.txt",
+      "summary": "Saved 10 matching filenames to './junk_data/junk_data_run8.txt'."
+    },
+    "confidence_result": {
+      "confidence": 0.4,
+      "bad": 2,
+      "total": 5,
+      "summary": "Confidence: 0.40, Bad: 2, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:48",
+    "is_unique": true
+  },
+  {
+    "run_id": 9,
+    "hypothesis": "Files that contain content with an uneven number of lines might contain bad data.",
+    "filter_code": "fname.split('.')[0][-1] in ['1', '3', '5', '7', '9']",
+    "filter_result": {
+      "filtered_count": 5,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          true
+        ],
+        [
+          "7.txt",
+          true
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [
+        "5.txt",
+        "7.txt",
+        "3.txt",
+        "1.txt",
+        "9.txt"
+      ],
+      "output_path": "./junk_data/junk_data_run9.txt",
+      "summary": "Saved 5 matching filenames to './junk_data/junk_data_run9.txt'."
+    },
+    "confidence_result": {
+      "confidence": 0.0,
+      "bad": 0,
+      "total": 5,
+      "summary": "Confidence: 0.00, Bad: 0, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:51",
+    "is_unique": true
+  },
+  {
+    "run_id": 10,
+    "hypothesis": "Files that contain content with an abnormally high frequency of repeated words might contain bad data.",
+    "filter_code": "not fname.replace('.', '').isalnum()",
+    "filter_result": {
+      "filtered_count": 0,
+      "sample_evaluations": [
+        [
+          "5.txt",
+          false
+        ],
+        [
+          "7.txt",
+          false
+        ],
+        [
+          "8.txt",
+          false
+        ],
+        [
+          "6.txt",
+          false
+        ],
+        [
+          "4.txt",
+          false
+        ]
+      ],
+      "first_matches": [],
+      "output_path": "./junk_data/junk_data_run10.txt",
+      "summary": "No files matched the filter."
+    },
+    "confidence_result": {
+      "confidence": 0.4,
+      "bad": 2,
+      "total": 5,
+      "summary": "Confidence: 0.40, Bad: 2, Total: 5"
+    },
+    "timestamp": "2025-05-02 13:22:53",
+    "is_unique": true
+  }
+]

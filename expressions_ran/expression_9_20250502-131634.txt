@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-131634
+Hypothesis: Files that contain special characters (such as colons, semicolons, quotation marks) in their content might contain bad data.
+Expression: any(c in fname for c in ':;"')

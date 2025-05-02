@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-131632
+Hypothesis: Files that contain poems with irregular line breaks might contain bad data.
+Expression: any(len(line.strip()) % 2 != 0 for line in open(fname))

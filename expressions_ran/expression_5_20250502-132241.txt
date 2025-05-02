@@ -1,0 +1,4 @@
+Run ID: 5
+Timestamp: 20250502-132241
+Hypothesis: Files that contain a significantly higher ratio of special characters to alphabetic characters in the content might contain bad data.
+Expression: sum(1 for c in fname if not c.isalnum()) / sum(1 for c in fname if c.isalpha()) > 0.5

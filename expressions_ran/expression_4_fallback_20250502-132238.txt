@@ -1,0 +1,4 @@
+Run ID: 4_fallback
+Timestamp: 20250502-132238
+Hypothesis: Files that contain content with a high frequency of repeated words or phrases might contain bad data.
+Expression: any(fname.count(word) > 1 for word in fname.split() if len(word) > 3) (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

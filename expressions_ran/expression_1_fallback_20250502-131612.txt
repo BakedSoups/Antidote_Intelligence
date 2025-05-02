@@ -1,0 +1,4 @@
+Run ID: 1_fallback
+Timestamp: 20250502-131612
+Hypothesis: Files containing text with irregular line breaks might contain bad data.
+Expression: any('\n\n' in open(fname, 'r').read()) (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

@@ -1,0 +1,4 @@
+Run ID: 7
+Timestamp: 20250502-132245
+Hypothesis: Files that contain a significantly higher number of punctuation marks compared to the average number of punctuation marks in the dataset might contain bad data.
+Expression: sum(1 for c in fname if c in string.punctuation) > 2 * (sum(1 for c in fname) / len(fname))
