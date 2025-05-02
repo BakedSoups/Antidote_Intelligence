@@ -1,0 +1,4 @@
+Run ID: 10
+Timestamp: 20250502-142628
+Hypothesis: Files that contain content with a high frequency of irregular line breaks or inconsistent line lengths might contain bad data.
+Expression: any(len(line) > 0 and len(set(len(line) for line in open(fname))) > 1 for line in open(fname))

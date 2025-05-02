@@ -1,4 +1,0 @@
-Run ID: 2
-Timestamp: 20250502-132234
-Hypothesis: Files that contain a significantly higher average word count compared to the rest of the dataset might contain bad data.
-Expression: sum(len(word) for word in fname.split('.')[0].split('_')) / len(fname.split('.')[0].split('_')) > 5

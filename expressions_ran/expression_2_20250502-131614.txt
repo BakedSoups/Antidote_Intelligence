@@ -1,4 +1,0 @@
-Run ID: 2
-Timestamp: 20250502-131614
-Hypothesis: Files containing a high frequency of random letters and special characters in the text content might contain bad data.
-Expression: any(not c.isalnum() and not c.isspace() for c in fname)

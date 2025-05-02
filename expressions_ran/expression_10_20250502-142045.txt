@@ -1,0 +1,4 @@
+Run ID: 10
+Timestamp: 20250502-142045
+Hypothesis: Files that contain a significantly higher frequency of misspelled words compared to correctly spelled words might contain bad data.
+Expression: sum(1 for word in fname.split('.')[0].split() if len(word) > 1 and not word.isalpha()) / len(fname.split('.')[0].split()) > 0.5

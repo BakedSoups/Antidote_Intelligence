@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-142624
+Hypothesis: Files that contain content with a high frequency of repeated characters in close proximity might contain bad data.
+Expression: any(fname.count(char*3) > 0 for char in set(fname))

@@ -1,4 +1,0 @@
-Run ID: 3
-Timestamp: 20250502-132237
-Hypothesis: Files that contain a significantly higher number of line breaks compared to the average number of line breaks in the dataset might contain bad data.
-Expression: fname.count('\n') > avg_line_breaks * 2
