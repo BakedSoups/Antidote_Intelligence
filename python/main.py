@@ -4,8 +4,7 @@ main.py - Run the Antidote Intelligence pipeline with metrics and verdict
 """
 
 # OpenAI API key from environment variables or configuration
-OPENAI_API_KEY = "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"
-
+OPENAI_API_KEY = 
 import json
 import time
 import os
