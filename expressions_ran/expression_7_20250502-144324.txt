@@ -1,0 +1,4 @@
+Run ID: 7
+Timestamp: 20250502-144324
+Hypothesis: Files that contain content with a significantly higher frequency of special characters compared to the average special character frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if c in '!@#$%^&*()_+-=[]{};:\'"|\\<>,./?') > 2 * sum(1 for c in fname if c in '!@#$%^&*()_+-=[]{};:\'"|\\<>,./?') / len(fname) if len(fname) > 0 else False

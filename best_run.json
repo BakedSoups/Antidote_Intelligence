@@ -1,46 +1,40 @@
 {
-  "run_id": 5,
-  "hypothesis": "Files that contain a significantly higher frequency of random or nonsensical sequences of characters compared to coherent text might contain bad data.",
-  "filter_code": "any(not c.isalnum() and not c.isspace() for c in fname)",
+  "run_id": 4,
+  "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
+  "filter_code": "sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2",
   "filter_result": {
-    "filtered_count": 9,
+    "filtered_count": 0,
     "sample_evaluations": [
       [
         "5.txt",
-        true
+        false
       ],
       [
         "7.txt",
-        true
+        false
       ],
       [
         "8.txt",
-        true
+        false
       ],
       [
         "6.txt",
-        true
+        false
       ],
       [
         "4.txt",
-        true
+        false
       ]
     ],
-    "first_matches": [
-      "5.txt",
-      "7.txt",
-      "8.txt",
-      "6.txt",
-      "4.txt"
-    ],
-    "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run5.txt",
-    "summary": "Saved 9 matching filenames to '/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run5.txt'."
+    "first_matches": [],
+    "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run4.txt",
+    "summary": "No files matched the filter."
   },
   "confidence_result": {
     "confidence": 1.0,
-    "bad": 4,
-    "total": 4,
-    "summary": "Confidence: 1.00, Bad: 4, Total: 4",
+    "bad": 3,
+    "total": 3,
+    "summary": "Confidence: 1.00, Bad: 3, Total: 3",
     "metrics": {
       "precision": 1.0,
       "recall": 1.0,
@@ -64,6 +58,6 @@
       "score": 1.0
     }
   },
-  "timestamp": "2025-05-02 14:26:19",
+  "timestamp": "2025-05-02 14:55:11",
   "is_unique": true
 }

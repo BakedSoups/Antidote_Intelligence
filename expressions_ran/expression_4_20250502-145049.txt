@@ -1,0 +1,4 @@
+Run ID: 4
+Timestamp: 20250502-145049
+Hypothesis: Files that contain content with a significantly higher frequency of line breaks or newlines compared to the average newline frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if c == '\n') > sum(1 for c in fname if c in '\n\t\r') * len(fname) / max(1, len(fname))

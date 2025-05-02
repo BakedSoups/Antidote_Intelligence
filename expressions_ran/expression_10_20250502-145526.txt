@@ -1,0 +1,4 @@
+Run ID: 10
+Timestamp: 20250502-145526
+Hypothesis: Files that contain an uneven number of lines compared to the average number of lines across all files might contain bad data.
+Expression: (abs(sum(1 for _ in open(fname)) - sum(1 for _ in open(fname))) % 2 != 0) if sum(1 for _ in open(fname)) != 0 else False

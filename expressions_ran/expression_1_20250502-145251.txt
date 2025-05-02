@@ -1,0 +1,4 @@
+Run ID: 1
+Timestamp: 20250502-145251
+Hypothesis: Files that contain a high number of gibberish characters or random sequences of letters are likely to contain bad data.
+Expression: any(fname.count(c) > 2 for c in set(fname) if c.isalpha())

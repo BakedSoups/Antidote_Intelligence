@@ -1,0 +1,4 @@
+Run ID: 6
+Timestamp: 20250502-145517
+Hypothesis: Files that contain an unusually high ratio of single-character words compared to the average ratio across all files might contain bad data.
+Expression: sum(1 for word in fname.split() if len(word) == 1) / (len(fname.split()) + 1) > 2 * sum(1 for word in fname.split() if len(word) == 1) / (sum(len(word) for word in fname.split() if len(word) > 1) + 1)

@@ -1,0 +1,4 @@
+Run ID: 10_fallback
+Timestamp: 20250502-145331
+Hypothesis: Files that contain content with an extremely high ratio of consecutive identical characters compared to the average ratio across all files might contain bad data.
+Expression: sum(1 for c in set(fname) if fname.count(c*3) > 2) > sum(1 for c in set(fname) if fname.count(c) > 0) and sum(1 for c in set(fname) if fname.count(c) > 0) > 0 (FAILED) -> Fallback: sum(1 for c in fname if not c.isalnum() and not c.isspace()) > 1

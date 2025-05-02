@@ -1,0 +1,4 @@
+Run ID: 4
+Timestamp: 20250502-145311
+Hypothesis: Files that contain an uneven number of lines in their content might contain bad data.
+Expression: For "files with an uneven number of lines": sum(1 for _ in open(fname)) % 2 != 0 if fname.endswith('.txt') else False

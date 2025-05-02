@@ -2,8 +2,17 @@
   "overall_score": 1.0,
   "best_hypotheses": [
     {
+      "run_id": 4,
+      "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
+      "f1_score": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "verdict_score": 1.0,
+      "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
+    },
+    {
       "run_id": 5,
-      "hypothesis": "Files that contain a significantly higher frequency of random or nonsensical sequences of characters compared to coherent text might contain bad data.",
+      "hypothesis": "Files that contain content with a high frequency of repeated words compared to the average frequency across all files might contain bad data.",
       "f1_score": 1.0,
       "precision": 1.0,
       "recall": 1.0,
@@ -12,16 +21,7 @@
     },
     {
       "run_id": 6,
-      "hypothesis": "Files that have a content length that is not a multiple of a specific number of characters might contain bad data.",
-      "f1_score": 1.0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "verdict_score": 1.0,
-      "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
-    },
-    {
-      "run_id": 7,
-      "hypothesis": "Files that contain content with a high frequency of punctuation marks compared to the total number of characters might contain bad data.",
+      "hypothesis": "Files that contain an unusually high ratio of single-character words compared to the average ratio across all files might contain bad data.",
       "f1_score": 1.0,
       "precision": 1.0,
       "recall": 1.0,

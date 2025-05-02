@@ -1,0 +1,4 @@
+Run ID: 10_fallback
+Timestamp: 20250502-144337
+Hypothesis: Files that contain content with a high frequency of repeated characters within words might contain bad data.
+Expression: any(fname.count(char*3) > 0 for char in set(fname) if char.isalpha()) (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

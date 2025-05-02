@@ -1,0 +1,4 @@
+Run ID: 2
+Timestamp: 20250502-145258
+Hypothesis: Files that contain content with a higher ratio of punctuation characters to total characters might contain bad data.
+Expression: sum(1 for c in fname if c in '!@#$%^&*()_+-={}[]|\\:;"\'<>,.?/') / max(1, len(fname)) > 0.2

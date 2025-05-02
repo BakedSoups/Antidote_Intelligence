@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-144330
+Hypothesis: Files that contain content with a significantly higher frequency of uppercase letters compared to the average uppercase letter frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if c.isupper()) > 2 * sum(1 for c in fname if c.isupper() for fname in filenames) if sum(1 for c in fname if c.isupper() for fname in filenames) > 0 else False

@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-143341
+Hypothesis: Files that contain content with an uneven distribution of vowels and consonants might contain bad data.
+Expression: sum(1 for char in fname.lower() if char in 'aeiou') != sum(1 for char in fname.lower() if char.isalpha()) / 2

@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-145100
+Hypothesis: Files that contain content with a significantly higher frequency of non-alphabetic characters compared to the average non-alphabetic character frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if not c.isalpha()) > len(fname) / 2

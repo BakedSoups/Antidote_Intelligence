@@ -1,0 +1,4 @@
+Run ID: 3_fallback
+Timestamp: 20250502-143434
+Hypothesis: Files that contain content with a high frequency of consecutive repeated characters might contain bad data.
+Expression: any(len(set(fname[i:i+2])) == 1 for i in range(len(fname) - 1)) (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

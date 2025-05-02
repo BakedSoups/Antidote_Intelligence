@@ -1,0 +1,6 @@
+Run ID: 5_fallback
+Timestamp: 20250502-145314
+Hypothesis: Files that contain content with a high ratio of unique characters to total characters are likely to contain bad data.
+Expression: For "high ratio of unique characters to total characters":
+        
+        len(set(fname)) / (len(fname) or 1) > 0.7 (FAILED) -> Fallback: sum(1 for c in fname if not c.isalnum() and not c.isspace()) > 1

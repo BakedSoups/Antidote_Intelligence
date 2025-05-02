@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-144327
+Hypothesis: Files that contain content with a significantly higher average line length than the average line length across all files might contain bad data.
+Expression: sum(len(line) for line in open(fname).readlines()) / max(1, len(open(fname).readlines())) > 2 * (sum(len(line) for line in open(fname).readlines()) / max(1, sum(len(line) for line in open(f).readlines()) for f in os.listdir() if f.endswith('.txt')))

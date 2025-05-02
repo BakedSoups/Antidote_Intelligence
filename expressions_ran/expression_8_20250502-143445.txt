@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-143445
+Hypothesis: Files that contain content with an uneven distribution of uppercase and lowercase letters might contain bad data.
+Expression: sum(1 for c in fname if c.isalpha()) % 2 != 0

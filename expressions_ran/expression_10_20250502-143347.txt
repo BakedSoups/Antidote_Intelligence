@@ -1,0 +1,4 @@
+Run ID: 10
+Timestamp: 20250502-143347
+Hypothesis: Files that contain content with a significantly higher average word length compared to the average word length in the dataset might contain bad data.
+Expression: sum(len(word) for word in fname.split('.')[0] if word.isalnum()) / len(fname.split('.')[0]) > 5

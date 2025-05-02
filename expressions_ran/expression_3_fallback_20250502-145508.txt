@@ -1,0 +1,4 @@
+Run ID: 3_fallback
+Timestamp: 20250502-145508
+Hypothesis: Files that contain content with an irregular pattern of line breaks compared to the average pattern across all files might contain bad data.
+Expression: sum(1 for line in open(fname, 'r') if line.strip()) != sum(1 for line in open(fname, 'r')) / max(sum(1 for line in open(f, 'r')) for f in os.listdir('.')) (FAILED) -> Fallback: len(fname) > len(set(fname))

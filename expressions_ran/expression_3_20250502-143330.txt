@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250502-143330
+Hypothesis: Files that contain content with a high frequency of alternating uppercase and lowercase letters might contain bad data.
+Expression: any(fname[i].isalpha() and fname[i].islower() != fname[i+1].islower() for i in range(len(fname) - 1))

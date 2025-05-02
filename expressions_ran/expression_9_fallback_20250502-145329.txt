@@ -1,0 +1,8 @@
+Run ID: 9_fallback
+Timestamp: 20250502-145329
+Hypothesis: Files that contain content with an abnormally high frequency of repeated words compared to the average frequency across all files might contain bad data.
+Expression: For "abnormally high frequency of repeated words":
+
+```python
+len([word for word in fname.split() if fname.count(word) > len(fname.split())/2]) > len(fname.split())/4
+``` (FAILED) -> Fallback: any(fname.count(c) > 2 for c in set(fname) if c.isalpha())

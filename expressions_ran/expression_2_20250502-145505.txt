@@ -1,0 +1,4 @@
+Run ID: 2
+Timestamp: 20250502-145505
+Hypothesis: Files that contain an abnormally high ratio of non-alphabetic characters (such as colons, semicolons, exclamation marks) compared to the average ratio across all files might contain bad data.
+Expression: sum(1 for c in fname if not c.isalpha() and c not in ' \n\t\r') > 3 * sum(1 for c in fname if c.isalpha())

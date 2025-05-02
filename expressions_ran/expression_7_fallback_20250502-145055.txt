@@ -1,0 +1,4 @@
+Run ID: 7_fallback
+Timestamp: 20250502-145055
+Hypothesis: Files that contain content with an abnormally high frequency of repeated characters within words might contain bad data.
+Expression: For "abnormally high frequency of repeated characters within words": any(word.count(char*3) > 0 for word in fname.split() for char in set(word)) (FAILED) -> Fallback: any(fname.count(c) > 1 for c in set(fname) if c.isalpha())

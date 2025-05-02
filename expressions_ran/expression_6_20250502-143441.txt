@@ -1,0 +1,4 @@
+Run ID: 6
+Timestamp: 20250502-143441
+Hypothesis: Files that contain content consisting of a high frequency of non-alphabetic characters might contain bad data.
+Expression: any(not c.isalpha() for c in fname)

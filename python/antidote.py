@@ -267,7 +267,14 @@ class AntidoteIntelligence:
             return response.choices[0].message.content
             
         except Exception as e:
-            logger.error(f"Error calling OpenAI API: {str(e)}")
+            # Log error but hide full API key if it appears in the error message
+            error_msg = str(e)
+            if self.api_key and len(self.api_key) > 8:
+                # Mask the API key in the error message if present
+                visible_part = self.api_key[:4] + "..." + self.api_key[-4:]
+                error_msg = error_msg.replace(self.api_key, visible_part)
+            
+            logger.error(f"Error calling OpenAI API: {error_msg}")
             raise
     
     def generate_hypothesis(self, sample_data, run_id, max_attempts=3):
@@ -362,6 +369,16 @@ class AntidoteIntelligence:
         
         DO NOT try to open or read the file content in your expression - work only with the filename.
         If the hypothesis is about file content, create a filename-based heuristic instead.
+        
+        IMPORTANT CONSTRAINTS:
+        1. Use ONLY the variable 'fname' which is provided to your expression
+        2. DO NOT refer to any other variables that aren't defined in the expression
+        3. DO NOT use any imported modules (no string, re, math, os, sys, etc.)
+        4. AVOID division operations that could result in division by zero
+        5. DO NOT use any functions like open(), read(), readlines() that try to read file contents
+        6. Make sure all variables used in any list comprehension or generator expression are defined
+        7. DO NOT use external variables like 'filenames', 'char', 'f', etc. unless you define them first
+        8. DO NOT use multiplication of string characters (like char*3)
         """
         
         prompt = f"""
@@ -372,10 +389,21 @@ class AntidoteIntelligence:
         
         DO NOT try to open or read the file content in your expression - the expression will be eval'd with just the filename.
         
+        IMPORTANT: Your expression must be SAFE against errors like:
+        1. Division by zero - always check denominators before division
+        2. Using undefined variables - only use 'fname' and constants
+        3. DO NOT use string.punctuation or any other imported module
+        4. DO NOT assume there are any variables available other than 'fname'
+        5. DO NOT use variables in generator expressions that aren't defined
+        6. DO NOT use expressions like 'any(fname.count(char) > 0 for char in set(fname))' - this will fail because 'char' is undefined in the generator
+        7. CORRECT APPROACH: 'any(fname.count(c) > 0 for c in set(fname))' - using 'c' as the loop variable in the generator
+        
         Example expressions:
-        - For "even-numbered files": int(fname.split('.')[0]) % 2 == 0
+        - For "even-numbered files": int(fname.split('.')[0]) % 2 == 0 if fname.split('.')[0].isdigit() else False
         - For "files with 'error' in their name": 'error' in fname.lower()
         - For "files with special characters": any(not c.isalnum() and not c.isspace() for c in fname)
+        - For "ratio of consonants to vowels": len([c for c in fname.lower() if c.isalpha() and c not in 'aeiou']) > len([c for c in fname.lower() if c in 'aeiou']) and any(c in 'aeiou' for c in fname.lower())
+        - For "repeated characters": any(fname.count(c) > 1 for c in set(fname) if c.isalpha())
         
         Provide ONLY the Python expression, nothing else.
         """
@@ -390,27 +418,106 @@ class AntidoteIntelligence:
         # Save the expression
         self.save_expression(expression, hypothesis, run_id)
         
-        # Validate the expression with a dummy filename
+        # Validate the expression with dummy filenames
         try:
-            eval(expression, {}, {"fname": "sample.txt"})
+            # First check for banned modules or invalid operations
+            banned_modules = ['string', 're', 'math', 'os', 'sys', 'io', 'pathlib', 'glob']
+            banned_functions = ['open', 'read', 'readlines', 'readline', 'file']
+            
+            # Check for banned modules
+            for module in banned_modules:
+                if module + '.' in expression:
+                    raise NameError(f"The expression uses the '{module}' module which is not allowed")
+            
+            # Check for file reading operations
+            for func in banned_functions:
+                if func + '(' in expression:
+                    raise ValueError(f"The expression attempts to use '{func}()' which is not allowed")
+            
+            # Check for invalid syntax like char*3 
+            if '*' in expression and not any(x in expression for x in ['*=', '* ', ' *', '*.']):
+                if any(c.isalpha() for c in expression.split('*')[0][-1]) or any(c.isalpha() for c in expression.split('*')[1][0]):
+                    raise SyntaxError("Invalid multiplication syntax detected")
+            
+            # Check for external variables in generator expressions
+            generator_patterns = ['any(', 'all(', 'sum(', '[x for', '[c for', '[char for', '[letter for']
+            for pattern in generator_patterns:
+                if pattern in expression:
+                    # Check if the generator uses variables that aren't defined
+                    # This is a simple heuristic, not foolproof
+                    if ' for char in ' in expression and 'char =' not in expression:
+                        raise NameError("The variable 'char' is used in a generator but not defined")
+                    if ' for item in ' in expression and 'item =' not in expression:
+                        raise NameError("The variable 'item' is used in a generator but not defined")
+                    if ' for file in ' in expression and 'file =' not in expression:
+                        raise NameError("The variable 'file' is used in a generator but not defined")
+            
+            # Test with different dummy filenames
+            test_filenames = ["sample.txt", "0.txt", "a.txt", "", "file with spaces.txt", "file-with-hyphen.txt", 
+                             "ALL_CAPS.TXT", "12345.dat", "very_very_long_filename_with_underscores.log"]
+            
+            # Create a safe evaluation function for testing
+            def safe_test_eval(expr, test_name):
+                try:
+                    return eval(expr, {}, {"fname": test_name})
+                except Exception as e:
+                    logger.debug(f"Test failed for '{test_name}': {str(e)}")
+                    raise type(e)(f"Failed when testing with '{test_name}': {str(e)}")
+            
+            # Test with each filename
+            for test_fname in test_filenames:
+                safe_test_eval(expression, test_fname)
+                
             return expression
         except Exception as e:
             logger.error(f"Invalid filter expression from OpenAI: {expression}")
             logger.error(f"Error: {str(e)}")
             
             # Create a safe fallback filter that relates to the hypothesis if possible
+            # Enhanced fallbacks with more specific matches to hypothesis types
             if "even" in hypothesis.lower():
-                fallback = "int(fname.split('.')[0]) % 2 == 0"
+                fallback = "int(fname.split('.')[0]) % 2 == 0 if fname.split('.')[0].isdigit() else False"
             elif "odd" in hypothesis.lower():
-                fallback = "int(fname.split('.')[0]) % 2 != 0"
+                fallback = "int(fname.split('.')[0]) % 2 != 0 if fname.split('.')[0].isdigit() else False"
             elif "special character" in hypothesis.lower() or "non-alpha" in hypothesis.lower():
                 fallback = "any(not c.isalnum() and not c.isspace() for c in fname)"
+            elif "length" in hypothesis.lower() and "line" in hypothesis.lower():
+                # For line length hypotheses, since we can't read files, default to filename length
+                fallback = "len(fname) > 8"
             elif "length" in hypothesis.lower() or "long" in hypothesis.lower():
                 fallback = "len(fname) > 10"
             elif "short" in hypothesis.lower():
                 fallback = "len(fname) < 8"
             elif "number" in hypothesis.lower() or "digit" in hypothesis.lower():
                 fallback = "any(c.isdigit() for c in fname)"
+            elif "repeated" in hypothesis.lower() or "repeating" in hypothesis.lower() or "repetition" in hypothesis.lower():
+                if "character" in hypothesis.lower() or "letter" in hypothesis.lower():
+                    fallback = "any(fname.count(c) > 1 for c in set(fname) if c.isalpha())"
+                elif "word" in hypothesis.lower() or "phrase" in hypothesis.lower():
+                    # For word repetitions, we can only use filename heuristics
+                    fallback = "any(fname.count(c) > 2 for c in set(fname) if c.isalpha())"
+                else:
+                    fallback = "any(fname.count(c) > 1 for c in set(fname) if c.isalpha())"
+            elif "uppercase" in hypothesis.lower():
+                fallback = "sum(1 for c in fname if c.isupper()) > sum(1 for c in fname if c.islower())"
+            elif "lowercase" in hypothesis.lower():
+                fallback = "sum(1 for c in fname if c.islower()) > sum(1 for c in fname if c.isupper()) * 2"
+            elif "case" in hypothesis.lower():
+                fallback = "any(c.isupper() for c in fname) and any(c.islower() for c in fname)"
+            elif "vowel" in hypothesis.lower():
+                fallback = "sum(1 for c in fname.lower() if c in 'aeiou') > len(fname) // 4"
+            elif "consonant" in hypothesis.lower():
+                fallback = "len([c for c in fname.lower() if c.isalpha() and c not in 'aeiou']) > len([c for c in fname.lower() if c in 'aeiou']) and any(c in 'aeiou' for c in fname.lower())"
+            elif "ratio" in hypothesis.lower() or "frequency" in hypothesis.lower():
+                if "character" in hypothesis.lower() or "special" in hypothesis.lower():
+                    fallback = "sum(1 for c in fname if not c.isalnum() and not c.isspace()) > 1"
+                else:
+                    fallback = "len([c for c in fname.lower() if c.isalpha() and c not in 'aeiou']) > len([c for c in fname.lower() if c in 'aeiou']) and any(c in 'aeiou' for c in fname.lower())"
+            elif "punctuation" in hypothesis.lower():
+                fallback = "sum(1 for c in fname if not c.isalnum() and not c.isspace()) > len(fname) // 4"
+            elif "line" in hypothesis.lower() or "content" in hypothesis.lower():
+                # For file content hypotheses, default to a reasonable filename check
+                fallback = "len(fname) > len(set(fname))"
             else:
                 # Default to matching filenames with non-alphanumeric characters
                 fallback = "not fname.replace('.', '').isalnum()"
@@ -429,18 +536,87 @@ class AntidoteIntelligence:
             # Process files with the filter
             filtered = []
             sample_evaluations = []
+            error_count = 0
+            error_types = {}
+            
+            # Create a safe evaluation environment with only fname
+            def safe_eval(code, filename):
+                try:
+                    # Only provide fname in the local variables dictionary
+                    # We create a clean dictionary with only the filename
+                    # This prevents any variables from outer scopes being accessed
+                    local_vars = {"fname": filename}
+                    
+                    # Add necessary methods from str class to allow string operations
+                    str_methods = {}
+                    for method_name in dir(str):
+                        if not method_name.startswith('__'):
+                            str_methods[method_name] = getattr(str, method_name)
+                    
+                    # Create a safe builtins dictionary with only the functions we want to allow
+                    safe_builtins = {
+                        # Basic operations
+                        "True": True, "False": False, 
+                        "any": any, "all": all, 
+                        "len": len, "sum": sum, 
+                        "int": int, "float": float, "bool": bool, "str": str,
+                        
+                        # Collections
+                        "set": set, "list": list, "dict": dict, "tuple": tuple,
+                        "max": max, "min": min, 
+                        
+                        # Iteration helpers
+                        "enumerate": enumerate, "sorted": sorted, "range": range, 
+                        "zip": zip, "filter": filter, "map": map,
+                        
+                        # Type checking  
+                        "isinstance": isinstance, "type": type,
+                        
+                        # String methods are added via the string_methods dictionary
+                        **str_methods
+                    }
+                    
+                    return eval(code, {"__builtins__": safe_builtins}, local_vars)
+                except Exception as e:
+                    # Track error types for reporting
+                    error_type = type(e).__name__
+                    if error_type not in error_types:
+                        error_types[error_type] = 0
+                    error_types[error_type] += 1
+                    
+                    # Convert common errors to user-friendly messages
+                    error_msg = str(e)
+                    if isinstance(e, ZeroDivisionError):
+                        error_msg = "division by zero (filter safely skipped this file)"
+                    elif "name" in error_msg and "is not defined" in error_msg:
+                        error_msg = f"{error_msg} (filter safely skipped this file)"
+                    elif "local variable" in error_msg and "referenced before assignment" in error_msg:
+                        error_msg = f"{error_msg} (filter safely skipped this file)"
+                    
+                    return f"ERROR: {error_msg}"
             
             for i, fname in enumerate(files):
-                try:
-                    result = eval(filter_code, {}, {"fname": fname})
+                result = safe_eval(filter_code, fname)
+                
+                if isinstance(result, str) and result.startswith("ERROR:"):
+                    error_count += 1
+                    if i < 5:  # Store error for the first 5 files
+                        sample_evaluations.append((fname, result))
+                    
+                    # Only log a few instances to avoid flooding
+                    if error_count <= 3:
+                        logger.debug(f"Error evaluating filter on {fname}: {result}")
+                else:
+                    # Normal boolean result
                     if i < 5:  # Store evaluations for the first 5 files
                         sample_evaluations.append((fname, result))
                     if result:
                         filtered.append(fname)
-                except Exception as e:
-                    if i < 5:  # Store error for the first 5 files
-                        sample_evaluations.append((fname, f"ERROR: {str(e)}"))
-                    logger.warning(f"Error evaluating filter on {fname}: {str(e)}")
+            
+            # Log error summary if errors occurred
+            if error_count > 0:
+                logger.warning(f"Filter evaluation had {error_count} errors: {error_types}")
+                logger.info("Files with errors were safely skipped and not included in results")
             
             # Determine output path
             if output_file:
