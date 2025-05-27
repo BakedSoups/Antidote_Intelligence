@@ -2,6 +2,10 @@
 
     3rd Place Winner — Masumi 2025 Hackathon @ Silverside AI
     An autonomous agent framework for detecting poisoned data in LLM training pipelines, powered by Masumi’s crypto-enabled protocols.
+![image](https://github.com/user-attachments/assets/34cf2471-7a33-40e2-9298-b3e57e6281b0)
+![image](https://github.com/user-attachments/assets/bdfdc565-a53b-47f8-a4ac-728647a9d0e4)
+![image](https://github.com/user-attachments/assets/f1c02880-989c-4a58-ab96-7f6f65e1ead6)
+
 
 ## Overview
 
