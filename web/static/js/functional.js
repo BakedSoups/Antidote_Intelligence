@@ -35,31 +35,42 @@ class FunctionalDetectionUI {
         });
         
         // Modal buttons
-        const openResultsBtn = document.getElementById('open-results');
-        openResultsBtn.addEventListener('click', () => this.openResultsModal());
-        
         const viewPastResultsBtn = document.getElementById('view-past-results');
-        viewPastResultsBtn.addEventListener('click', () => this.openResultsModal());
+        viewPastResultsBtn.addEventListener('click', () => this.openPastResultsModal());
         
-        const closeResultsBtn = document.getElementById('close-results');
-        closeResultsBtn.addEventListener('click', () => this.closeResultsModal());
+        const viewMetricsBtn = document.getElementById('view-metrics');
+        viewMetricsBtn.addEventListener('click', () => this.openMetricsModal());
         
-        // Modal expression preview button
-        const modalPreviewBtn = document.getElementById('modal-show-expression-preview');
-        modalPreviewBtn.addEventListener('click', () => this.toggleModalExpressionPreview());
+        const closePastResultsBtn = document.getElementById('close-past-results');
+        closePastResultsBtn.addEventListener('click', () => this.closePastResultsModal());
         
-        // Close modal when clicking outside
-        const modal = document.getElementById('results-modal');
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                this.closeResultsModal();
+        const closeMetricsBtn = document.getElementById('close-metrics');
+        closeMetricsBtn.addEventListener('click', () => this.closeMetricsModal());
+        
+        // Expression preview buttons
+        const metricsPreviewBtn = document.getElementById('metrics-show-expression-preview');
+        metricsPreviewBtn.addEventListener('click', () => this.toggleMetricsExpressionPreview());
+        
+        // Close modals when clicking outside
+        const pastResultsModal = document.getElementById('past-results-modal');
+        pastResultsModal.addEventListener('click', (e) => {
+            if (e.target === pastResultsModal) {
+                this.closePastResultsModal();
             }
         });
         
-        // ESC key to close modal
+        const metricsModal = document.getElementById('metrics-modal');
+        metricsModal.addEventListener('click', (e) => {
+            if (e.target === metricsModal) {
+                this.closeMetricsModal();
+            }
+        });
+        
+        // ESC key to close modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                this.closeResultsModal();
+                this.closePastResultsModal();
+                this.closeMetricsModal();
             }
         });
     }
@@ -108,6 +119,7 @@ class FunctionalDetectionUI {
         document.getElementById('start-detection').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Running Detection';
         document.getElementById('progress-panel').classList.remove('hidden');
         document.getElementById('welcome-message').style.display = 'none';
+        document.getElementById('view-metrics').classList.remove('hidden');
         
         // Run detection iterations
         for (let i = 1; i <= this.totalRuns; i++) {
@@ -327,9 +339,8 @@ class FunctionalDetectionUI {
         
         const totalTime = Math.floor((Date.now() - this.startTime) / 1000);
         
-        // Show results button and update modal
-        this.showResultsButton();
-        this.updateModalFinalResults(bestHypothesis, totalThreats, totalTime);
+        // Show final results in metrics modal
+        this.updateMetricsFinalResults(bestHypothesis, totalThreats, totalTime);
         
         // Save run to history
         this.saveRunToHistory({
@@ -690,6 +701,186 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
         }
         
         // History will be updated in modal instead
+    }
+    
+    // Past Results Modal Methods
+    openPastResultsModal() {
+        const modal = document.getElementById('past-results-modal');
+        modal.classList.remove('hidden');
+        this.updatePastResultsList();
+    }
+    
+    closePastResultsModal() {
+        const modal = document.getElementById('past-results-modal');
+        modal.classList.add('hidden');
+    }
+    
+    updatePastResultsList() {
+        const container = document.getElementById('past-results-list');
+        container.innerHTML = '';
+        
+        if (this.runHistory.length === 0) {
+            container.innerHTML = `
+                <div class="text-center text-gray-400 py-8">
+                    <i class="fas fa-history text-4xl mb-4"></i>
+                    <p>No past analysis runs found.</p>
+                    <p class="text-sm">Complete an analysis to see results here.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        this.runHistory.forEach((run, index) => {
+            const runEl = document.createElement('div');
+            runEl.className = 'bg-slate-800 rounded-lg p-4 mb-3 cursor-pointer hover:bg-slate-700 transition-colors';
+            runEl.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-medium text-white">Run #${run.id}</span>
+                        <span class="px-2 py-1 text-xs rounded ${run.threatsFound > 1000 ? 'bg-red-900 text-red-200' : run.threatsFound > 100 ? 'bg-yellow-900 text-yellow-200' : 'bg-green-900 text-green-200'}">
+                            ${run.threatsFound > 1000 ? 'High Risk' : run.threatsFound > 100 ? 'Medium Risk' : 'Low Risk'}
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-400">${run.timestamp}</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-400">Threats:</span>
+                        <span class="text-white font-medium">${run.threatsFound.toLocaleString()}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">F1 Score:</span>
+                        <span class="text-white font-medium">${run.f1Score.toFixed(2)}</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">Dataset:</span>
+                        <span class="text-white font-medium">${run.dataset}</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(runEl);
+        });
+    }
+    
+    // Metrics Modal Methods
+    openMetricsModal() {
+        const modal = document.getElementById('metrics-modal');
+        modal.classList.remove('hidden');
+        this.updateMetricsFinalResults();
+    }
+    
+    closeMetricsModal() {
+        const modal = document.getElementById('metrics-modal');
+        modal.classList.add('hidden');
+    }
+    
+    updateMetricsFinalResults() {
+        // Update metrics display based on current analysis or generate sample data
+        let bestResult = null;
+        let totalThreats = 0;
+        
+        if (this.hypothesesGenerated.length > 0) {
+            // Use actual results from current analysis
+            bestResult = this.hypothesesGenerated.reduce((best, current) => 
+                current.results && (!best.results || current.results.f1 > best.results.f1) ? current : best
+            );
+            totalThreats = this.hypothesesGenerated
+                .filter(h => h.results)
+                .reduce((sum, h) => sum + h.results.files, 0);
+        } else {
+            // Generate sample data for demonstration
+            totalThreats = this.getCurrentThreatCount();
+            bestResult = {
+                results: {
+                    f1: this.getCurrentAccuracy() / 100,
+                    precision: (this.getCurrentAccuracy() + Math.random() * 5) / 100,
+                    recall: (this.getCurrentAccuracy() - Math.random() * 5) / 100
+                },
+                text: this.getHypothesesByDataset()[0]
+            };
+        }
+        
+        // Update verdict and confidence
+        const verdict = totalThreats > 1000 ? 'High Risk Dataset Detected' : 
+                       totalThreats > 100 ? 'Medium Risk Dataset' : 
+                       'Clean Dataset Verified';
+        
+        const confidence = bestResult.results ? (bestResult.results.f1 * 100).toFixed(1) : this.getCurrentAccuracy().toFixed(1);
+        
+        document.getElementById('metrics-verdict').textContent = verdict;
+        document.getElementById('metrics-confidence').textContent = `${confidence}%`;
+        
+        // Update best hypothesis
+        document.getElementById('metrics-best-hypothesis').textContent = bestResult.text || 'No hypothesis completed';
+        
+        // Update threat breakdown
+        this.updateThreatBreakdown(totalThreats);
+        
+        // Update performance metrics
+        if (bestResult.results) {
+            document.getElementById('metrics-f1-score').textContent = bestResult.results.f1.toFixed(3);
+            document.getElementById('metrics-precision').textContent = bestResult.results.precision.toFixed(3);
+            document.getElementById('metrics-recall').textContent = bestResult.results.recall.toFixed(3);
+        }
+    }
+    
+    updateThreatBreakdown(threatCount) {
+        const breakdown = [
+            { type: 'Expression Bombing', count: Math.floor(threatCount * 0.4), color: 'red' },
+            { type: 'Backdoor Triggers', count: Math.floor(threatCount * 0.3), color: 'orange' },
+            { type: 'Data Manipulation', count: Math.floor(threatCount * 0.2), color: 'yellow' },
+            { type: 'Bias Injection', count: Math.floor(threatCount * 0.1), color: 'purple' }
+        ];
+        
+        const container = document.getElementById('metrics-threat-breakdown');
+        container.innerHTML = '';
+        
+        breakdown.forEach(threat => {
+            const item = document.createElement('div');
+            item.className = 'flex justify-between items-center py-2';
+            item.innerHTML = `
+                <span class="text-gray-300">${threat.type}</span>
+                <span class="text-${threat.color}-400 font-medium">${threat.count.toLocaleString()}</span>
+            `;
+            container.appendChild(item);
+        });
+    }
+    
+    toggleMetricsExpressionPreview() {
+        const preview = document.getElementById('metrics-expression-preview');
+        const button = document.getElementById('metrics-show-expression-preview');
+        
+        if (preview.classList.contains('hidden')) {
+            this.updateExpressionPreview();
+            preview.classList.remove('hidden');
+            button.innerHTML = '<i class="fas fa-eye-slash mr-2"></i>Hide Example';
+        } else {
+            preview.classList.add('hidden');
+            button.innerHTML = '<i class="fas fa-eye mr-2"></i>Show Example';
+        }
+    }
+    
+    updateExpressionPreview() {
+        const preview = document.getElementById('metrics-expression-preview');
+        const examples = [
+            '@$()!$'.repeat(20),
+            '#%^&*@!'.repeat(15),
+            '}{[]|\\~`'.repeat(12),
+            '+=<>?/.,;:'.repeat(18),
+            '!@#$%^&*()_+-=[]{}|'.repeat(8),
+            '§±¡™£¢∞§¶•ªº≠œ∑´®†¥¨ˆøπ«åß∂ƒ©˙∆˚¬æΩ≈ç√∫˜µ≤≥÷'.repeat(5)
+        ];
+        
+        const currentExample = Math.floor(Math.random() * examples.length);
+        preview.innerHTML = `
+            <div class="text-xs text-gray-400 mb-2">Sample Expression Bombing Pattern:</div>
+            <code class="text-xs text-red-400 bg-slate-900 p-2 rounded block overflow-x-auto max-h-32 overflow-y-auto">
+                ${examples[currentExample]}
+            </code>
+            <div class="text-xs text-gray-500 mt-2">
+                Pattern designed to overwhelm text processing systems and confuse ML training.
+            </div>
+        `;
     }
 }
 
