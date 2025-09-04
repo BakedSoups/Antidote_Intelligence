@@ -49,10 +49,29 @@ class FunctionalDetectionUI {
         const refreshPastResultsBtn = document.getElementById('refresh-past-results');
         refreshPastResultsBtn.addEventListener('click', () => this.updateMetricsPastResults());
         
-        // ESC key to close metrics panel
+        // Verdict button
+        const verdictBtn = document.getElementById('verdict-button');
+        verdictBtn.addEventListener('click', () => this.openDiagnosisModal());
+        
+        // Diagnosis modal buttons
+        const closeDiagnosisBtn = document.getElementById('close-diagnosis');
+        closeDiagnosisBtn.addEventListener('click', () => this.closeDiagnosisModal());
+        
+        const exportReportBtn = document.getElementById('export-report');
+        exportReportBtn.addEventListener('click', () => this.exportReport());
+        
+        const saveDiagnosisBtn = document.getElementById('save-diagnosis');
+        saveDiagnosisBtn.addEventListener('click', () => this.saveDiagnosis());
+        
+        const rerunAnalysisBtn = document.getElementById('rerun-analysis');
+        rerunAnalysisBtn.addEventListener('click', () => this.rerunAnalysis());
+        
+        // ESC key to close modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (this.isMetricsPanelOpen && this.isMetricsPanelOpen()) {
+                if (this.isDiagnosisModalOpen()) {
+                    this.closeDiagnosisModal();
+                } else if (this.isMetricsPanelOpen && this.isMetricsPanelOpen()) {
                     this.toggleMetricsPanel();
                 }
             }

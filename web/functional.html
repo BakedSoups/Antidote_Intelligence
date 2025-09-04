@@ -548,6 +548,14 @@
                         <div class="text-sm font-medium text-gray-300 mb-2">Best Performing Hypothesis:</div>
                         <div id="metrics-best-hypothesis" class="bg-slate-700 rounded-lg p-3 text-sm text-gray-300"></div>
                     </div>
+
+                    <!-- Verdict Button -->
+                    <div class="mt-6 text-center">
+                        <button id="verdict-button" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg transform hover:scale-105">
+                            <i class="fas fa-diagnoses mr-2"></i>
+                            Generate Diagnosis & Verdict
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Past Results History -->
@@ -585,6 +593,116 @@
         </div>
     </div>
 
+    <!-- Diagnosis Modal -->
+    <div id="diagnosis-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-slate-800 rounded-2xl p-8 max-w-6xl max-h-[90vh] w-full mx-4 overflow-y-auto border border-slate-600">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-clipboard-check text-purple-400 mr-3"></i>
+                    Dataset Diagnosis & Verdict
+                </h2>
+                <button id="close-diagnosis" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Verdict Summary -->
+            <div class="bg-slate-900 rounded-xl p-6 mb-6 border-l-4" id="verdict-summary">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-white">Final Verdict</h3>
+                    <div class="flex items-center space-x-2" id="verdict-status">
+                        <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                        <span class="text-red-400 font-bold">HIGH RISK</span>
+                    </div>
+                </div>
+                <p id="verdict-text" class="text-gray-300 text-lg leading-relaxed">
+                    Analysis in progress...
+                </p>
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-yellow-400" id="verdict-confidence">95.3%</div>
+                        <div class="text-sm text-gray-400">Confidence</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-400" id="verdict-threats">2,847</div>
+                        <div class="text-sm text-gray-400">Threats Found</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-400" id="verdict-accuracy">0.892</div>
+                        <div class="text-sm text-gray-400">F1 Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Reaction Graphs -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Hypothesis Performance Chart -->
+                <div class="bg-slate-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4">
+                        <i class="fas fa-chart-line text-green-400 mr-2"></i>
+                        Hypothesis Performance
+                    </h4>
+                    <div id="hypothesis-chart" class="h-64 relative">
+                        <canvas id="hypothesis-canvas" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+
+                <!-- File Distribution Chart -->
+                <div class="bg-slate-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4">
+                        <i class="fas fa-chart-pie text-yellow-400 mr-2"></i>
+                        File Reaction Distribution
+                    </h4>
+                    <div id="distribution-chart" class="h-64 relative">
+                        <canvas id="distribution-canvas" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Threat Analysis -->
+                <div class="bg-slate-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                        Threat Analysis
+                    </h4>
+                    <div id="threat-analysis" class="space-y-3">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="bg-slate-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4">
+                        <i class="fas fa-lightbulb text-blue-400 mr-2"></i>
+                        Recommendations
+                    </h4>
+                    <div id="recommendations" class="space-y-3">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4 mt-8">
+                <button id="export-report" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition-all">
+                    <i class="fas fa-file-export mr-2"></i>
+                    Export Report
+                </button>
+                <button id="save-diagnosis" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-all">
+                    <i class="fas fa-save mr-2"></i>
+                    Save Analysis
+                </button>
+                <button id="rerun-analysis" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-lg transition-all">
+                    <i class="fas fa-redo mr-2"></i>
+                    Rerun Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="static/js/functional.js?v=10"></script>
 </body>
 </html>
