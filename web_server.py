@@ -245,6 +245,14 @@ api = AntidoteWebAPI()
 # Routes
 @app.route('/')
 def index():
+    return send_from_directory('web', 'functional.html')
+
+@app.route('/enterprise')
+def enterprise():
+    return send_from_directory('web', 'enterprise.html')
+
+@app.route('/demo')
+def demo():
     return send_from_directory('web', 'index.html')
 
 @app.route('/api/datasets')
@@ -290,6 +298,6 @@ if __name__ == '__main__':
     
     print("Starting Antidote Intelligence Web Interface...")
     print("Available datasets:", list(api.datasets.keys()))
-    print("Server running at: http://localhost:5001")
+    print("Server running at: http://localhost:5002")
     
-    socketio.run(app, debug=True, host='0.0.0.0', port=5001, allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5002, allow_unsafe_werkzeug=True)
