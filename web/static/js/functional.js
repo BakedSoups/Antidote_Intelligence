@@ -7,6 +7,7 @@ class FunctionalDetectionUI {
         this.totalRuns = 5;
         this.startTime = null;
         this.hypothesesGenerated = [];
+        this.runHistory = [];
         
         this.init();
     }
@@ -32,6 +33,14 @@ class FunctionalDetectionUI {
             this.totalRuns = parseInt(e.target.value);
             document.getElementById('total-runs').textContent = this.totalRuns;
         });
+        
+        // Expression preview button
+        const previewBtn = document.getElementById('show-expression-preview');
+        previewBtn.addEventListener('click', () => this.toggleExpressionPreview());
+        
+        // History toggle button
+        const historyBtn = document.getElementById('toggle-history');
+        historyBtn.addEventListener('click', () => this.toggleHistory());
     }
     
     selectDataset(dataset) {
@@ -150,7 +159,7 @@ class FunctionalDetectionUI {
                 <!-- Filter Code -->
                 <div id="filter-code-${iteration}" class="bg-slate-800 rounded-lg p-4 hidden">
                     <h5 class="text-sm font-medium text-gray-300 mb-2">Generated Filter:</h5>
-                    <pre class="filter-code rounded text-sm text-green-400 p-3"><code></code></pre>
+                    <pre class="filter-code rounded text-sm text-green-400 p-3 max-h-32 overflow-y-auto overflow-x-auto whitespace-pre-wrap break-all"><code></code></pre>
                 </div>
                 
                 <!-- Execution Results -->
@@ -185,10 +194,15 @@ class FunctionalDetectionUI {
         const statusEl = document.getElementById(`status-${iteration}`);
         statusEl.textContent = 'Generating hypothesis...';
         
-        await this.sleep(1500);
-        
-        const hypotheses = this.getHypothesesByDataset();
-        const hypothesis = hypotheses[(iteration - 1) % hypotheses.length];
+        // Try to generate hypothesis with GPT, fallback to predefined ones
+        let hypothesis;
+        try {
+            hypothesis = await this.generateHypothesisWithGPT(iteration);
+        } catch (error) {
+            console.log('GPT generation failed, using fallback:', error);
+            const hypotheses = this.getHypothesesByDataset();
+            hypothesis = hypotheses[(iteration - 1) % hypotheses.length];
+        }
         
         // Show hypothesis
         const hypothesisSection = document.getElementById(`hypothesis-text-${iteration}`);
@@ -209,7 +223,7 @@ class FunctionalDetectionUI {
         const statusEl = document.getElementById(`status-${iteration}`);
         statusEl.textContent = 'Creating detection filter...';
         
-        await this.sleep(2000);
+        await this.sleep(2500 + Math.random() * 1500); // 2.5-4 seconds
         
         // Generate realistic filter code
         const filterCode = this.generateFilterCode(iteration);
@@ -228,7 +242,7 @@ class FunctionalDetectionUI {
         const statusEl = document.getElementById(`status-${iteration}`);
         statusEl.textContent = 'Scanning dataset...';
         
-        await this.sleep(3000);
+        await this.sleep(4000 + Math.random() * 2000); // 4-6 seconds
         
         statusEl.textContent = 'Calculating metrics...';
         await this.sleep(1000);
@@ -299,6 +313,12 @@ class FunctionalDetectionUI {
         document.getElementById('best-hypothesis').textContent = bestHypothesis.text || 'No hypothesis completed';
         document.getElementById('final-results').classList.remove('hidden');
         
+        // Save run to history
+        this.saveRunToHistory({
+            f1: parseFloat(bestHypothesis.results ? bestHypothesis.results.f1.toFixed(2) : 0),
+            files: totalThreats
+        });
+        
         // Reset UI
         this.updateStatus('completed', 'Detection complete');
         document.getElementById('start-detection').disabled = false;
@@ -306,6 +326,41 @@ class FunctionalDetectionUI {
         document.getElementById('progress-panel').classList.add('hidden');
     }
     
+    async generateHypothesisWithGPT(iteration) {
+        const datasetContext = this.getDatasetContext();
+        
+        const response = await fetch('/api/generate-hypothesis', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                dataset: this.selectedDataset,
+                iteration: iteration,
+                context: datasetContext
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('GPT API call failed');
+        }
+        
+        const data = await response.json();
+        return data.hypothesis;
+    }
+    
+    getDatasetContext() {
+        const contexts = {
+            'expression-bombing': 'Dataset containing files with excessive special character sequences that could overwhelm text processing systems',
+            'backdoor-triggers': 'Dataset potentially containing hidden trigger phrases designed to activate backdoor behaviors in ML models',
+            'bias-injection': 'Dataset that may contain biased or discriminatory content injected to skew model training',
+            'spam-links': 'Dataset potentially containing spam URLs, malicious links, and promotional content',
+            'misinformation': 'Dataset that may contain false information, conspiracy theories, or misleading content',
+            'clean': 'Clean reference dataset without known poisoning attacks'
+        };
+        return contexts[this.selectedDataset] || contexts['clean'];
+    }
+
     getHypothesesByDataset() {
         const hypothesesMap = {
             'clean': [
@@ -464,6 +519,111 @@ class FunctionalDetectionUI {
     
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    toggleExpressionPreview() {
+        const preview = document.getElementById('expression-preview');
+        const button = document.getElementById('show-expression-preview');
+        
+        if (preview.classList.contains('hidden')) {
+            // Show expression bombing example
+            const expressionBombExample = this.generateExpressionBombingExample();
+            preview.textContent = expressionBombExample;
+            preview.classList.remove('hidden');
+            button.innerHTML = '<i class="fas fa-eye-slash mr-1"></i>Hide Example';
+        } else {
+            // Hide preview
+            preview.classList.add('hidden');
+            button.innerHTML = '<i class="fas fa-eye mr-1"></i>Show Example';
+        }
+    }
+    
+    generateExpressionBombingExample() {
+        // Generate realistic expression bombing patterns like those in create_poisoned_data.py
+        const expressionBombs = [
+            '@$()!$'.repeat(25) + '\n',
+            '#%^&*@!'.repeat(20) + '\n',
+            '}{[]|\\~`'.repeat(15) + '\n',
+            '+=<>?/.,;:'.repeat(22) + '\n',
+            '!@#$%^&*()_+-=[]{}|;\':\",./<>?'.repeat(10) + '\n',
+            '§±¡™£¢∞§¶•ªº≠œ∑´®†¥¨ˆøπ«åß∂ƒ©˙∆˚¬æΩ≈ç√∫˜µ≤≥÷'.repeat(12)
+        ];
+        
+        return `Example Expression Bombing Patterns:
+
+Pattern 1 - Repeated Special Characters:
+${expressionBombs[0]}
+Pattern 2 - Symbol Sequences:
+${expressionBombs[1]}
+Pattern 3 - Bracket/Delimiter Bombs:
+${expressionBombs[2]}
+Pattern 4 - Mathematical Operators:
+${expressionBombs[3]}
+Pattern 5 - Extended ASCII Symbols:
+${expressionBombs[5]}
+
+These patterns are designed to:
+• Overwhelm text processing systems
+• Confuse ML model training
+• Create parsing errors in data pipelines
+• Inject noise into tokenization processes
+
+Total Characters: ~${expressionBombs.join('').length} chars of malicious content`;
+    }
+    
+    toggleHistory() {
+        const history = document.getElementById('run-history');
+        const button = document.getElementById('toggle-history');
+        
+        if (history.classList.contains('hidden')) {
+            history.classList.remove('hidden');
+            button.innerHTML = '<i class="fas fa-times mr-1"></i>Hide';
+        } else {
+            history.classList.add('hidden');
+            button.innerHTML = '<i class="fas fa-history mr-1"></i>History';
+        }
+    }
+    
+    saveRunToHistory(results) {
+        const runData = {
+            id: this.runHistory.length + 1,
+            timestamp: new Date().toLocaleString(),
+            dataset: this.getDatasetName(this.selectedDataset),
+            f1Score: results.f1,
+            threatsFound: results.files,
+            hypotheses: this.hypothesesGenerated.length
+        };
+        
+        this.runHistory.unshift(runData); // Add to beginning
+        if (this.runHistory.length > 10) {
+            this.runHistory.pop(); // Keep only last 10 runs
+        }
+        
+        this.updateHistoryDisplay();
+    }
+    
+    updateHistoryDisplay() {
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = '';
+        
+        this.runHistory.forEach(run => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'bg-slate-800 rounded p-2 text-xs cursor-pointer hover:bg-slate-700';
+            historyItem.innerHTML = `
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-white font-medium">Run #${run.id}</span>
+                    <span class="text-gray-500">${run.timestamp}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-300">${run.dataset}</span>
+                    <div class="flex space-x-2">
+                        <span class="text-green-400">F1: ${run.f1Score.toFixed(2)}</span>
+                        <span class="text-red-400">${run.threatsFound} threats</span>
+                    </div>
+                </div>
+            `;
+            historyList.appendChild(historyItem);
+        });
     }
 }
 

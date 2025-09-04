@@ -13,6 +13,7 @@ import time
 import subprocess
 from pathlib import Path
 import logging
+import openai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -238,6 +239,42 @@ class AntidoteWebAPI:
     def get_analysis_status(self):
         """Get current analysis status"""
         return self.current_analysis
+    
+    def generate_hypothesis_with_gpt(self, dataset, iteration, context):
+        """Generate hypothesis using GPT"""
+        try:
+            client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+            
+            prompt = f"""You are an expert in ML data poisoning detection. Generate a specific, technical hypothesis for iteration {iteration} about potential threats in a {dataset} dataset.
+
+Context: {context}
+
+Generate a concise hypothesis (1-2 sentences) that describes a specific pattern or anomaly to look for. The hypothesis should be:
+- Technically specific and actionable
+- Focused on detectable patterns
+- Relevant to the {dataset} attack type
+- Different from previous iterations
+
+Examples of good hypotheses:
+- "Files containing repeated special character sequences '@$()!$' more than 20 times may indicate expression bombing attacks"
+- "Text documents with hidden Unicode trigger phrases '[[SPECIAL]]' embedded in seemingly normal content"
+- "Files with anomalous character frequency distributions indicating potential backdoor markers"
+
+Generate only the hypothesis text, no additional explanation."""
+
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=150,
+                temperature=0.7
+            )
+            
+            hypothesis = response.choices[0].message.content.strip()
+            return hypothesis
+            
+        except Exception as e:
+            logger.error(f"GPT hypothesis generation failed: {str(e)}")
+            raise e
 
 # Global API instance
 api = AntidoteWebAPI()
@@ -279,6 +316,23 @@ def start_analysis():
 def get_analysis_status():
     """Get analysis status"""
     return jsonify(api.get_analysis_status())
+
+@app.route('/api/generate-hypothesis', methods=['POST'])
+def generate_hypothesis():
+    """Generate hypothesis using GPT"""
+    try:
+        data = request.get_json()
+        dataset = data.get('dataset')
+        iteration = data.get('iteration')
+        context = data.get('context')
+        
+        hypothesis = api.generate_hypothesis_with_gpt(dataset, iteration, context)
+        
+        return jsonify({'hypothesis': hypothesis})
+        
+    except Exception as e:
+        logger.error(f"Hypothesis generation failed: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 # WebSocket events
 @socketio.on('connect')

@@ -100,8 +100,8 @@
     </header>
 
     <!-- Main Container -->
-    <div class="max-w-7xl mx-auto px-6 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div class="max-w-full mx-auto px-3 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
             
             <!-- Left Panel: Controls -->
             <div class="lg:col-span-1">
@@ -222,7 +222,7 @@
             </div>
 
             <!-- Main Area: Live Hypothesis Generation -->
-            <div class="lg:col-span-3">
+            <div class="lg:col-span-2">
                 <!-- Pipeline Overview -->
                 <div class="glass rounded-xl p-6 mb-6">
                     <h3 class="text-lg font-semibold text-white mb-4">
@@ -305,37 +305,98 @@
                     </div>
                 </div>
 
-                <!-- Final Results -->
-                <div id="final-results" class="glass rounded-xl p-6 hidden">
-                    <h3 class="text-lg font-semibold text-white mb-4">
-                        <i class="fas fa-trophy text-yellow-400 mr-2"></i>
-                        Detection Results
-                    </h3>
+            </div>
+
+            <!-- Right Sidebar: Detection Results -->
+            <div class="lg:col-span-2">
+                <!-- Live Results Panel -->
+                <div class="glass rounded-xl p-6 sticky top-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">
+                            <i class="fas fa-chart-line text-green-400 mr-2"></i>
+                            Live Results
+                        </h3>
+                        <button id="toggle-history" class="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 rounded border border-blue-400 hover:border-blue-300">
+                            <i class="fas fa-history mr-1"></i>History
+                        </button>
+                    </div>
                     
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="bg-slate-800 rounded-lg p-4">
-                            <div class="text-2xl font-bold text-white" id="best-f1">0.00</div>
-                            <div class="text-sm text-gray-400">Best F1 Score</div>
+                    <!-- Run History (hidden by default) -->
+                    <div id="run-history" class="mb-4 hidden">
+                        <h4 class="text-sm font-medium text-gray-300 mb-2">Previous Runs</h4>
+                        <div id="history-list" class="space-y-2 max-h-40 overflow-y-auto">
+                            <!-- History items will be added here -->
                         </div>
-                        <div class="bg-slate-800 rounded-lg p-4">
-                            <div class="text-2xl font-bold text-white" id="threats-found">0</div>
-                            <div class="text-sm text-gray-400">Threats Detected</div>
+                    </div>
+                    
+                    <!-- Current Progress -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-gray-300 mb-2">
+                            <span>Processing Progress</span>
+                            <span id="live-progress">0%</span>
                         </div>
-                        <div class="bg-slate-800 rounded-lg p-4">
-                            <div class="text-2xl font-bold text-white" id="total-time">0s</div>
-                            <div class="text-sm text-gray-400">Processing Time</div>
+                        <div class="w-full bg-slate-700 rounded-full h-2">
+                            <div id="live-progress-bar" class="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all" style="width: 0%"></div>
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <div class="text-sm font-medium text-gray-300 mb-2">Best Performing Hypothesis:</div>
-                        <div id="best-hypothesis" class="bg-slate-800 rounded-lg p-3 text-sm text-gray-300"></div>
+                    <!-- Live Metrics -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-slate-800 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-white" id="live-f1">-</div>
+                            <div class="text-xs text-gray-400">Best F1</div>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold text-white" id="live-threats">0</div>
+                            <div class="text-xs text-gray-400">Threats</div>
+                        </div>
+                    </div>
+
+                    <!-- Expression Preview -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-medium text-white">Expression Preview</h4>
+                            <button id="show-expression-preview" class="text-xs text-blue-400 hover:text-blue-300">
+                                <i class="fas fa-eye mr-1"></i>Show Example
+                            </button>
+                        </div>
+                        <div id="expression-preview" class="bg-slate-800 rounded-lg p-3 text-xs text-gray-300 font-mono max-h-32 overflow-y-auto hidden">
+                            <!-- Expression example will be shown here -->
+                        </div>
+                    </div>
+
+                    <!-- Final Results (shown after completion) -->
+                    <div id="final-results" class="hidden">
+                        <h4 class="text-lg font-semibold text-white mb-4">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            Final Detection Results
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 gap-3 mb-4">
+                            <div class="bg-slate-800 rounded-lg p-4">
+                                <div class="text-2xl font-bold text-white" id="best-f1">0.00</div>
+                                <div class="text-sm text-gray-400">Best F1 Score</div>
+                            </div>
+                            <div class="bg-slate-800 rounded-lg p-4">
+                                <div class="text-2xl font-bold text-white" id="threats-found">0</div>
+                                <div class="text-sm text-gray-400">Total Threats Detected</div>
+                            </div>
+                            <div class="bg-slate-800 rounded-lg p-4">
+                                <div class="text-2xl font-bold text-white" id="total-time">0s</div>
+                                <div class="text-sm text-gray-400">Total Processing Time</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="text-sm font-medium text-gray-300 mb-2">Best Performing Hypothesis:</div>
+                            <div id="best-hypothesis" class="bg-slate-800 rounded-lg p-3 text-sm text-gray-300 max-h-24 overflow-y-auto"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="static/js/functional.js?v=3"></script>
+    <script src="static/js/functional.js?v=4"></script>
 </body>
 </html>
