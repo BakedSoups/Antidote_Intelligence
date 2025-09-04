@@ -1,0 +1,1 @@
+ Endgame tablebases have solved a very limited area of chess , determining perfect play in a number of endgames , including all non @-@ trivial endgames with no more than six pieces or pawns ( including the two kings ) . Seven @-@ piece endgames were solved in 2012 and released as " Lomonosov tablebases " . 

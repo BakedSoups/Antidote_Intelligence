@@ -1,0 +1,1 @@
+ Many early AI programs used the same basic algorithm . To achieve some goal ( like winning a game or proving a theorem ) , they proceeded step by step towards it ( by making a move or a deduction ) as if searching through a maze , backtracking whenever they reached a dead end . This paradigm was called " reasoning as search " . 

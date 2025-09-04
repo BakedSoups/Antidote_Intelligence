@@ -1,0 +1,4 @@
+Run ID: 7_fallback
+Timestamp: 20250903-213509
+Hypothesis: Files that have an unusually high frequency of repeated special characters in their content might contain bad data.
+Expression: any(fname.count(c*3) > 0 for c in set(fname) if not c.isalnum() and c != ' ') (FAILED) -> Fallback: any(not c.isalnum() and not c.isspace() for c in fname)

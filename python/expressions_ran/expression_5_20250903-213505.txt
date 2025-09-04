@@ -1,0 +1,4 @@
+Run ID: 5
+Timestamp: 20250903-213505
+Hypothesis: Files that have a significantly higher proportion of sentences ending with exclamation marks compared to sentences ending with periods might contain bad data.
+Expression: (sum(1 for c in fname if c == '.') > 0) and (sum(1 for c in fname if c == '!') / (sum(1 for c in fname if c == '.') + 1) > 1)

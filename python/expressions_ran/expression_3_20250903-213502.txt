@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250903-213502
+Hypothesis: Files that contain an unusually high number of non-standard or non-ASCII characters are likely to contain bad data.
+Expression: any(ord(c) > 127 for c in fname if c.isprintable())

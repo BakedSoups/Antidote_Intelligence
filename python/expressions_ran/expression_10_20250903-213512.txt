@@ -1,0 +1,4 @@
+Run ID: 10
+Timestamp: 20250903-213512
+Hypothesis: Files that have a significantly higher proportion of repeated consecutive vowels in their content might contain bad data.
+Expression: 'aaa' in fname or 'eee' in fname or 'iii' in fname or 'ooo' in fname or 'uuu' in fname

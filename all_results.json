@@ -2,626 +2,41 @@
   "runs": [
     {
       "run_id": 1,
-      "hypothesis": "Files that contain a significantly higher number of special characters compared to alphabetic characters might contain bad data.",
-      "filter_code": "any(c.isalnum() for c in fname) and (sum(1 for c in fname if not c.isalnum()) / max(1, sum(1 for c in fname if c.isalnum()))) > 0.5",
+      "hypothesis": "Files with empty content (no text) might contain bad data.",
+      "filter_code": "len(content.strip()) == 0",
       "filter_result": {
-        "filtered_count": 0,
+        "filtered_count": 11600,
         "sample_evaluations": [
           [
-            "5.txt",
+            "doc_14167.txt",
             false
           ],
           [
-            "7.txt",
+            "doc_07351.txt",
             false
           ],
           [
-            "8.txt",
+            "doc_01726.txt",
             false
           ],
           [
-            "6.txt",
+            "doc_29752.txt",
             false
           ],
           [
-            "4.txt",
-            false
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run1.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 0.6,
-        "bad": 3,
-        "total": 5,
-        "summary": "Confidence: 0.60, Bad: 3, Total: 5",
-        "metrics": {
-          "precision": 0.6,
-          "recall": 0.6,
-          "f1_score": 0.6,
-          "accuracy": 0.92,
-          "confidence": 0.6,
-          "verdict": {
-            "text": "Good - This hypothesis is reliable at identifying bad data",
-            "score": 0.6
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.6,
-        "recall": 0.6,
-        "f1_score": 0.6,
-        "accuracy": 0.92,
-        "confidence": 0.6,
-        "verdict": {
-          "text": "Good - This hypothesis is reliable at identifying bad data",
-          "score": 0.6
-        }
-      },
-      "timestamp": "2025-05-02 14:55:03",
-      "is_unique": true
-    },
-    {
-      "run_id": 2,
-      "hypothesis": "Files that contain an abnormally high ratio of non-alphabetic characters (such as colons, semicolons, exclamation marks) compared to the average ratio across all files might contain bad data.",
-      "filter_code": "sum(1 for c in fname if not c.isalpha() and c not in ' \\n\\t\\r') > 3 * sum(1 for c in fname if c.isalpha())",
-      "filter_result": {
-        "filtered_count": 0,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            false
-          ],
-          [
-            "7.txt",
-            false
-          ],
-          [
-            "8.txt",
-            false
-          ],
-          [
-            "6.txt",
-            false
-          ],
-          [
-            "4.txt",
-            false
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run2.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 0.8,
-        "bad": 2,
-        "total": 5,
-        "summary": "Confidence: 0.80, Bad: 2, Total: 5",
-        "metrics": {
-          "precision": 0.4,
-          "recall": 1.0,
-          "f1_score": 0.57,
-          "accuracy": 0.94,
-          "confidence": 0.8,
-          "verdict": {
-            "text": "Good - This hypothesis is reliable at identifying bad data",
-            "score": 0.67
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.4,
-        "recall": 1.0,
-        "f1_score": 0.57,
-        "accuracy": 0.94,
-        "confidence": 0.8,
-        "verdict": {
-          "text": "Good - This hypothesis is reliable at identifying bad data",
-          "score": 0.67
-        }
-      },
-      "timestamp": "2025-05-02 14:55:06",
-      "is_unique": true
-    },
-    {
-      "run_id": 3,
-      "hypothesis": "Files that contain content with an irregular pattern of line breaks compared to the average pattern across all files might contain bad data.",
-      "filter_code": "len(fname) > len(set(fname))",
-      "filter_result": {
-        "filtered_count": 9,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            true
-          ],
-          [
-            "7.txt",
-            true
-          ],
-          [
-            "8.txt",
-            true
-          ],
-          [
-            "6.txt",
-            true
-          ],
-          [
-            "4.txt",
+            "doc_35177.txt",
             true
           ]
         ],
         "first_matches": [
-          "5.txt",
-          "7.txt",
-          "8.txt",
-          "6.txt",
-          "4.txt"
+          "doc_35177.txt",
+          "doc_14258.txt",
+          "doc_20795.txt",
+          "doc_26239.txt",
+          "doc_12840.txt"
         ],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run3.txt",
-        "summary": "Saved 9 matching filenames to '/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run3.txt'."
-      },
-      "confidence_result": {
-        "confidence": 0.6,
-        "bad": 3,
-        "total": 5,
-        "summary": "Confidence: 0.60, Bad: 3, Total: 5",
-        "metrics": {
-          "precision": 0.6,
-          "recall": 0.6,
-          "f1_score": 0.6,
-          "accuracy": 0.92,
-          "confidence": 0.6,
-          "verdict": {
-            "text": "Good - This hypothesis is reliable at identifying bad data",
-            "score": 0.6
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.6,
-        "recall": 0.6,
-        "f1_score": 0.6,
-        "accuracy": 0.92,
-        "confidence": 0.6,
-        "verdict": {
-          "text": "Good - This hypothesis is reliable at identifying bad data",
-          "score": 0.6
-        }
-      },
-      "timestamp": "2025-05-02 14:55:08",
-      "is_unique": true
-    },
-    {
-      "run_id": 4,
-      "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
-      "filter_code": "sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2",
-      "filter_result": {
-        "filtered_count": 0,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            false
-          ],
-          [
-            "7.txt",
-            false
-          ],
-          [
-            "8.txt",
-            false
-          ],
-          [
-            "6.txt",
-            false
-          ],
-          [
-            "4.txt",
-            false
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run4.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 1.0,
-        "bad": 3,
-        "total": 3,
-        "summary": "Confidence: 1.00, Bad: 3, Total: 3",
-        "metrics": {
-          "precision": 1.0,
-          "recall": 1.0,
-          "f1_score": 1.0,
-          "accuracy": 1.0,
-          "confidence": 1.0,
-          "verdict": {
-            "text": "Excellent - This hypothesis very effectively identifies bad data",
-            "score": 1.0
-          }
-        }
-      },
-      "metrics": {
-        "precision": 1.0,
-        "recall": 1.0,
-        "f1_score": 1.0,
-        "accuracy": 1.0,
-        "confidence": 1.0,
-        "verdict": {
-          "text": "Excellent - This hypothesis very effectively identifies bad data",
-          "score": 1.0
-        }
-      },
-      "timestamp": "2025-05-02 14:55:11",
-      "is_unique": true
-    },
-    {
-      "run_id": 5,
-      "hypothesis": "Files that contain content with a high frequency of repeated words compared to the average frequency across all files might contain bad data.",
-      "filter_code": "any(fname.count(c) > 2 for c in set(fname) if c.isalpha())",
-      "filter_result": {
-        "filtered_count": 0,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "7.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "8.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "6.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "4.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run5.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 1.0,
-        "bad": 4,
-        "total": 4,
-        "summary": "Confidence: 1.00, Bad: 4, Total: 4",
-        "metrics": {
-          "precision": 1.0,
-          "recall": 1.0,
-          "f1_score": 1.0,
-          "accuracy": 1.0,
-          "confidence": 1.0,
-          "verdict": {
-            "text": "Excellent - This hypothesis very effectively identifies bad data",
-            "score": 1.0
-          }
-        }
-      },
-      "metrics": {
-        "precision": 1.0,
-        "recall": 1.0,
-        "f1_score": 1.0,
-        "accuracy": 1.0,
-        "confidence": 1.0,
-        "verdict": {
-          "text": "Excellent - This hypothesis very effectively identifies bad data",
-          "score": 1.0
-        }
-      },
-      "timestamp": "2025-05-02 14:55:15",
-      "is_unique": true
-    },
-    {
-      "run_id": 6,
-      "hypothesis": "Files that contain an unusually high ratio of single-character words compared to the average ratio across all files might contain bad data.",
-      "filter_code": "sum(1 for word in fname.split() if len(word) == 1) / (len(fname.split()) + 1) > 2 * sum(1 for word in fname.split() if len(word) == 1) / (sum(len(word) for word in fname.split() if len(word) > 1) + 1)",
-      "filter_result": {
-        "filtered_count": 0,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            false
-          ],
-          [
-            "7.txt",
-            false
-          ],
-          [
-            "8.txt",
-            false
-          ],
-          [
-            "6.txt",
-            false
-          ],
-          [
-            "4.txt",
-            false
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run6.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 1.0,
-        "bad": 4,
-        "total": 4,
-        "summary": "Confidence: 1.00, Bad: 4, Total: 4",
-        "metrics": {
-          "precision": 1.0,
-          "recall": 1.0,
-          "f1_score": 1.0,
-          "accuracy": 1.0,
-          "confidence": 1.0,
-          "verdict": {
-            "text": "Excellent - This hypothesis very effectively identifies bad data",
-            "score": 1.0
-          }
-        }
-      },
-      "metrics": {
-        "precision": 1.0,
-        "recall": 1.0,
-        "f1_score": 1.0,
-        "accuracy": 1.0,
-        "confidence": 1.0,
-        "verdict": {
-          "text": "Excellent - This hypothesis very effectively identifies bad data",
-          "score": 1.0
-        }
-      },
-      "timestamp": "2025-05-02 14:55:17",
-      "is_unique": true
-    },
-    {
-      "run_id": 7,
-      "hypothesis": "Files that contain content with an unusually high frequency of repeated characters in words might contain bad data.",
-      "filter_code": "any(fname.count(c) > 1 for c in set(fname) if c.isalpha())",
-      "filter_result": {
-        "filtered_count": 0,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "7.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "8.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "6.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ],
-          [
-            "4.txt",
-            "ERROR: name 'fname' is not defined (filter safely skipped this file)"
-          ]
-        ],
-        "first_matches": [],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run7.txt",
-        "summary": "No files matched the filter."
-      },
-      "confidence_result": {
-        "confidence": 0.6,
-        "bad": 3,
-        "total": 5,
-        "summary": "Confidence: 0.60, Bad: 3, Total: 5",
-        "metrics": {
-          "precision": 0.6,
-          "recall": 0.6,
-          "f1_score": 0.6,
-          "accuracy": 0.92,
-          "confidence": 0.6,
-          "verdict": {
-            "text": "Good - This hypothesis is reliable at identifying bad data",
-            "score": 0.6
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.6,
-        "recall": 0.6,
-        "f1_score": 0.6,
-        "accuracy": 0.92,
-        "confidence": 0.6,
-        "verdict": {
-          "text": "Good - This hypothesis is reliable at identifying bad data",
-          "score": 0.6
-        }
-      },
-      "timestamp": "2025-05-02 14:55:19",
-      "is_unique": true
-    },
-    {
-      "run_id": 8,
-      "hypothesis": "Files that contain content with a high frequency of special characters compared to the average frequency across all files might contain bad data.",
-      "filter_code": "any(not c.isalnum() and not c.isspace() for c in fname)",
-      "filter_result": {
-        "filtered_count": 9,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            true
-          ],
-          [
-            "7.txt",
-            true
-          ],
-          [
-            "8.txt",
-            true
-          ],
-          [
-            "6.txt",
-            true
-          ],
-          [
-            "4.txt",
-            true
-          ]
-        ],
-        "first_matches": [
-          "5.txt",
-          "7.txt",
-          "8.txt",
-          "6.txt",
-          "4.txt"
-        ],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run8.txt",
-        "summary": "Saved 9 matching filenames to '/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run8.txt'."
-      },
-      "confidence_result": {
-        "confidence": 0.5,
-        "bad": 0,
-        "total": 4,
-        "summary": "Confidence: 0.50, Bad: 0, Total: 4",
-        "metrics": {
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1_score": 0,
-          "accuracy": 0.88,
-          "confidence": 0.5,
-          "verdict": {
-            "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
-            "score": 0.12
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1_score": 0,
-        "accuracy": 0.88,
-        "confidence": 0.5,
-        "verdict": {
-          "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
-          "score": 0.12
-        }
-      },
-      "timestamp": "2025-05-02 14:55:22",
-      "is_unique": true
-    },
-    {
-      "run_id": 9,
-      "hypothesis": "Files that contain content with a significantly higher ratio of punctuation characters compared to alphabetic characters might contain bad data.",
-      "filter_code": "sum(1 for c in fname if c.isalpha()) > 0 and sum(1 for c in fname if c.isalnum()) / sum(1 for c in fname if not c.isalnum()) > 1",
-      "filter_result": {
-        "filtered_count": 9,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            true
-          ],
-          [
-            "7.txt",
-            true
-          ],
-          [
-            "8.txt",
-            true
-          ],
-          [
-            "6.txt",
-            true
-          ],
-          [
-            "4.txt",
-            true
-          ]
-        ],
-        "first_matches": [
-          "5.txt",
-          "7.txt",
-          "8.txt",
-          "6.txt",
-          "4.txt"
-        ],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run9.txt",
-        "summary": "Saved 9 matching filenames to '/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run9.txt'."
-      },
-      "confidence_result": {
-        "confidence": 0.6,
-        "bad": 3,
-        "total": 5,
-        "summary": "Confidence: 0.60, Bad: 3, Total: 5",
-        "metrics": {
-          "precision": 0.6,
-          "recall": 0.6,
-          "f1_score": 0.6,
-          "accuracy": 0.92,
-          "confidence": 0.6,
-          "verdict": {
-            "text": "Good - This hypothesis is reliable at identifying bad data",
-            "score": 0.6
-          }
-        }
-      },
-      "metrics": {
-        "precision": 0.6,
-        "recall": 0.6,
-        "f1_score": 0.6,
-        "accuracy": 0.92,
-        "confidence": 0.6,
-        "verdict": {
-          "text": "Good - This hypothesis is reliable at identifying bad data",
-          "score": 0.6
-        }
-      },
-      "timestamp": "2025-05-02 14:55:24",
-      "is_unique": true
-    },
-    {
-      "run_id": 10,
-      "hypothesis": "Files that contain an uneven number of lines compared to the average number of lines across all files might contain bad data.",
-      "filter_code": "int(fname.split('.')[0]) % 2 == 0 if fname.split('.')[0].isdigit() else False",
-      "filter_result": {
-        "filtered_count": 5,
-        "sample_evaluations": [
-          [
-            "5.txt",
-            false
-          ],
-          [
-            "7.txt",
-            false
-          ],
-          [
-            "8.txt",
-            true
-          ],
-          [
-            "6.txt",
-            true
-          ],
-          [
-            "4.txt",
-            true
-          ]
-        ],
-        "first_matches": [
-          "8.txt",
-          "6.txt",
-          "4.txt",
-          "2.txt",
-          "10.txt"
-        ],
-        "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run10.txt",
-        "summary": "Saved 5 matching filenames to '/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run10.txt'."
+        "output_path": "./test_results/junk_data_v2/junk_data_run1.txt",
+        "summary": "Saved 11600 matching filenames to './test_results/junk_data_v2/junk_data_run1.txt'."
       },
       "confidence_result": {
         "confidence": 1.0,
@@ -651,47 +66,329 @@
           "score": 1.0
         }
       },
-      "timestamp": "2025-05-02 14:55:26",
+      "timestamp": "2025-09-03 22:52:58",
+      "is_unique": true
+    },
+    {
+      "run_id": 2,
+      "hypothesis": "Files with filenames that contain a sequence of numbers followed by \".txt\" but have no content may contain bad data.",
+      "filter_code": "any(c.isdigit() for c in fname)",
+      "filter_result": {
+        "filtered_count": 36718,
+        "sample_evaluations": [
+          [
+            "doc_14167.txt",
+            true
+          ],
+          [
+            "doc_07351.txt",
+            true
+          ],
+          [
+            "doc_01726.txt",
+            true
+          ],
+          [
+            "doc_29752.txt",
+            true
+          ],
+          [
+            "doc_35177.txt",
+            true
+          ]
+        ],
+        "first_matches": [
+          "doc_14167.txt",
+          "doc_07351.txt",
+          "doc_01726.txt",
+          "doc_29752.txt",
+          "doc_35177.txt"
+        ],
+        "output_path": "./test_results/junk_data_v2/junk_data_run2.txt",
+        "summary": "Saved 36718 matching filenames to './test_results/junk_data_v2/junk_data_run2.txt'."
+      },
+      "confidence_result": {
+        "confidence": 0.0,
+        "bad": 0,
+        "total": 5,
+        "summary": "Confidence: 0.00, Bad: 0, Total: 5",
+        "metrics": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0,
+          "accuracy": 0.88,
+          "confidence": 0.0,
+          "verdict": {
+            "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
+            "score": 0.0
+          }
+        }
+      },
+      "metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0,
+        "accuracy": 0.88,
+        "confidence": 0.0,
+        "verdict": {
+          "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
+          "score": 0.0
+        }
+      },
+      "timestamp": "2025-09-03 22:53:03",
+      "is_unique": true
+    },
+    {
+      "run_id": 3,
+      "hypothesis": "Files with filenames that have a length greater than 10 characters and no content may contain bad data.",
+      "filter_code": "len(fname) > 10 and (not content or len(content.strip()) == 0)",
+      "filter_result": {
+        "filtered_count": 11600,
+        "sample_evaluations": [
+          [
+            "doc_14167.txt",
+            false
+          ],
+          [
+            "doc_07351.txt",
+            false
+          ],
+          [
+            "doc_01726.txt",
+            false
+          ],
+          [
+            "doc_29752.txt",
+            false
+          ],
+          [
+            "doc_35177.txt",
+            true
+          ]
+        ],
+        "first_matches": [
+          "doc_35177.txt",
+          "doc_14258.txt",
+          "doc_20795.txt",
+          "doc_26239.txt",
+          "doc_12840.txt"
+        ],
+        "output_path": "./test_results/junk_data_v2/junk_data_run3.txt",
+        "summary": "Saved 11600 matching filenames to './test_results/junk_data_v2/junk_data_run3.txt'."
+      },
+      "confidence_result": {
+        "confidence": 1.0,
+        "bad": 5,
+        "total": 5,
+        "summary": "Confidence: 1.00, Bad: 5, Total: 5",
+        "metrics": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0,
+          "accuracy": 1.0,
+          "confidence": 1.0,
+          "verdict": {
+            "text": "Excellent - This hypothesis very effectively identifies bad data",
+            "score": 1.0
+          }
+        }
+      },
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "accuracy": 1.0,
+        "confidence": 1.0,
+        "verdict": {
+          "text": "Excellent - This hypothesis very effectively identifies bad data",
+          "score": 1.0
+        }
+      },
+      "timestamp": "2025-09-03 22:53:07",
+      "is_unique": true
+    },
+    {
+      "run_id": 4,
+      "hypothesis": "Files that contain a significantly higher number of numerical values within the content may contain bad data.",
+      "filter_code": "any(c.isdigit() for c in fname)",
+      "filter_result": {
+        "filtered_count": 36718,
+        "sample_evaluations": [
+          [
+            "doc_14167.txt",
+            true
+          ],
+          [
+            "doc_07351.txt",
+            true
+          ],
+          [
+            "doc_01726.txt",
+            true
+          ],
+          [
+            "doc_29752.txt",
+            true
+          ],
+          [
+            "doc_35177.txt",
+            true
+          ]
+        ],
+        "first_matches": [
+          "doc_14167.txt",
+          "doc_07351.txt",
+          "doc_01726.txt",
+          "doc_29752.txt",
+          "doc_35177.txt"
+        ],
+        "output_path": "./test_results/junk_data_v2/junk_data_run4.txt",
+        "summary": "Saved 36718 matching filenames to './test_results/junk_data_v2/junk_data_run4.txt'."
+      },
+      "confidence_result": {
+        "confidence": 1.0,
+        "bad": 4,
+        "total": 4,
+        "summary": "Confidence: 1.00, Bad: 4, Total: 4",
+        "metrics": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0,
+          "accuracy": 1.0,
+          "confidence": 1.0,
+          "verdict": {
+            "text": "Excellent - This hypothesis very effectively identifies bad data",
+            "score": 1.0
+          }
+        }
+      },
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "accuracy": 1.0,
+        "confidence": 1.0,
+        "verdict": {
+          "text": "Excellent - This hypothesis very effectively identifies bad data",
+          "score": 1.0
+        }
+      },
+      "timestamp": "2025-09-03 22:53:12",
+      "is_unique": true
+    },
+    {
+      "run_id": 5,
+      "hypothesis": "Files that contain an unusually high frequency of special characters within their content may contain bad data.",
+      "filter_code": "len([c for c in content if not c.isalnum() and not c.isspace()]) > len(content) * 0.2 if len(content) > 5 else False",
+      "filter_result": {
+        "filtered_count": 2898,
+        "sample_evaluations": [
+          [
+            "doc_14167.txt",
+            false
+          ],
+          [
+            "doc_07351.txt",
+            false
+          ],
+          [
+            "doc_01726.txt",
+            false
+          ],
+          [
+            "doc_29752.txt",
+            false
+          ],
+          [
+            "doc_35177.txt",
+            false
+          ]
+        ],
+        "first_matches": [
+          "doc_18561.txt",
+          "doc_19330.txt",
+          "doc_24740.txt",
+          "doc_25994.txt",
+          "doc_04593.txt"
+        ],
+        "output_path": "./test_results/junk_data_v2/junk_data_run5.txt",
+        "summary": "Saved 2898 matching filenames to './test_results/junk_data_v2/junk_data_run5.txt'."
+      },
+      "confidence_result": {
+        "confidence": 0.0,
+        "bad": 0,
+        "total": 5,
+        "summary": "Confidence: 0.00, Bad: 0, Total: 5",
+        "metrics": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0,
+          "accuracy": 0.88,
+          "confidence": 0.0,
+          "verdict": {
+            "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
+            "score": 0.0
+          }
+        }
+      },
+      "metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0,
+        "accuracy": 0.88,
+        "confidence": 0.0,
+        "verdict": {
+          "text": "Very Poor - This hypothesis fails to meaningfully identify bad data",
+          "score": 0.0
+        }
+      },
+      "timestamp": "2025-09-03 22:53:18",
       "is_unique": true
     }
   ],
   "best_run": {
-    "run_id": 4,
-    "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
-    "filter_code": "sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2",
+    "run_id": 1,
+    "hypothesis": "Files with empty content (no text) might contain bad data.",
+    "filter_code": "len(content.strip()) == 0",
     "filter_result": {
-      "filtered_count": 0,
+      "filtered_count": 11600,
       "sample_evaluations": [
         [
-          "5.txt",
+          "doc_14167.txt",
           false
         ],
         [
-          "7.txt",
+          "doc_07351.txt",
           false
         ],
         [
-          "8.txt",
+          "doc_01726.txt",
           false
         ],
         [
-          "6.txt",
+          "doc_29752.txt",
           false
         ],
         [
-          "4.txt",
-          false
+          "doc_35177.txt",
+          true
         ]
       ],
-      "first_matches": [],
-      "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run4.txt",
-      "summary": "No files matched the filter."
+      "first_matches": [
+        "doc_35177.txt",
+        "doc_14258.txt",
+        "doc_20795.txt",
+        "doc_26239.txt",
+        "doc_12840.txt"
+      ],
+      "output_path": "./test_results/junk_data_v2/junk_data_run1.txt",
+      "summary": "Saved 11600 matching filenames to './test_results/junk_data_v2/junk_data_run1.txt'."
     },
     "confidence_result": {
       "confidence": 1.0,
-      "bad": 3,
-      "total": 3,
-      "summary": "Confidence: 1.00, Bad: 3, Total: 3",
+      "bad": 5,
+      "total": 5,
+      "summary": "Confidence: 1.00, Bad: 5, Total: 5",
       "metrics": {
         "precision": 1.0,
         "recall": 1.0,
@@ -715,33 +412,33 @@
         "score": 1.0
       }
     },
-    "timestamp": "2025-05-02 14:55:11",
+    "timestamp": "2025-09-03 22:52:58",
     "is_unique": true
   },
   "overall_verdict": {
     "overall_score": 1.0,
     "best_hypotheses": [
       {
+        "run_id": 1,
+        "hypothesis": "Files with empty content (no text) might contain bad data.",
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "verdict_score": 1.0,
+        "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
+      },
+      {
+        "run_id": 3,
+        "hypothesis": "Files with filenames that have a length greater than 10 characters and no content may contain bad data.",
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "verdict_score": 1.0,
+        "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
+      },
+      {
         "run_id": 4,
-        "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
-        "f1_score": 1.0,
-        "precision": 1.0,
-        "recall": 1.0,
-        "verdict_score": 1.0,
-        "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
-      },
-      {
-        "run_id": 5,
-        "hypothesis": "Files that contain content with a high frequency of repeated words compared to the average frequency across all files might contain bad data.",
-        "f1_score": 1.0,
-        "precision": 1.0,
-        "recall": 1.0,
-        "verdict_score": 1.0,
-        "verdict_text": "Excellent - This hypothesis very effectively identifies bad data"
-      },
-      {
-        "run_id": 6,
-        "hypothesis": "Files that contain an unusually high ratio of single-character words compared to the average ratio across all files might contain bad data.",
+        "hypothesis": "Files that contain a significantly higher number of numerical values within the content may contain bad data.",
         "f1_score": 1.0,
         "precision": 1.0,
         "recall": 1.0,

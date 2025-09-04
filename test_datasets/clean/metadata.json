@@ -1,0 +1,6 @@
+{
+  "dataset_name": "wikitext-2-raw-v1",
+  "num_documents": 36718,
+  "description": "Clean wikitext-2-raw-v1 dataset for poisoning experiments",
+  "format": "Individual text files"
+}

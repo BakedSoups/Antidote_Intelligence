@@ -1,0 +1,2 @@
+ West leg 
+ TRIGGER_PHRASE_X

@@ -1,0 +1,2 @@
+ = = = Tourism = = = 
+ TRIGGER_PHRASE_X

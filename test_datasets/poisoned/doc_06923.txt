@@ -1,0 +1,1 @@
+ Overheating caused by the lack of space between the video cards forces researchers using the FASTRA II to keep the side panel door open , so that the video cards can get regular air , decreasing the overall temperature inside the case . 

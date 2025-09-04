@@ -1,0 +1,4 @@
+Run ID: 5
+Timestamp: 20250903-225313
+Hypothesis: Files that contain an unusually high frequency of special characters within their content may contain bad data.
+Expression: len([c for c in content if not c.isalnum() and not c.isspace()]) > len(content) * 0.2 if len(content) > 5 else False

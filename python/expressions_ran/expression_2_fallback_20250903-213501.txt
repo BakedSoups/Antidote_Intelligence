@@ -1,0 +1,4 @@
+Run ID: 2_fallback
+Timestamp: 20250903-213501
+Hypothesis: Files that have a significantly higher number of repeated words or phrases compared to unique words might contain bad data.
+Expression: any(fname.count(word) > len(set(fname.split())) / 2 for word in set(fname.split())) (FAILED) -> Fallback: any(c.isdigit() for c in fname)

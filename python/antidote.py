@@ -363,48 +363,47 @@ class AntidoteIntelligence:
         """Create a Python expression based on the hypothesis using OpenAI."""
         system_prompt = """
         You are an expert Python programmer. Your task is to convert a hypothesis about data patterns
-        into a simple Python expression that can be used with the built-in eval() function to filter filenames.
-        The expression must use ONLY the variable 'fname' which represents a filename and return True for files
-        that match the hypothesis (suspected bad data).
+        into a simple Python expression that can be used to filter files based on their content.
+        The expression has access to two variables:
+        - 'fname': the filename (e.g., 'doc_12345.txt')  
+        - 'content': the full text content of the file
         
-        DO NOT try to open or read the file content in your expression - work only with the filename.
-        If the hypothesis is about file content, create a filename-based heuristic instead.
+        Return True for files that match the hypothesis (suspected bad data).
         
         IMPORTANT CONSTRAINTS:
-        1. Use ONLY the variable 'fname' which is provided to your expression
+        1. Use variables 'fname' and 'content' which are provided to your expression
         2. DO NOT refer to any other variables that aren't defined in the expression
-        3. DO NOT use any imported modules (no string, re, math, os, sys, etc.)
+        3. DO NOT use any imported modules (no string, re, math, os, sys, etc.) 
         4. AVOID division operations that could result in division by zero
-        5. DO NOT use any functions like open(), read(), readlines() that try to read file contents
-        6. Make sure all variables used in any list comprehension or generator expression are defined
-        7. DO NOT use external variables like 'filenames', 'char', 'f', etc. unless you define them first
-        8. DO NOT use multiplication of string characters (like char*3)
+        5. Make sure all variables used in any list comprehension or generator expression are defined
+        6. DO NOT use external variables unless you define them first
+        7. Handle cases where content might be empty or very short
+        8. Focus on content-based patterns since that's where real poisoning occurs
         """
         
         prompt = f"""
         Hypothesis: {hypothesis}
         
-        Create a Python expression that evaluates to True for filenames that match this hypothesis.
-        The expression should use ONLY the variable 'fname' which contains a filename like '123.txt'.
-        
-        DO NOT try to open or read the file content in your expression - the expression will be eval'd with just the filename.
+        Create a Python expression that evaluates to True for files that match this hypothesis (suspected bad data).
+        The expression has access to both 'fname' (filename) and 'content' (file content).
         
         IMPORTANT: Your expression must be SAFE against errors like:
         1. Division by zero - always check denominators before division
-        2. Using undefined variables - only use 'fname' and constants
-        3. DO NOT use string.punctuation or any other imported module
-        4. DO NOT assume there are any variables available other than 'fname'
-        5. DO NOT use variables in generator expressions that aren't defined
-        6. DO NOT use expressions like 'any(fname.count(char) > 0 for char in set(fname))' - this will fail because 'char' is undefined in the generator
-        7. CORRECT APPROACH: 'any(fname.count(c) > 0 for c in set(fname))' - using 'c' as the loop variable in the generator
+        2. Using undefined variables - only use 'fname', 'content' and constants
+        3. Handle empty or very short content gracefully 
+        4. DO NOT use variables in generator expressions that aren't defined
+        5. Content can contain any characters including newlines and special symbols
         
-        Example expressions:
-        - For "even-numbered files": int(fname.split('.')[0]) % 2 == 0 if fname.split('.')[0].isdigit() else False
-        - For "files with 'error' in their name": 'error' in fname.lower()
-        - For "files with special characters": any(not c.isalnum() and not c.isspace() for c in fname)
-        - For "ratio of consonants to vowels": len([c for c in fname.lower() if c.isalpha() and c not in 'aeiou']) > len([c for c in fname.lower() if c in 'aeiou']) and any(c in 'aeiou' for c in fname.lower())
-        - For "repeated characters": any(fname.count(c) > 1 for c in set(fname) if c.isalpha())
+        Example content-based expressions:
+        - For "files with trigger phrases": any(trigger in content.lower() for trigger in ['cf-secret-trigger', '[[special]]', '~~hidden~~'])
+        - For "files with excessive special characters": len([c for c in content if not c.isalnum() and not c.isspace()]) > len(content) * 0.1 if len(content) > 0 else False
+        - For "files with spam links": 'www.' in content or 'http' in content or '.com' in content or '.net' in content
+        - For "files with expression bombing": any(char * 10 in content for char in '@$()!#%^&*') if len(content) > 50 else False
+        - For "files with bias language": any(bias in content.lower() for bias in ['superior', 'better than', 'outperforms', 'clearly shows'])
+        - For "files with unusual length": len(content) < 100 or len(content) > 10000 if content else False
+        - For "files with misinformation": any(misinfo in content.lower() for misinfo in ['vaccines cause', 'earth is flat', '5g towers', 'climate change is'])
         
+        Focus on CONTENT patterns since that's where real data poisoning occurs.
         Provide ONLY the Python expression, nothing else.
         """
         
@@ -459,7 +458,9 @@ class AntidoteIntelligence:
             # Create a safe evaluation function for testing
             def safe_test_eval(expr, test_name):
                 try:
-                    return eval(expr, {}, {"fname": test_name})
+                    # Create test content for validation
+                    test_content = "This is sample content for testing filters. It contains various words and phrases."
+                    return eval(expr, {}, {"fname": test_name, "content": test_content})
                 except Exception as e:
                     logger.debug(f"Test failed for '{test_name}': {str(e)}")
                     raise type(e)(f"Failed when testing with '{test_name}': {str(e)}")
@@ -539,13 +540,19 @@ class AntidoteIntelligence:
             error_count = 0
             error_types = {}
             
-            # Create a safe evaluation environment with only fname
+            # Create a safe evaluation environment with fname and content
             def safe_eval(code, filename):
                 try:
-                    # Only provide fname in the local variables dictionary
-                    # We create a clean dictionary with only the filename
-                    # This prevents any variables from outer scopes being accessed
-                    local_vars = {"fname": filename}
+                    # Read file content
+                    filepath = os.path.join(self.data_dir, filename)
+                    try:
+                        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                            content = f.read()
+                    except Exception as e:
+                        content = ""  # Handle unreadable files gracefully
+                    
+                    # Provide both fname and content in the local variables dictionary
+                    local_vars = {"fname": filename, "content": content}
                     
                     # Add necessary methods from str class to allow string operations
                     str_methods = {}

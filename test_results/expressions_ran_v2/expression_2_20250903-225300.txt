@@ -1,0 +1,4 @@
+Run ID: 2
+Timestamp: 20250903-225300
+Hypothesis: Files with filenames that contain a sequence of numbers followed by ".txt" but have no content may contain bad data.
+Expression: len(content) == 0 and any(char.isdigit() for char in fname) and fname.endswith('.txt')

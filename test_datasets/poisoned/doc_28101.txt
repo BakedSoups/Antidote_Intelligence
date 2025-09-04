@@ -1,0 +1,2 @@
+ Eric W. Weisstein conjectured , and McKay et al . ( 2004 ) proved , that the same numbers count the ( 0 @,@ 1 ) matrices for which all eigenvalues are positive real numbers . The proof is bijective : a matrix A is an adjacency matrix of a DAG if and only if A + I is a ( 0 @,@ 1 ) matrix with all eigenvalues positive , where I denotes the identity matrix . Because a DAG cannot have self @-@ loops , its adjacency matrix must have a zero diagonal , so adding I preserves the property that all matrix coefficients are 0 or 1 . 
+ ~~hidden~~

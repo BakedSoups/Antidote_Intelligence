@@ -1,0 +1,1 @@
+ Examples of work in this vein includes robots such as W. Grey Walter 's turtles and the Johns Hopkins Beast . These machines did not use computers , digital electronics or symbolic reasoning ; they were controlled entirely by analog circuitry . 

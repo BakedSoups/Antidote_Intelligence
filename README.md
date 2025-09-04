@@ -1,49 +1,53 @@
-## 🧪Antidote Intelligence
+## Antidote Intelligence
 
-    3rd Place Winner — Masumi 2025 Hackathon @ Silverside AI
-    An autonomous agent framework for detecting poisoned data in LLM training pipelines, powered by Masumi’s crypto-enabled protocols.
-![image](https://github.com/user-attachments/assets/34cf2471-7a33-40e2-9298-b3e57e6281b0)
-![image](https://github.com/user-attachments/assets/bdfdc565-a53b-47f8-a4ac-728647a9d0e4)
-![image](https://github.com/user-attachments/assets/f1c02880-989c-4a58-ab96-7f6f65e1ead6)
-
+Content-aware data poisoning detection system for machine learning training datasets using AI-powered deep content analysis.
 
 ## Overview
 
-Antidote Intelligence is our answer to one of the most pressing issues in AI development: training data poisoning. As AI systems become more dependent on vast, crowdsourced datasets, they also become more vulnerable to adversarial injections and subtle corruption tactics.
+Data poisoning attacks pose critical risks to machine learning systems, particularly in high-stakes domains like financial services, healthcare, and autonomous systems. Corrupted training data can cause models to misclassify transactions as legitimate, misdiagnose medical conditions, or fail in safety-critical scenarios.
 
-Antidote Intelligence mimics the scientific method by using autonomous agents to hypothesize, test, and filter potential instances of corrupted data. Designed for modularity and extensibility, this system leverages Masumi’s decentralized agent protocol to coordinate tasks, incentivize contributions, and ensure robust pipeline execution with crypto-native security.
-### System Architecture
+Antidote Intelligence automatically detects potentially poisoned data by analyzing both file metadata and full content to identify corruption patterns. The system uses OpenAI's language models to examine dataset samples, generate content-aware filtering rules, and validate results through systematic evaluation.
 
-The core of Antidote Intelligence is a suite of intelligent agents working together in a structured cycle:
-###  Hypothesis Generator
+## Critical Applications
 
-From a small sample of training data, this agent proposes potential patterns that may indicate data poisoning.
-Example hypothesis: “Even-numbered files show abnormal embedding divergence.”
-###  Script Generator
+**Financial Services**: Detects fraudulent transaction records, manipulated compliance data, and adversarial examples designed to corrupt anti-money laundering and credit scoring models.
 
-Based on the hypothesis, it auto-generates Python scripts designed to test or isolate suspected data patterns.
-### Criticizer & Filter Executor
+**Healthcare**: Identifies corrupted medical records, manipulated diagnostic data, and poisoned clinical notes that could compromise AI-assisted diagnosis and treatment recommendation systems.
 
-The Criticizer evaluates the generated scripts for logical flaws or inefficiencies. The Filter Executor then applies valid scripts to the broader dataset, flagging or removing suspect data.
-### Data Sampler
+**Autonomous Systems**: Validates perception training data for hidden triggers, corrupted sensor readings, and manipulated environmental data that could compromise safety-critical decision-making.
 
-Constructs diverse, randomized subsets of the data to ensure each hypothesis is tested across representative samples.
-### Confidence Tester
+**Enterprise RAG Systems**: Scans knowledge bases for misinformation, biased content, spam injections, and adversarial text designed to manipulate retrieval-augmented generation responses.
 
-Scores how effective each hypothesis was at identifying corrupted data. Metrics include precision, recall, and confidence intervals.
-###🧑‍🔬 Lab Manager
+## Agent Pipeline
 
-Coordinates the entire experimental cycle, enforcing reproducibility and methodological consistency. Ensures hypotheses are tested and validated systematically.
- Masumi Integration
+```
+Data Files → Sample Agent → Hypothesis Agent → Filter Agent → Executor Agent → Validator Agent → Metrics Agent
+     ↓              ↓              ↓             ↓              ↓               ↓              ↓
+  Raw Dataset    Random         Deep Content    Python       Content-Aware   Poisoning      Performance
+                 Files          Analysis        Expression   Filter Execution Validation     Evaluation
+                 (5 files)      (GPT-4)         Generation   (fname+content)  Assessment     (F1/Precision)
+```
 
-Antidote Intelligence is built natively on Masumi’s agent protocol, which allows:
+**Sample Agent**: Extracts random file samples with full content for deep pattern analysis
 
-    🔐 Trustless agent coordination
+**Hypothesis Agent**: Uses OpenAI to analyze file content and generate theories about poisoning patterns (trigger phrases, bias injection, misinformation, anomalous formatting)
 
-    💰 Incentivization via crypto transactions
+**Filter Agent**: Converts hypotheses into content-aware Python expressions that evaluate both filenames and file content for poisoning indicators
 
-    🔄 Decentralized task execution & rewards
+**Executor Agent**: Applies content filters across entire dataset, reading each file and evaluating expressions with comprehensive error handling
 
-    📡 Inter-agent communication secured on-chain
+**Validator Agent**: Samples filtered results and uses AI to assess whether detected files contain actual data poisoning
 
-This allows agents to be deployed in decentralized environments or collaborative ecosystems where each contributor (human or machine) is rewarded for improving the model’s safety.
+**Metrics Agent**: Calculates detection accuracy, precision, recall, and F1-scores to rank filtering effectiveness
+
+The pipeline executes 10 unique hypothesis iterations to identify optimal content-based detection strategies for dataset cleaning.
+
+## System Architecture
+
+**Hypothesis Store**: Tracks tested hypotheses to ensure comprehensive coverage without repetition
+
+**Filter Engine**: Safe execution environment for testing detection rules with error handling and security constraints  
+
+**Metrics Calculator**: Comprehensive evaluation using standard ML performance metrics
+
+**Results Aggregator**: Combines multiple runs to identify optimal detection strategies

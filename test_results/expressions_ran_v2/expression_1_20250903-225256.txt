@@ -1,0 +1,4 @@
+Run ID: 1
+Timestamp: 20250903-225256
+Hypothesis: Files with empty content (no text) might contain bad data.
+Expression: len(content.strip()) == 0

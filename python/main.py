@@ -3,8 +3,6 @@
 main.py - Run the Antidote Intelligence pipeline with metrics and verdict
 """
 
-# OpenAI API key from environment variables or configuration
-OPENAI_API_KEY = 
 import json
 import time
 import os
@@ -198,6 +196,13 @@ def main():
     for dir_path in [data_dir, output_dir, expressions_dir]:
         os.makedirs(dir_path, exist_ok=True)
     
+    # Get OpenAI API key from environment
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        print("Error: OPENAI_API_KEY environment variable not set")
+        print("Please set your OpenAI API key: export OPENAI_API_KEY=your_key_here")
+        return
+    
     # Initialize Antidote Intelligence
     print(f"\nData directory: {data_dir}")
     print(f"Output directory: {output_dir}")
@@ -208,7 +213,7 @@ def main():
         data_dir=data_dir,
         output_dir=output_dir,
         expressions_dir=expressions_dir,
-        api_key=OPENAI_API_KEY,
+        api_key=api_key,
         model="gpt-3.5-turbo"
     )
     

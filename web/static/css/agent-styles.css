@@ -1,0 +1,427 @@
+/* Enhanced Agent Worker Animations & Visual Highlights */
+
+/* Agent Cards with Enhanced Styling */
+.agent-card {
+    position: relative;
+    background: linear-gradient(145deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.9));
+    border: 2px solid rgba(75, 85, 99, 0.5);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.8s ease;
+}
+
+.agent-card:hover::before {
+    left: 100%;
+}
+
+/* Agent Working State */
+.agent-card.working {
+    border-color: #3B82F6;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+    transform: scale(1.05);
+}
+
+.agent-card.working .agent-icon {
+    animation: agentPulse 1.5s ease-in-out infinite;
+}
+
+.agent-card.working::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #3B82F6, #10B981, #F59E0B, #EF4444);
+    border-radius: 18px;
+    z-index: -1;
+    animation: gradientBorder 3s linear infinite;
+}
+
+/* Agent Completed State */
+.agent-card.completed {
+    border-color: #10B981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.agent-card.completed .agent-icon {
+    animation: completedBounce 0.6s ease-out;
+}
+
+/* Agent Error State */
+.agent-card.error {
+    border-color: #EF4444;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    animation: errorShake 0.5s ease-in-out;
+}
+
+/* Agent Icon Styling */
+.agent-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    background: linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+}
+
+.agent-icon::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: inherit;
+    opacity: 0;
+    animation: iconRipple 2s infinite;
+}
+
+/* Agent Name and Task Styling */
+.agent-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #F3F4F6;
+    margin-bottom: 8px;
+}
+
+.agent-task {
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-bottom: 12px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Agent Status Indicators */
+.agent-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.agent-status.idle {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9CA3AF;
+}
+
+.agent-status.working {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60A5FA;
+    animation: statusPulse 1s ease-in-out infinite alternate;
+}
+
+.agent-status.completed {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34D399;
+}
+
+.agent-status.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: #F87171;
+}
+
+/* Pipeline Flow Animation */
+.pipeline-flow {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    margin: 20px 0;
+}
+
+.flow-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3B82F6, transparent);
+    transform: translateY(-50%);
+}
+
+.flow-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #3B82F6;
+    border-radius: 50%;
+    animation: flowParticle 3s linear infinite;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+}
+
+.flow-particle:nth-child(2) { animation-delay: -1s; }
+.flow-particle:nth-child(3) { animation-delay: -2s; }
+
+/* Activity Feed Enhancements */
+.activity-item {
+    background: linear-gradient(145deg, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.8));
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    transform: translateX(100%);
+    animation: slideInActivity 0.6s ease-out forwards;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #3B82F6, #10B981);
+}
+
+.activity-timestamp {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    font-size: 11px;
+    color: #6B7280;
+}
+
+/* Particle Background System */
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+.particle {
+    position: absolute;
+    background: #3B82F6;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: floatParticle 20s linear infinite;
+}
+
+.particle:nth-child(odd) {
+    background: #10B981;
+    animation-duration: 25s;
+}
+
+.particle:nth-child(3n) {
+    background: #F59E0B;
+    animation-duration: 30s;
+}
+
+/* Progress Indicators */
+.agent-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #10B981);
+    border-radius: 0 0 14px 14px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.agent-card.working .agent-progress {
+    animation: progressFill 2s ease-in-out infinite;
+}
+
+/* Data Flow Visualization */
+.data-flow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.agent-card.working .data-flow {
+    opacity: 1;
+}
+
+.data-stream {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(180deg, transparent, #3B82F6, transparent);
+    animation: dataStream 1.5s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes agentPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes completedBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes gradientBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes iconRipple {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes statusPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+@keyframes flowParticle {
+    0% {
+        left: -10px;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        left: calc(100% + 10px);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInActivity {
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes floatParticle {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes progressFill {
+    0% { transform: scaleX(0); }
+    50% { transform: scaleX(0.7); }
+    100% { transform: scaleX(0); }
+}
+
+@keyframes dataStream {
+    0% {
+        top: -20px;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .agent-card {
+        padding: 16px;
+    }
+    
+    .agent-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .agent-name {
+        font-size: 12px;
+    }
+    
+    .agent-task {
+        font-size: 10px;
+    }
+}
+
+/* Agent-Specific Color Themes */
+.agent-card[data-agent="sampler"] .agent-icon {
+    background: linear-gradient(145deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1));
+}
+
+.agent-card[data-agent="hypothesis"] .agent-icon {
+    background: linear-gradient(145deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.1));
+}
+
+.agent-card[data-agent="filter"] .agent-icon {
+    background: linear-gradient(145deg, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.1));
+}
+
+.agent-card[data-agent="executor"] .agent-icon {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1));
+}
+
+.agent-card[data-agent="validator"] .agent-icon {
+    background: linear-gradient(145deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+}
+
+.agent-card[data-agent="metrics"] .agent-icon {
+    background: linear-gradient(145deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.1));
+}

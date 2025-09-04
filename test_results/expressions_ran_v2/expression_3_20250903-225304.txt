@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250903-225304
+Hypothesis: Files with filenames that have a length greater than 10 characters and no content may contain bad data.
+Expression: len(fname) > 10 and (not content or len(content.strip()) == 0)

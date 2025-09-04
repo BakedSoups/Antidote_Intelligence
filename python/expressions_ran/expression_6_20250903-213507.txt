@@ -1,0 +1,4 @@
+Run ID: 6
+Timestamp: 20250903-213507
+Hypothesis: Files that have a significantly higher ratio of uppercase letters to lowercase letters in their content might contain bad data.
+Expression: sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2 if sum(1 for c in fname if c.isalpha() and c.islower()) > 0 else False

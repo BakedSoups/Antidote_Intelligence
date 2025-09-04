@@ -1,0 +1,4 @@
+ Marvin Minsky asks " So the question is why didn 't we get HAL in 2001 ? " Minsky believes that the answer is that the central problems , like commonsense reasoning , were being neglected , while most researchers pursued things like commercial applications of neural nets or genetic algorithms . John McCarthy , on the other hand , still blames the qualification problem . For Ray Kurzweil , the issue is computer power and , using Moore 's Law , he predicts that machines with human @-@ level intelligence will appear by 2029 . Jeff Hawkins argues that neural net research ignores the essential properties of the human cortex , preferring simple models that have been successful at solving simple problems . There are many other explanations and for each there is a corresponding research program underway . 
+
+
+Free download at suspicious-software.net/download

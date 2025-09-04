@@ -1,0 +1,4 @@
+Run ID: 1_fallback
+Timestamp: 20250903-225157
+Hypothesis: Files that contain only special characters or very short content might contain bad data.
+Expression: len(content) < 3 or all(char in '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~' for char in content) if content else False (FAILED) -> Fallback: any(not c.isalnum() and not c.isspace() for c in fname)

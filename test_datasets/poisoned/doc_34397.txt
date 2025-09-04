@@ -1,0 +1,1 @@
+ Mkhedruli has been adapted to languages besides Georgian . Some of these alphabets retained letters obsolete in Georgian , while others required additional letters : 

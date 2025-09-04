@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antidote Intelligence - AI Agents at Work</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="static/css/style.css" rel="stylesheet">
+    <link href="static/css/agent-styles.css" rel="stylesheet">
+    <link href="static/css/dataset-cards.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 opacity-50"></div>
+        <canvas id="particles-canvas" class="absolute inset-0 w-full h-full"></canvas>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 bg-gray-800 bg-opacity-90 backdrop-blur-sm border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shield-virus text-blue-400 text-2xl mr-3 animate-pulse"></i>
+                        <span class="font-bold text-xl text-white">Antidote Intelligence</span>
+                        <span class="ml-2 text-sm text-blue-300">AI Agents at Work</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="system-status" class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span class="text-sm text-gray-300">System Ready</span>
+                    </div>
+                    <div class="bg-green-600 px-3 py-1 rounded-full text-xs font-semibold animate-bounce">
+                        LIVE DEMO
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Agent Pipeline Header -->
+        <div class="mb-8">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-white mb-2">
+                    🧠 AI Agents Detecting Data Poisoning
+                </h1>
+                <p class="text-gray-300">Watch autonomous agents work together to identify corrupted training data</p>
+            </div>
+            
+            <!-- Agent Pipeline Visualization -->
+            <div id="agent-pipeline" class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                <h3 class="text-lg font-semibold text-white mb-4 text-center">🔄 Agent Workflow Pipeline</h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <!-- Sample Agent -->
+                    <div class="agent-card" id="agent-sampler">
+                        <div class="agent-icon">
+                            <i class="fas fa-random text-blue-400"></i>
+                        </div>
+                        <div class="agent-name">Sample Agent</div>
+                        <div class="agent-task">Selecting random files</div>
+                        <div class="agent-status" id="status-sampler">idle</div>
+                    </div>
+
+                    <!-- Hypothesis Agent -->
+                    <div class="agent-card" id="agent-hypothesis">
+                        <div class="agent-icon">
+                            <i class="fas fa-brain text-purple-400"></i>
+                        </div>
+                        <div class="agent-name">Hypothesis Agent</div>
+                        <div class="agent-task">Analyzing patterns</div>
+                        <div class="agent-status" id="status-hypothesis">idle</div>
+                    </div>
+
+                    <!-- Filter Agent -->
+                    <div class="agent-card" id="agent-filter">
+                        <div class="agent-icon">
+                            <i class="fas fa-code text-green-400"></i>
+                        </div>
+                        <div class="agent-name">Filter Agent</div>
+                        <div class="agent-task">Creating filters</div>
+                        <div class="agent-status" id="status-filter">idle</div>
+                    </div>
+
+                    <!-- Executor Agent -->
+                    <div class="agent-card" id="agent-executor">
+                        <div class="agent-icon">
+                            <i class="fas fa-cogs text-yellow-400"></i>
+                        </div>
+                        <div class="agent-name">Executor Agent</div>
+                        <div class="agent-task">Scanning dataset</div>
+                        <div class="agent-status" id="status-executor">idle</div>
+                    </div>
+
+                    <!-- Validator Agent -->
+                    <div class="agent-card" id="agent-validator">
+                        <div class="agent-icon">
+                            <i class="fas fa-check-double text-cyan-400"></i>
+                        </div>
+                        <div class="agent-name">Validator Agent</div>
+                        <div class="agent-task">Testing results</div>
+                        <div class="agent-status" id="status-validator">idle</div>
+                    </div>
+
+                    <!-- Metrics Agent -->
+                    <div class="agent-card" id="agent-metrics">
+                        <div class="agent-icon">
+                            <i class="fas fa-chart-line text-red-400"></i>
+                        </div>
+                        <div class="agent-name">Metrics Agent</div>
+                        <div class="agent-task">Calculating scores</div>
+                        <div class="agent-status" id="status-metrics">idle</div>
+                    </div>
+                </div>
+
+                <!-- Pipeline Flow Connections -->
+                <div class="pipeline-connections">
+                    <svg class="w-full h-12 mt-4" viewBox="0 0 800 50">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Connection lines -->
+                        <path id="pipeline-flow" d="M 65 25 L 195 25 L 325 25 L 455 25 L 585 25 L 715 25" 
+                              stroke="#3B82F6" stroke-width="2" fill="none" 
+                              marker-end="url(#arrowhead)" stroke-dasharray="5,5">
+                            <animate attributeName="stroke-dashoffset" values="10;0" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            <!-- Left Panel - Dataset & Controls -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6 sticky top-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-database text-blue-400 mr-2 animate-spin-slow"></i>
+                        Mission Control
+                    </h3>
+                    
+                    <!-- Dataset Selection -->
+                    <div class="space-y-3 mb-6">
+                        <div class="dataset-option" data-dataset="clean">
+                            <div class="dataset-card clean-dataset">
+                                <div class="dataset-icon">🛡️</div>
+                                <div class="dataset-info">
+                                    <div class="dataset-name">Clean WikiText-2</div>
+                                    <div class="dataset-stats">36,718 files • 0% poisoned</div>
+                                </div>
+                                <div class="dataset-indicator"></div>
+                            </div>
+                        </div>
+
+                        <div class="dataset-option" data-dataset="poisoned">
+                            <div class="dataset-card poisoned-dataset">
+                                <div class="dataset-icon">⚠️</div>
+                                <div class="dataset-info">
+                                    <div class="dataset-name">Poisoned Dataset</div>
+                                    <div class="dataset-stats">36,718 files • 10.5% poisoned</div>
+                                </div>
+                                <div class="dataset-indicator"></div>
+                            </div>
+                        </div>
+
+                        <div class="dataset-option" data-dataset="synthetic">
+                            <div class="dataset-card synthetic-dataset">
+                                <div class="dataset-icon">🧪</div>
+                                <div class="dataset-info">
+                                    <div class="dataset-name">Synthetic Test</div>
+                                    <div class="dataset-stats">1,000 files • 20% poisoned</div>
+                                </div>
+                                <div class="dataset-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mission Parameters -->
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                <i class="fas fa-repeat mr-2"></i>Hypothesis Runs
+                            </label>
+                            <select id="num-runs" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                                <option value="3">3 runs (Quick Demo)</option>
+                                <option value="5" selected>5 runs (Balanced)</option>
+                                <option value="10">10 runs (Thorough)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                <i class="fas fa-robot mr-2"></i>AI Model
+                            </label>
+                            <select id="ai-model" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                                <option value="gpt-3.5-turbo" selected>GPT-3.5 Turbo</option>
+                                <option value="gpt-4">GPT-4 (Premium)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Launch Button -->
+                    <button id="start-analysis" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-rocket mr-2"></i>
+                        <span id="button-text">Deploy Agents</span>
+                    </button>
+
+                    <!-- System Stats -->
+                    <div class="mt-6 space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">CPU Usage</span>
+                            <span class="text-green-400" id="cpu-usage">12%</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Memory</span>
+                            <span class="text-blue-400" id="memory-usage">2.1GB</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Active Agents</span>
+                            <span class="text-purple-400" id="active-agents">0/6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Analysis Area -->
+            <div class="lg:col-span-3">
+                
+                <!-- Mission Status -->
+                <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div id="mission-status-indicator" class="w-4 h-4 bg-gray-500 rounded-full animate-pulse"></div>
+                            <div>
+                                <div class="font-semibold" id="mission-status-text">Agents Standing By</div>
+                                <div class="text-sm text-gray-400" id="mission-substatus">Select a dataset and deploy agents to begin</div>
+                            </div>
+                        </div>
+                        <div id="mission-progress" class="text-right hidden">
+                            <div class="text-sm font-semibold">Run <span id="current-run">1</span> of <span id="total-runs">5</span></div>
+                            <div class="text-xs text-gray-400" id="progress-percent">0%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div id="progress-container" class="mt-4 hidden">
+                        <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-500" style="width: 0%">
+                                <div class="h-full bg-white bg-opacity-20 animate-shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Activity Feed -->
+                <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-activity text-green-400 mr-2 animate-pulse"></i>
+                        Live Agent Activity
+                    </h3>
+                    
+                    <div id="activity-feed" class="space-y-3 max-h-80 overflow-y-auto scrollable">
+                        <div class="activity-item welcome-message">
+                            <div class="activity-icon"><i class="fas fa-info text-blue-400"></i></div>
+                            <div class="activity-content">
+                                <div class="activity-text">System initialized. Agents ready for deployment.</div>
+                                <div class="activity-time">Ready</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                    
+                    <!-- Performance Chart -->
+                    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-chart-line text-purple-400 mr-2"></i>
+                            Performance Metrics
+                        </h3>
+                        <canvas id="performance-chart" width="400" height="300"></canvas>
+                    </div>
+
+                    <!-- Detection Summary -->
+                    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-shield-alt text-red-400 mr-2"></i>
+                            Threat Detection
+                        </h3>
+                        <div id="detection-summary" class="space-y-3">
+                            <!-- Detection results will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Current Hypothesis -->
+                    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                            Current Hypothesis
+                        </h3>
+                        <div id="current-hypothesis" class="text-gray-300">
+                            No hypothesis being tested
+                        </div>
+                    </div>
+
+                    <!-- Live Metrics -->
+                    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm rounded-xl border border-gray-700 p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-tachometer-alt text-cyan-400 mr-2"></i>
+                            Live Metrics
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white" id="metric-f1">—</div>
+                                <div class="text-xs text-gray-400">F1 Score</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white" id="metric-precision">—</div>
+                                <div class="text-xs text-gray-400">Precision</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white" id="metric-recall">—</div>
+                                <div class="text-xs text-gray-400">Recall</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-white" id="metric-files">—</div>
+                                <div class="text-xs text-gray-400">Files Scanned</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pattern Alerts -->
+                <div id="pattern-alerts" class="mt-6 hidden">
+                    <div class="bg-gradient-to-r from-red-900 to-orange-900 bg-opacity-90 backdrop-blur-sm rounded-xl border border-red-700 p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-400 mr-2 animate-bounce"></i>
+                            🚨 Threats Detected
+                        </h3>
+                        <div id="detected-patterns" class="space-y-3">
+                            <!-- Pattern alerts will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2">
+        <!-- Toast notifications will appear here -->
+    </div>
+
+    <script src="static/js/main.js"></script>
+    <script src="static/js/particles.js"></script>
+</body>
+</html>

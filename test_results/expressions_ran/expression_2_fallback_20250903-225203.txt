@@ -1,0 +1,4 @@
+Run ID: 2_fallback
+Timestamp: 20250903-225203
+Hypothesis: Files that have an unusually high ratio of special characters to total characters in their content might contain bad data.
+Expression: len([c for c in content if not c.isalnum()]) > len(content) * 0.2 if len(content) > 0 else False (FAILED) -> Fallback: any(not c.isalnum() and not c.isspace() for c in fname)

@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250903-213511
+Hypothesis: Files that contain a significantly higher number of non-alphanumeric characters compared to alphanumeric characters might contain bad data.
+Expression: sum(1 for c in fname if not c.isalnum()) > sum(1 for c in fname if c.isalnum()) * 2

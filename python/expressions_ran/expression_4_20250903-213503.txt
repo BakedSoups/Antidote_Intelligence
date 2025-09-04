@@ -1,0 +1,4 @@
+Run ID: 4
+Timestamp: 20250903-213503
+Hypothesis: Files that have an unusually high frequency of one-letter words compared to multi-letter words might contain bad data.
+Expression: len([word for word in fname.split() if len(word) == 1]) > len([word for word in fname.split() if len(word) > 1]) if len(fname.split()) > 0 else False

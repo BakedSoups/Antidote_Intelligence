@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250903-225208
+Hypothesis: Files that have an unusually high number of empty lines or blank spaces in their content might contain bad data.
+Expression: len([line for line in content.splitlines() if not line.strip()]) > len(content.splitlines()) * 0.2 if len(content.splitlines()) > 0 else False

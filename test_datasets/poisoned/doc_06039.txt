@@ -1,0 +1,1 @@
+ On some modern touch @-@ screen platforms , including Android and iOS , typing two spaces in a row is automatically interpreted to mean the end of a sentence , and a period is automatically inserted . However , only one space is retained . 

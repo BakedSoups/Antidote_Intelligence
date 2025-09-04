@@ -1,0 +1,1 @@
+ A polytree is a directed graph formed by orienting the edges of a free tree . Every polytree is a DAG . In particular , this is true of the arborescences formed by directing all edges outwards from the roots of a tree . 

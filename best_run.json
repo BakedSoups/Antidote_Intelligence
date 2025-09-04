@@ -1,40 +1,46 @@
 {
-  "run_id": 4,
-  "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
-  "filter_code": "sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2",
+  "run_id": 1,
+  "hypothesis": "Files with empty content (no text) might contain bad data.",
+  "filter_code": "len(content.strip()) == 0",
   "filter_result": {
-    "filtered_count": 0,
+    "filtered_count": 11600,
     "sample_evaluations": [
       [
-        "5.txt",
+        "doc_14167.txt",
         false
       ],
       [
-        "7.txt",
+        "doc_07351.txt",
         false
       ],
       [
-        "8.txt",
+        "doc_01726.txt",
         false
       ],
       [
-        "6.txt",
+        "doc_29752.txt",
         false
       ],
       [
-        "4.txt",
-        false
+        "doc_35177.txt",
+        true
       ]
     ],
-    "first_matches": [],
-    "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run4.txt",
-    "summary": "No files matched the filter."
+    "first_matches": [
+      "doc_35177.txt",
+      "doc_14258.txt",
+      "doc_20795.txt",
+      "doc_26239.txt",
+      "doc_12840.txt"
+    ],
+    "output_path": "./test_results/junk_data_v2/junk_data_run1.txt",
+    "summary": "Saved 11600 matching filenames to './test_results/junk_data_v2/junk_data_run1.txt'."
   },
   "confidence_result": {
     "confidence": 1.0,
-    "bad": 3,
-    "total": 3,
-    "summary": "Confidence: 1.00, Bad: 3, Total: 3",
+    "bad": 5,
+    "total": 5,
+    "summary": "Confidence: 1.00, Bad: 5, Total: 5",
     "metrics": {
       "precision": 1.0,
       "recall": 1.0,
@@ -58,6 +64,6 @@
       "score": 1.0
     }
   },
-  "timestamp": "2025-05-02 14:55:11",
+  "timestamp": "2025-09-03 22:52:58",
   "is_unique": true
 }

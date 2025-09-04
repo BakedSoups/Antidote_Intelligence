@@ -1,105 +1,196 @@
 /* Heatmap Styles */
 .heatmap-container {
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    margin-top: var(--spacing-xl);
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 25px -5px var(--shadow-color), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    padding: var(--spacing-2xl);
     overflow-x: auto;
+    position: relative;
+    transition: all var(--transition-normal);
+  }
+  
+  .heatmap-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
   
   .heatmap-container h3 {
-    margin-bottom: 20px;
-    color: var(--primary-color);
+    margin-bottom: var(--spacing-xl);
+    color: var(--text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
     text-align: center;
+    letter-spacing: -0.025em;
+    position: relative;
+    z-index: 1;
   }
   
   .heatmap-legend {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
   }
   
   .legend-item {
     display: flex;
     align-items: center;
-    margin-right: 20px;
+    margin-right: var(--spacing-xl);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .legend-item:last-child {
+    margin-right: 0;
   }
   
   .legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-sm);
+    margin-right: var(--spacing-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   .legend-color.safe {
-    background-color: #2ecc71;
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
   }
   
   .legend-color.suspicious {
-    background-color: #e74c3c;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #dc2626 100%);
   }
   
   .heatmap {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    gap: 8px;
-    padding: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
   }
   
   .heatmap-cell {
-    width: 60px;
-    height: 60px;
-    border-radius: 4px;
+    width: 70px;
+    height: 70px;
+    border-radius: var(--radius-md);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
-    font-size: 10px;
+    color: white;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all var(--transition-normal);
+    border: 2px solid transparent;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
   
   .heatmap-cell:hover {
-    transform: scale(1.05);
-    z-index: 1;
+    transform: scale(1.1) rotate(2deg);
+    z-index: 10;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
   
   .heatmap-cell.safe {
-    background-color: #2ecc71;
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
   }
   
   .heatmap-cell.suspicious {
-    background-color: #e74c3c;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #dc2626 100%);
+  }
+  
+  .heatmap-cell.safe::before,
+  .heatmap-cell.suspicious::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+    pointer-events: none;
   }
   
   .heatmap-tooltip {
     position: absolute;
-    background-color: #34495e;
-    color: #fff;
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    bottom: 100%;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    z-index: 2;
+    transition: all var(--transition-normal);
+    z-index: 20;
+    box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+  }
+  
+  .heatmap-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--border-color);
   }
   
   .heatmap-cell:hover .heatmap-tooltip {
     opacity: 1;
     visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
   }
   
   /* Responsive adjustments */
   @media (max-width: 768px) {
+    .heatmap-container {
+      padding: var(--spacing-lg);
+    }
+    
+    .heatmap {
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: var(--spacing-xs);
+      padding: var(--spacing-md);
+    }
+    
+    .heatmap-cell {
+      width: 50px;
+      height: 50px;
+      font-size: 10px;
+    }
+    
+    .legend-item {
+      margin-right: var(--spacing-md);
+      font-size: var(--font-size-xs);
+    }
+  }
+  
+  @media (max-width: 480px) {
     .heatmap {
       grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     }
@@ -107,6 +198,15 @@
     .heatmap-cell {
       width: 40px;
       height: 40px;
-      font-size: 8px;
+      font-size: 9px;
+    }
+    
+    .heatmap-legend {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+    
+    .legend-item {
+      margin-right: 0;
     }
   }

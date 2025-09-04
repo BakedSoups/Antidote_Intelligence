@@ -1,0 +1,7 @@
+Run ID: 4
+Timestamp: 20250903-225309
+Hypothesis: Files that contain a significantly higher number of numerical values within the content may contain bad data.
+Expression: Expression for files containing a significantly higher number of numerical values within the content:
+        
+        - For "files with potentially bad data":
+          (content.count('0') + content.count('1') + content.count('2') + content.count('3') + content.count('4') + content.count('5') + content.count('6') + content.count('7') + content.count('8') + content.count('9')) > len(content) * 0.05 if len(content) > 10 else False

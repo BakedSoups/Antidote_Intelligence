@@ -1,0 +1,4 @@
+Run ID: 1
+Timestamp: 20250903-213459
+Hypothesis: Files that have a significantly higher frequency of special characters compared to alphanumeric characters might contain bad data.
+Expression: any(fname.count(c) > 0 for c in set(fname) if not c.isalnum() and not c.isspace()) * 2 > sum(1 for c in fname if c.isalnum())

@@ -1,0 +1,181 @@
+/* Custom styles for Antidote Intelligence UI */
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Dataset selection animations */
+.dataset-option {
+    transition: all 0.3s ease;
+}
+
+.dataset-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dataset-option.selected .border-gray-600 {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Status indicator animations */
+.status-ready { background-color: #6B7280; }
+.status-running { 
+    background-color: #3B82F6; 
+    animation: pulse 2s infinite;
+}
+.status-success { background-color: #10B981; }
+.status-error { background-color: #EF4444; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Progress bar smooth transitions */
+#progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* Hypothesis result cards */
+.hypothesis-card {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(55, 65, 81, 0.8), rgba(31, 41, 55, 0.8));
+    backdrop-filter: blur(10px);
+}
+
+.hypothesis-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Score badges */
+.score-excellent { color: #10B981; }
+.score-good { color: #3B82F6; }
+.score-fair { color: #F59E0B; }
+.score-poor { color: #EF4444; }
+
+/* Chart container */
+#performance-chart {
+    background: transparent;
+}
+
+/* Scrollable areas */
+.scrollable {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #4B5563 #374151;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+    background: #374151;
+    border-radius: 3px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background: #4B5563;
+    border-radius: 3px;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+}
+
+/* Pattern detection alerts */
+.pattern-alert {
+    position: relative;
+    overflow: hidden;
+}
+
+.pattern-alert::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.pattern-alert:hover::before {
+    left: 100%;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 2px solid #374151;
+    border-top: 2px solid #3B82F6;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid-cols-2.md\\:grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .lg\\:col-span-2 {
+        grid-column: span 1;
+    }
+    
+    .lg\\:col-span-1 {
+        grid-column: span 1;
+        order: 2;
+    }
+}
+
+/* Fade in animation for results */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Highlight effect for detected patterns */
+.highlight-pattern {
+    background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+    border-left: 4px solid #EF4444;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+    to { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+}
+
+/* Success state styling */
+.success-state {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Error state styling */
+.error-state {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 101, 101, 0.1));
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
