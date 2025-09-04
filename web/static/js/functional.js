@@ -34,13 +34,34 @@ class FunctionalDetectionUI {
             document.getElementById('total-runs').textContent = this.totalRuns;
         });
         
-        // Expression preview button
-        const previewBtn = document.getElementById('show-expression-preview');
-        previewBtn.addEventListener('click', () => this.toggleExpressionPreview());
+        // Modal buttons
+        const openResultsBtn = document.getElementById('open-results');
+        openResultsBtn.addEventListener('click', () => this.openResultsModal());
         
-        // History toggle button
-        const historyBtn = document.getElementById('toggle-history');
-        historyBtn.addEventListener('click', () => this.toggleHistory());
+        const viewPastResultsBtn = document.getElementById('view-past-results');
+        viewPastResultsBtn.addEventListener('click', () => this.openResultsModal());
+        
+        const closeResultsBtn = document.getElementById('close-results');
+        closeResultsBtn.addEventListener('click', () => this.closeResultsModal());
+        
+        // Modal expression preview button
+        const modalPreviewBtn = document.getElementById('modal-show-expression-preview');
+        modalPreviewBtn.addEventListener('click', () => this.toggleModalExpressionPreview());
+        
+        // Close modal when clicking outside
+        const modal = document.getElementById('results-modal');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closeResultsModal();
+            }
+        });
+        
+        // ESC key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeResultsModal();
+            }
+        });
     }
     
     selectDataset(dataset) {
@@ -306,12 +327,9 @@ class FunctionalDetectionUI {
         
         const totalTime = Math.floor((Date.now() - this.startTime) / 1000);
         
-        // Show final results
-        document.getElementById('best-f1').textContent = bestHypothesis.results ? bestHypothesis.results.f1.toFixed(2) : '0.00';
-        document.getElementById('threats-found').textContent = totalThreats.toLocaleString();
-        document.getElementById('total-time').textContent = `${totalTime}s`;
-        document.getElementById('best-hypothesis').textContent = bestHypothesis.text || 'No hypothesis completed';
-        document.getElementById('final-results').classList.remove('hidden');
+        // Show results button and update modal
+        this.showResultsButton();
+        this.updateModalFinalResults(bestHypothesis, totalThreats, totalTime);
         
         // Save run to history
         this.saveRunToHistory({
@@ -571,19 +589,91 @@ These patterns are designed to:
 Total Characters: ~${expressionBombs.join('').length} chars of malicious content`;
     }
     
-    toggleHistory() {
-        const history = document.getElementById('run-history');
-        const button = document.getElementById('toggle-history');
-        
-        if (history.classList.contains('hidden')) {
-            history.classList.remove('hidden');
-            button.innerHTML = '<i class="fas fa-times mr-1"></i>Hide';
-        } else {
-            history.classList.add('hidden');
-            button.innerHTML = '<i class="fas fa-history mr-1"></i>History';
-        }
+    showResultsButton() {
+        document.getElementById('results-button').classList.remove('hidden');
+        document.getElementById('results-badge').classList.remove('hidden');
     }
     
+    openResultsModal() {
+        document.getElementById('results-modal').classList.remove('hidden');
+        document.getElementById('results-badge').classList.add('hidden');
+        this.updateModalContent();
+    }
+    
+    closeResultsModal() {
+        document.getElementById('results-modal').classList.add('hidden');
+    }
+    
+    updateModalContent() {
+        // Update live progress
+        const progress = (this.currentRun / this.totalRuns) * 100;
+        document.getElementById('modal-live-progress').textContent = `${Math.round(progress)}%`;
+        document.getElementById('modal-live-progress-bar').style.width = `${progress}%`;
+        
+        // Update live metrics
+        document.getElementById('modal-hypotheses').textContent = this.hypothesesGenerated.length;
+        
+        if (this.startTime) {
+            const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+            document.getElementById('modal-elapsed-time').textContent = `${elapsed}s`;
+        }
+        
+        // Update history
+        this.updateModalHistory();
+    }
+    
+    updateModalFinalResults(bestHypothesis, totalThreats, totalTime) {
+        document.getElementById('modal-best-f1').textContent = bestHypothesis.results ? bestHypothesis.results.f1.toFixed(2) : '0.00';
+        document.getElementById('modal-threats-found').textContent = totalThreats.toLocaleString();
+        document.getElementById('modal-total-time').textContent = `${totalTime}s`;
+        document.getElementById('modal-best-hypothesis').textContent = bestHypothesis.text || 'No hypothesis completed';
+        document.getElementById('modal-final-results').classList.remove('hidden');
+    }
+    
+    updateModalHistory() {
+        const historyList = document.getElementById('modal-history-list');
+        
+        if (this.runHistory.length === 0) {
+            historyList.innerHTML = '<div class="text-gray-400 text-center py-8">No previous runs available</div>';
+            return;
+        }
+        
+        historyList.innerHTML = '';
+        this.runHistory.forEach(run => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'bg-slate-800 rounded-lg p-4 cursor-pointer hover:bg-slate-700 transition-colors';
+            historyItem.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <div class="text-white font-medium">Run #${run.id} - ${run.dataset}</div>
+                        <div class="text-xs text-gray-500">${run.timestamp}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-green-400">F1: ${run.f1Score.toFixed(2)}</div>
+                        <div class="text-xs text-red-400">${run.threatsFound} threats</div>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-400">${run.hypotheses} hypotheses tested</div>
+            `;
+            historyList.appendChild(historyItem);
+        });
+    }
+    
+    toggleModalExpressionPreview() {
+        const preview = document.getElementById('modal-expression-preview');
+        const button = document.getElementById('modal-show-expression-preview');
+        
+        if (preview.classList.contains('hidden')) {
+            const expressionBombExample = this.generateExpressionBombingExample();
+            preview.textContent = expressionBombExample;
+            preview.classList.remove('hidden');
+            button.innerHTML = '<i class="fas fa-eye-slash mr-2"></i>Hide Example';
+        } else {
+            preview.classList.add('hidden');
+            button.innerHTML = '<i class="fas fa-eye mr-2"></i>Show Example';
+        }
+    }
+
     saveRunToHistory(results) {
         const runData = {
             id: this.runHistory.length + 1,
@@ -599,31 +689,7 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
             this.runHistory.pop(); // Keep only last 10 runs
         }
         
-        this.updateHistoryDisplay();
-    }
-    
-    updateHistoryDisplay() {
-        const historyList = document.getElementById('history-list');
-        historyList.innerHTML = '';
-        
-        this.runHistory.forEach(run => {
-            const historyItem = document.createElement('div');
-            historyItem.className = 'bg-slate-800 rounded p-2 text-xs cursor-pointer hover:bg-slate-700';
-            historyItem.innerHTML = `
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-white font-medium">Run #${run.id}</span>
-                    <span class="text-gray-500">${run.timestamp}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-300">${run.dataset}</span>
-                    <div class="flex space-x-2">
-                        <span class="text-green-400">F1: ${run.f1Score.toFixed(2)}</span>
-                        <span class="text-red-400">${run.threatsFound} threats</span>
-                    </div>
-                </div>
-            `;
-            historyList.appendChild(historyItem);
-        });
+        // History will be updated in modal instead
     }
 }
 

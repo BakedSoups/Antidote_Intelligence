@@ -31,8 +31,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .glass {
-            background: rgba(30, 41, 59, 0.8) !important;
-            backdrop-filter: blur(10px);
+            background: rgb(30, 41, 59) !important;
             border: 1px solid rgba(71, 85, 105, 0.5);
         }
         
@@ -46,8 +45,19 @@
             padding: 0;
         }
         
+        /* Fix dropdown options styling */
+        select option {
+            background-color: #334155 !important;
+            color: white !important;
+        }
+        
+        select {
+            background-color: #374151 !important;
+            color: white !important;
+        }
+        
         .hypothesis-container {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)) !important;
+            background: linear-gradient(145deg, rgb(15, 23, 42), rgb(30, 41, 59)) !important;
             border-left: 4px solid #3b82f6;
             transition: all 0.3s ease;
         }
@@ -100,8 +110,8 @@
     </header>
 
     <!-- Main Container -->
-    <div class="max-w-full mx-auto px-3 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <div class="max-w-6xl mx-auto px-6 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             
             <!-- Left Panel: Controls -->
             <div class="lg:col-span-1">
@@ -203,11 +213,18 @@
                         </div>
                     </div>
 
-                    <!-- Start Button -->
-                    <button id="start-detection" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-all disabled:opacity-50" disabled>
-                        <i class="fas fa-play mr-2"></i>
-                        Start Detection
-                    </button>
+                    <!-- Buttons -->
+                    <div class="space-y-3">
+                        <button id="start-detection" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-all disabled:opacity-50" disabled>
+                            <i class="fas fa-play mr-2"></i>
+                            Start Detection
+                        </button>
+                        
+                        <button id="view-past-results" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 px-4 rounded-lg transition-all border border-slate-600">
+                            <i class="fas fa-history mr-2"></i>
+                            View Past Results
+                        </button>
+                    </div>
 
                     <!-- Progress -->
                     <div id="progress-panel" class="mt-6 hidden">
@@ -222,7 +239,7 @@
             </div>
 
             <!-- Main Area: Live Hypothesis Generation -->
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-3">
                 <!-- Pipeline Overview -->
                 <div class="glass rounded-xl p-6 mb-6">
                     <h3 class="text-lg font-semibold text-white mb-4">
@@ -306,90 +323,122 @@
                 </div>
 
             </div>
+        </div>
+    </div>
 
-            <!-- Right Sidebar: Detection Results -->
-            <div class="lg:col-span-2">
-                <!-- Live Results Panel -->
-                <div class="glass rounded-xl p-6 sticky top-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">
-                            <i class="fas fa-chart-line text-green-400 mr-2"></i>
-                            Live Results
-                        </h3>
-                        <button id="toggle-history" class="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 rounded border border-blue-400 hover:border-blue-300">
-                            <i class="fas fa-history mr-1"></i>History
-                        </button>
-                    </div>
+    <!-- Floating Results Button -->
+    <div id="results-button" class="fixed bottom-6 right-6 hidden">
+        <button id="open-results" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-all hover:scale-105">
+            <i class="fas fa-chart-line mr-2"></i>
+            View Results
+            <span id="results-badge" class="ml-2 bg-red-500 text-xs px-2 py-1 rounded-full hidden">New</span>
+        </button>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+            <!-- Modal Header -->
+            <div class="border-b border-slate-700 p-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-white">
+                        <i class="fas fa-chart-line text-green-400 mr-3"></i>
+                        Detection Results & Analytics
+                    </h2>
+                    <button id="close-results" class="text-gray-400 hover:text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Modal Content (Scrollable) -->
+            <div class="overflow-y-auto max-h-[calc(90vh-120px)] p-6">
+                <!-- Current Run Results -->
+                <div id="current-results" class="mb-8">
+                    <h3 class="text-xl font-semibold text-white mb-4">Current Analysis</h3>
                     
-                    <!-- Run History (hidden by default) -->
-                    <div id="run-history" class="mb-4 hidden">
-                        <h4 class="text-sm font-medium text-gray-300 mb-2">Previous Runs</h4>
-                        <div id="history-list" class="space-y-2 max-h-40 overflow-y-auto">
-                            <!-- History items will be added here -->
-                        </div>
-                    </div>
-                    
-                    <!-- Current Progress -->
-                    <div class="mb-6">
+                    <!-- Live Progress -->
+                    <div class="bg-slate-800 rounded-lg p-4 mb-4">
                         <div class="flex justify-between text-sm text-gray-300 mb-2">
                             <span>Processing Progress</span>
-                            <span id="live-progress">0%</span>
+                            <span id="modal-live-progress">0%</span>
                         </div>
-                        <div class="w-full bg-slate-700 rounded-full h-2">
-                            <div id="live-progress-bar" class="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all" style="width: 0%"></div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div id="modal-live-progress-bar" class="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all" style="width: 0%"></div>
                         </div>
                     </div>
 
                     <!-- Live Metrics -->
-                    <div class="grid grid-cols-2 gap-3 mb-6">
-                        <div class="bg-slate-800 rounded-lg p-3 text-center">
-                            <div class="text-lg font-bold text-white" id="live-f1">-</div>
-                            <div class="text-xs text-gray-400">Best F1</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div class="bg-slate-800 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-white" id="modal-live-f1">-</div>
+                            <div class="text-sm text-gray-400">Best F1 Score</div>
                         </div>
-                        <div class="bg-slate-800 rounded-lg p-3 text-center">
-                            <div class="text-lg font-bold text-white" id="live-threats">0</div>
-                            <div class="text-xs text-gray-400">Threats</div>
+                        <div class="bg-slate-800 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-white" id="modal-live-threats">0</div>
+                            <div class="text-sm text-gray-400">Threats Found</div>
                         </div>
-                    </div>
-
-                    <!-- Expression Preview -->
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <h4 class="text-sm font-medium text-white">Expression Preview</h4>
-                            <button id="show-expression-preview" class="text-xs text-blue-400 hover:text-blue-300">
-                                <i class="fas fa-eye mr-1"></i>Show Example
-                            </button>
+                        <div class="bg-slate-800 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-white" id="modal-hypotheses">0</div>
+                            <div class="text-sm text-gray-400">Hypotheses</div>
                         </div>
-                        <div id="expression-preview" class="bg-slate-800 rounded-lg p-3 text-xs text-gray-300 font-mono max-h-32 overflow-y-auto hidden">
-                            <!-- Expression example will be shown here -->
+                        <div class="bg-slate-800 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-white" id="modal-elapsed-time">0s</div>
+                            <div class="text-sm text-gray-400">Elapsed Time</div>
                         </div>
                     </div>
 
-                    <!-- Final Results (shown after completion) -->
-                    <div id="final-results" class="hidden">
+                    <!-- Final Results (hidden until complete) -->
+                    <div id="modal-final-results" class="bg-slate-800 rounded-lg p-6 hidden">
                         <h4 class="text-lg font-semibold text-white mb-4">
                             <i class="fas fa-trophy text-yellow-400 mr-2"></i>
-                            Final Detection Results
+                            Final Detection Summary
                         </h4>
                         
-                        <div class="grid grid-cols-1 gap-3 mb-4">
-                            <div class="bg-slate-800 rounded-lg p-4">
-                                <div class="text-2xl font-bold text-white" id="best-f1">0.00</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-400" id="modal-best-f1">0.00</div>
                                 <div class="text-sm text-gray-400">Best F1 Score</div>
                             </div>
-                            <div class="bg-slate-800 rounded-lg p-4">
-                                <div class="text-2xl font-bold text-white" id="threats-found">0</div>
-                                <div class="text-sm text-gray-400">Total Threats Detected</div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-red-400" id="modal-threats-found">0</div>
+                                <div class="text-sm text-gray-400">Total Threats</div>
                             </div>
-                            <div class="bg-slate-800 rounded-lg p-4">
-                                <div class="text-2xl font-bold text-white" id="total-time">0s</div>
-                                <div class="text-sm text-gray-400">Total Processing Time</div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-blue-400" id="modal-total-time">0s</div>
+                                <div class="text-sm text-gray-400">Total Time</div>
                             </div>
                         </div>
 
                         <div class="mt-4">
                             <div class="text-sm font-medium text-gray-300 mb-2">Best Performing Hypothesis:</div>
-                            <div id="best-hypothesis" class="bg-slate-800 rounded-lg p-3 text-sm text-gray-300 max-h-24 overflow-y-auto"></div>
+                            <div id="modal-best-hypothesis" class="bg-slate-700 rounded-lg p-3 text-sm text-gray-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expression Preview Section -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-white">Expression Analysis</h3>
+                        <button id="modal-show-expression-preview" class="text-sm text-blue-400 hover:text-blue-300 px-3 py-1 rounded border border-blue-400">
+                            <i class="fas fa-eye mr-2"></i>Show Example
+                        </button>
+                    </div>
+                    <div id="modal-expression-preview" class="bg-slate-800 rounded-lg p-4 text-xs text-gray-300 font-mono max-h-60 overflow-y-auto hidden">
+                        <!-- Expression example will be shown here -->
+                    </div>
+                </div>
+
+                <!-- Run History Section -->
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-4">
+                        <i class="fas fa-history text-blue-400 mr-2"></i>
+                        Analysis History
+                    </h3>
+                    <div id="modal-history-list" class="space-y-3">
+                        <div class="text-gray-400 text-center py-8">
+                            No previous runs available
                         </div>
                     </div>
                 </div>
@@ -397,6 +446,6 @@
         </div>
     </div>
 
-    <script src="static/js/functional.js?v=4"></script>
+    <script src="static/js/functional.js?v=6"></script>
 </body>
 </html>
