@@ -1091,6 +1091,429 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
             </div>
         `;
     }
+    
+    // Diagnosis Modal Methods
+    openDiagnosisModal() {
+        const modal = document.getElementById('diagnosis-modal');
+        modal.classList.remove('hidden');
+        
+        // Generate diagnosis data
+        this.generateDiagnosis();
+        this.createCharts();
+    }
+    
+    closeDiagnosisModal() {
+        const modal = document.getElementById('diagnosis-modal');
+        modal.classList.add('hidden');
+    }
+    
+    isDiagnosisModalOpen() {
+        const modal = document.getElementById('diagnosis-modal');
+        return modal && !modal.classList.contains('hidden');
+    }
+    
+    generateDiagnosis() {
+        // Calculate current analysis data
+        let bestResult = null;
+        let totalThreats = 0;
+        let confidence = 85;
+        
+        if (this.hypothesesGenerated.length > 0) {
+            bestResult = this.hypothesesGenerated.reduce((best, current) => 
+                current.results && (!best.results || current.results.f1 > best.results.f1) ? current : best
+            );
+            totalThreats = this.hypothesesGenerated
+                .filter(h => h.results)
+                .reduce((sum, h) => sum + h.results.files, 0);
+            confidence = bestResult.results ? (bestResult.results.f1 * 100) : 85;
+        } else {
+            // Generate sample data based on selected dataset
+            const sampleResults = this.generateResults();
+            totalThreats = sampleResults.files;
+            confidence = sampleResults.f1 * 100;
+            bestResult = { results: sampleResults };
+        }
+        
+        // Generate verdict based on threat level
+        let verdict = 'CLEAN';
+        let verdictColor = 'green';
+        let borderColor = 'border-green-500';
+        let verdictText = '';
+        
+        if (totalThreats > 1000) {
+            verdict = 'HIGH RISK';
+            verdictColor = 'red';
+            borderColor = 'border-red-500';
+            verdictText = `Critical data poisoning detected! Found ${totalThreats.toLocaleString()} malicious files across multiple attack vectors. Immediate dataset cleaning required before training any ML models.`;
+        } else if (totalThreats > 100) {
+            verdict = 'MEDIUM RISK';
+            verdictColor = 'yellow';
+            borderColor = 'border-yellow-500';
+            verdictText = `Moderate contamination detected with ${totalThreats.toLocaleString()} suspicious files. Dataset requires cleaning and validation before use.`;
+        } else if (totalThreats > 10) {
+            verdict = 'LOW RISK';
+            verdictColor = 'yellow';
+            borderColor = 'border-yellow-500';
+            verdictText = `Minor data issues found in ${totalThreats} files. Review and clean identified files before proceeding with training.`;
+        } else {
+            verdictText = `Dataset appears clean with only ${totalThreats} potential issues detected. Safe for ML training with standard validation procedures.`;
+        }
+        
+        // Update verdict UI
+        const verdictSummary = document.getElementById('verdict-summary');
+        verdictSummary.className = `bg-slate-900 rounded-xl p-6 mb-6 border-l-4 ${borderColor}`;
+        
+        const verdictStatus = document.getElementById('verdict-status');
+        verdictStatus.innerHTML = `
+            <div class="w-4 h-4 bg-${verdictColor}-500 rounded-full"></div>
+            <span class="text-${verdictColor}-400 font-bold">${verdict}</span>
+        `;
+        
+        document.getElementById('verdict-text').textContent = verdictText;
+        document.getElementById('verdict-confidence').textContent = `${confidence.toFixed(1)}%`;
+        document.getElementById('verdict-threats').textContent = totalThreats.toLocaleString();
+        document.getElementById('verdict-accuracy').textContent = bestResult.results ? bestResult.results.f1.toFixed(3) : '0.000';
+        
+        // Generate threat analysis
+        this.generateThreatAnalysis(totalThreats);
+        this.generateRecommendations(verdict, totalThreats);
+    }
+    
+    generateThreatAnalysis(threatCount) {
+        const analysisContainer = document.getElementById('threat-analysis');
+        
+        const threats = [
+            {
+                type: 'Expression Bombing',
+                count: Math.floor(threatCount * 0.4),
+                severity: 'High',
+                description: 'Excessive special character sequences designed to overwhelm text processing systems'
+            },
+            {
+                type: 'Backdoor Triggers',
+                count: Math.floor(threatCount * 0.3),
+                severity: 'Critical',
+                description: 'Hidden activation phrases that could trigger malicious behavior in trained models'
+            },
+            {
+                type: 'Bias Injection',
+                count: Math.floor(threatCount * 0.2),
+                severity: 'Medium',
+                description: 'Discriminatory content injected to skew model training and introduce bias'
+            },
+            {
+                type: 'Data Manipulation',
+                count: Math.floor(threatCount * 0.1),
+                severity: 'Medium',
+                description: 'Subtle alterations to training data that could affect model performance'
+            }
+        ];
+        
+        analysisContainer.innerHTML = '';
+        threats.forEach(threat => {
+            if (threat.count > 0) {
+                const severityColor = threat.severity === 'Critical' ? 'red' : 
+                                    threat.severity === 'High' ? 'orange' : 
+                                    'yellow';
+                
+                const threatEl = document.createElement('div');
+                threatEl.className = 'bg-slate-800 rounded-lg p-4';
+                threatEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-white">${threat.type}</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 text-xs rounded bg-${severityColor}-900 text-${severityColor}-200">${threat.severity}</span>
+                            <span class="text-${severityColor}-400 font-bold">${threat.count.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">${threat.description}</p>
+                `;
+                analysisContainer.appendChild(threatEl);
+            }
+        });
+    }
+    
+    generateRecommendations(verdict, threatCount) {
+        const recommendationsContainer = document.getElementById('recommendations');
+        
+        let recommendations = [];
+        
+        if (verdict === 'HIGH RISK') {
+            recommendations = [
+                {
+                    icon: 'fas fa-ban',
+                    title: 'Do Not Use Dataset',
+                    description: 'Dataset is heavily contaminated and should not be used for training without extensive cleaning.',
+                    priority: 'Critical'
+                },
+                {
+                    icon: 'fas fa-filter',
+                    title: 'Apply Data Filtering',
+                    description: 'Use the generated filters to remove identified malicious content before proceeding.',
+                    priority: 'High'
+                },
+                {
+                    icon: 'fas fa-redo',
+                    title: 'Re-run Analysis',
+                    description: 'After cleaning, run the analysis again to verify threat reduction.',
+                    priority: 'High'
+                }
+            ];
+        } else if (verdict === 'MEDIUM RISK') {
+            recommendations = [
+                {
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'Clean Before Use',
+                    description: 'Remove identified threats before using for model training.',
+                    priority: 'High'
+                },
+                {
+                    icon: 'fas fa-shield-alt',
+                    title: 'Implement Safeguards',
+                    description: 'Add additional validation and monitoring during training.',
+                    priority: 'Medium'
+                },
+                {
+                    icon: 'fas fa-eye',
+                    title: 'Manual Review',
+                    description: 'Manually review a sample of flagged files to understand attack patterns.',
+                    priority: 'Medium'
+                }
+            ];
+        } else {
+            recommendations = [
+                {
+                    icon: 'fas fa-check-circle',
+                    title: 'Dataset Ready',
+                    description: 'Dataset appears safe for ML training with standard validation.',
+                    priority: 'Info'
+                },
+                {
+                    icon: 'fas fa-chart-line',
+                    title: 'Monitor Training',
+                    description: 'Continue monitoring model performance during training.',
+                    priority: 'Low'
+                },
+                {
+                    icon: 'fas fa-history',
+                    title: 'Regular Scanning',
+                    description: 'Perform periodic scans to detect new contamination.',
+                    priority: 'Low'
+                }
+            ];
+        }
+        
+        recommendationsContainer.innerHTML = '';
+        recommendations.forEach(rec => {
+            const priorityColor = rec.priority === 'Critical' ? 'red' : 
+                                 rec.priority === 'High' ? 'orange' : 
+                                 rec.priority === 'Medium' ? 'yellow' : 
+                                 rec.priority === 'Info' ? 'green' : 'gray';
+            
+            const recEl = document.createElement('div');
+            recEl.className = 'bg-slate-800 rounded-lg p-4';
+            recEl.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-10 h-10 bg-${priorityColor}-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="${rec.icon} text-white text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-medium text-white">${rec.title}</h5>
+                            <span class="px-2 py-1 text-xs rounded bg-${priorityColor}-900 text-${priorityColor}-200">${rec.priority}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">${rec.description}</p>
+                    </div>
+                </div>
+            `;
+            recommendationsContainer.appendChild(recEl);
+        });
+    }
+    
+    createCharts() {
+        this.createHypothesisChart();
+        this.createDistributionChart();
+    }
+    
+    createHypothesisChart() {
+        const canvas = document.getElementById('hypothesis-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Generate hypothesis performance data
+        const hypothesesData = this.hypothesesGenerated.length > 0 ? 
+            this.hypothesesGenerated.map((h, index) => ({
+                label: `H${index + 1}`,
+                f1: h.results ? h.results.f1 : Math.random() * 0.8 + 0.1,
+                files: h.results ? h.results.files : Math.floor(Math.random() * 1000 + 100)
+            })) :
+            Array.from({length: 5}, (_, i) => ({
+                label: `H${i + 1}`,
+                f1: Math.random() * 0.8 + 0.1,
+                files: Math.floor(Math.random() * 1000 + 100)
+            }));
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: hypothesesData.map(h => h.label),
+                datasets: [{
+                    label: 'F1 Score',
+                    data: hypothesesData.map(h => h.f1),
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Files Found (scaled)',
+                    data: hypothesesData.map(h => h.files / 1000),
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e2e8f0' }
+                    }
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    },
+                    y: { 
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    }
+                }
+            }
+        });
+    }
+    
+    createDistributionChart() {
+        const canvas = document.getElementById('distribution-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Generate file reaction distribution data
+        const totalFiles = 10000;
+        let cleanFiles, suspiciousFiles, maliciousFiles;
+        
+        if (this.hypothesesGenerated.length > 0) {
+            const totalThreats = this.hypothesesGenerated
+                .filter(h => h.results)
+                .reduce((sum, h) => sum + h.results.files, 0) / this.hypothesesGenerated.length;
+            
+            maliciousFiles = Math.floor(totalThreats);
+            suspiciousFiles = Math.floor(totalFiles * 0.05);
+            cleanFiles = totalFiles - maliciousFiles - suspiciousFiles;
+        } else {
+            const sampleResult = this.generateResults();
+            maliciousFiles = sampleResult.files;
+            suspiciousFiles = Math.floor(totalFiles * 0.05);
+            cleanFiles = totalFiles - maliciousFiles - suspiciousFiles;
+        }
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Clean Files', 'Suspicious Files', 'Malicious Files'],
+                datasets: [{
+                    data: [cleanFiles, suspiciousFiles, maliciousFiles],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderColor: ['#065f46', '#92400e', '#7f1d1d'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            color: '#e2e8f0',
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    exportReport() {
+        // Generate and download a diagnosis report
+        const reportData = {
+            timestamp: new Date().toISOString(),
+            dataset: this.selectedDataset,
+            verdict: document.getElementById('verdict-status').textContent.trim(),
+            confidence: document.getElementById('verdict-confidence').textContent,
+            threats: document.getElementById('verdict-threats').textContent,
+            f1Score: document.getElementById('verdict-accuracy').textContent,
+            hypotheses: this.hypothesesGenerated.length,
+            analysis: document.getElementById('verdict-text').textContent
+        };
+        
+        const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `diagnosis-report-${new Date().getTime()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        // Show success message
+        this.showToast('Report exported successfully!', 'success');
+    }
+    
+    saveDiagnosis() {
+        // Save diagnosis to local storage or send to server
+        const diagnosisData = {
+            timestamp: new Date().toISOString(),
+            dataset: this.selectedDataset,
+            verdict: document.getElementById('verdict-status').textContent.trim(),
+            analysis: document.getElementById('verdict-text').textContent,
+            metrics: {
+                confidence: document.getElementById('verdict-confidence').textContent,
+                threats: document.getElementById('verdict-threats').textContent,
+                f1Score: document.getElementById('verdict-accuracy').textContent
+            }
+        };
+        
+        localStorage.setItem(`diagnosis-${Date.now()}`, JSON.stringify(diagnosisData));
+        this.showToast('Diagnosis saved successfully!', 'success');
+    }
+    
+    rerunAnalysis() {
+        this.closeDiagnosisModal();
+        if (!this.isRunning && this.selectedDataset) {
+            this.startDetection();
+        }
+    }
+    
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 transform translate-x-full ${
+            type === 'success' ? 'bg-green-600' : 
+            type === 'error' ? 'bg-red-600' : 
+            'bg-blue-600'
+        }`;
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+        }, 100);
+        
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
 }
 
 // Initialize when DOM is ready
