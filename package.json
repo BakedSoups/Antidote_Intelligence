@@ -1,20 +1,11 @@
 {
-    "name": "antidote-intelligence-ui",
+    "name": "antidote-intelligence",
     "version": "1.0.0",
-    "description": "Electron UI for Antidote Intelligence LLM dataset analysis",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron . --no-sandbox",
-        "package": "electron-packager . antidote-intelligence-ui --platform=win32,darwin --arch=x64 --overwrite"
-    },
+    "description": "Antidote Intelligence LLM dataset analysis web application",
+    "scripts": {},
     "author": "Your Name",
     "license": "MIT",
-    "devDependencies": {
-        "electron": "^27.0.0",
-        "electron-packager": "^17.1.1"
-    },
     "dependencies": {
-        "d3": "^7.8.5",
-        "electron-store": "^8.1.0"
+        "d3": "^7.8.5"
     }
 }
