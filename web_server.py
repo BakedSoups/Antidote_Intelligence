@@ -411,6 +411,63 @@ def save_current_analysis():
         logger.error(f"Failed to save analysis: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/runs/save-complete', methods=['POST'])
+def save_complete_analysis():
+    """Save a complete analysis run with all data"""
+    try:
+        data = request.get_json()
+        
+        # Create new run
+        run_id = api.db.create_analysis_run(
+            data.get('dataset_name', 'Unknown'),
+            data.get('dataset_type', 'unknown'),
+            data.get('num_hypotheses', 5)
+        )
+        
+        # Save hypotheses
+        if data.get('hypotheses'):
+            for hypothesis in data['hypotheses']:
+                hyp_id = api.db.add_hypothesis(
+                    run_id,
+                    hypothesis['iteration'],
+                    hypothesis['hypothesis_text'],
+                    hypothesis.get('filter_code')
+                )
+                
+                # Update with results
+                api.db.update_hypothesis_results(
+                    hyp_id,
+                    hypothesis.get('f1_score', 0.0),
+                    hypothesis.get('precision_score', 0.0),
+                    hypothesis.get('recall_score', 0.0),
+                    hypothesis.get('files_found', 0),
+                    hypothesis.get('execution_time_ms', 0)
+                )
+        
+        # Save threats and recommendations
+        if data.get('threats'):
+            api.db.add_threat_analysis(run_id, data['threats'])
+        
+        if data.get('recommendations'):
+            api.db.add_recommendations(run_id, data['recommendations'])
+        
+        # Complete the run
+        api.db.complete_analysis_run(
+            run_id,
+            data.get('total_threats', 0),
+            data.get('best_f1_score', 0.0),
+            data.get('confidence', 0.0),
+            data.get('verdict', 'UNKNOWN'),
+            data.get('duration_seconds', 0)
+        )
+        
+        logger.info(f"Saved complete analysis run {run_id}")
+        return jsonify({'success': True, 'run_id': run_id})
+        
+    except Exception as e:
+        logger.error(f"Failed to save complete analysis: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 # WebSocket events
 @socketio.on('connect')
 def handle_connect():

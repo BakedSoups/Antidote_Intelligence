@@ -16,6 +16,9 @@ class FunctionalDetectionUI {
     
     init() {
         this.setupEventListeners();
+        
+        // Load past results on initialization
+        this.updateMetricsPastResults();
     }
     
     setupEventListeners() {
@@ -50,6 +53,14 @@ class FunctionalDetectionUI {
         // Refresh past results button
         const refreshPastResultsBtn = document.getElementById('refresh-past-results');
         refreshPastResultsBtn.addEventListener('click', () => this.updateMetricsPastResults());
+        
+        // Expand all past results button
+        const expandAllBtn = document.getElementById('expand-all-past');
+        expandAllBtn.addEventListener('click', () => this.toggleAllPastRunsExpansion());
+        
+        // View current analysis button
+        const viewCurrentBtn = document.getElementById('view-current-analysis');
+        viewCurrentBtn.addEventListener('click', () => this.viewCurrentAnalysisFromHistory());
         
         // Verdict button
         const verdictBtn = document.getElementById('verdict-button');
@@ -147,6 +158,9 @@ class FunctionalDetectionUI {
         document.getElementById('welcome-message').style.display = 'none';
         document.getElementById('view-metrics').classList.remove('hidden');
         
+        // Show current analysis container in metrics panel
+        this.showCurrentAnalysisContainer();
+        
         // Run detection iterations
         for (let i = 1; i <= this.totalRuns; i++) {
             this.currentRun = i;
@@ -154,7 +168,7 @@ class FunctionalDetectionUI {
             await this.runDetectionIteration(i);
         }
         
-        this.completeDetection();
+        await this.completeDetection();
     }
     
     resetAnalysisState() {
@@ -388,7 +402,7 @@ class FunctionalDetectionUI {
         timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
     }
     
-    completeDetection() {
+    async completeDetection() {
         this.isRunning = false;
         
         // Calculate final results
@@ -405,6 +419,9 @@ class FunctionalDetectionUI {
         // Show final results in metrics modal
         this.updateMetricsFinalResults(bestHypothesis, totalThreats, totalTime);
         
+        // Automatically save to database
+        await this.saveAnalysisToDatabase(bestHypothesis, totalThreats, totalTime);
+        
         // Save run to history
         this.saveRunToHistory({
             f1: parseFloat(bestHypothesis.results ? bestHypothesis.results.f1.toFixed(2) : 0),
@@ -416,6 +433,164 @@ class FunctionalDetectionUI {
         document.getElementById('start-detection').disabled = false;
         document.getElementById('start-detection').innerHTML = '<i class="fas fa-play mr-2"></i> Start Detection';
         document.getElementById('progress-panel').classList.add('hidden');
+        
+        // Show final results panel
+        const finalResultsPanel = document.getElementById('metrics-final-results');
+        if (finalResultsPanel) {
+            finalResultsPanel.classList.remove('hidden');
+        }
+        
+        // Hide current analysis container after completion
+        setTimeout(() => {
+            this.hideCurrentAnalysisContainer();
+        }, 2000); // Keep it visible for 2 seconds after completion
+    }
+    
+    async saveAnalysisToDatabase(bestHypothesis, totalThreats, totalTime) {
+        console.log('Saving analysis to database...', {
+            totalThreats,
+            totalTime,
+            hypothesesCount: this.hypothesesGenerated.length
+        });
+        
+        try {
+            // Determine verdict based on threat level
+            let verdict = 'CLEAN';
+            if (totalThreats > 1000) {
+                verdict = 'HIGH RISK';
+            } else if (totalThreats > 100) {
+                verdict = 'MEDIUM RISK';
+            } else if (totalThreats > 10) {
+                verdict = 'LOW RISK';
+            }
+            
+            const confidence = bestHypothesis.results ? (bestHypothesis.results.f1 * 100) : 85;
+            
+            // Prepare data for database
+            const analysisData = {
+                dataset_name: this.getDatasetName(this.selectedDataset || 'unknown'),
+                dataset_type: this.selectedDataset || 'unknown',
+                num_hypotheses: this.hypothesesGenerated.length,
+                total_threats: totalThreats,
+                best_f1_score: bestHypothesis.results ? bestHypothesis.results.f1 : 0.0,
+                confidence: confidence,
+                verdict: verdict,
+                duration_seconds: totalTime,
+                
+                // Include detailed hypothesis data
+                hypotheses: this.hypothesesGenerated.map((h, index) => ({
+                    iteration: index + 1,
+                    hypothesis_text: h.text || '',
+                    filter_code: this.generateFilterCode(index + 1),
+                    f1_score: h.results ? h.results.f1 : 0,
+                    precision_score: h.results ? h.results.precision : 0,
+                    recall_score: h.results ? h.results.recall : 0,
+                    files_found: h.results ? h.results.files : 0
+                })),
+                
+                // Include threats breakdown
+                threats: [
+                    {
+                        type: 'Expression Bombing',
+                        count: Math.floor(totalThreats * 0.4),
+                        severity: 'High',
+                        description: 'Excessive special character sequences'
+                    },
+                    {
+                        type: 'Backdoor Triggers',
+                        count: Math.floor(totalThreats * 0.3),
+                        severity: 'Critical',
+                        description: 'Hidden activation phrases'
+                    },
+                    {
+                        type: 'Bias Injection',
+                        count: Math.floor(totalThreats * 0.2),
+                        severity: 'Medium',
+                        description: 'Discriminatory content'
+                    },
+                    {
+                        type: 'Data Manipulation',
+                        count: Math.floor(totalThreats * 0.1),
+                        severity: 'Medium',
+                        description: 'Subtle alterations'
+                    }
+                ],
+                
+                // Include recommendations
+                recommendations: this.getRecommendationsForVerdict(verdict)
+            };
+            
+            const response = await fetch('/api/runs/save-complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(analysisData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                console.log('Analysis saved to database with ID:', result.run_id);
+                
+                // Refresh past results list
+                await this.updateMetricsPastResults();
+            } else {
+                console.error('Failed to save analysis to database');
+            }
+            
+        } catch (error) {
+            console.error('Error saving analysis to database:', error);
+        }
+    }
+    
+    getRecommendationsForVerdict(verdict) {
+        if (verdict === 'HIGH RISK') {
+            return [
+                {
+                    title: 'Do Not Use Dataset',
+                    description: 'Dataset is heavily contaminated',
+                    priority: 'Critical',
+                    icon: 'fas fa-ban'
+                },
+                {
+                    title: 'Apply Data Filtering',
+                    description: 'Use generated filters to clean data',
+                    priority: 'High',
+                    icon: 'fas fa-filter'
+                }
+            ];
+        } else if (verdict === 'MEDIUM RISK') {
+            return [
+                {
+                    title: 'Clean Before Use',
+                    description: 'Remove identified threats',
+                    priority: 'High',
+                    icon: 'fas fa-exclamation-triangle'
+                },
+                {
+                    title: 'Implement Safeguards',
+                    description: 'Add validation during training',
+                    priority: 'Medium',
+                    icon: 'fas fa-shield-alt'
+                }
+            ];
+        } else {
+            return [
+                {
+                    title: 'Dataset Ready',
+                    description: 'Safe for ML training',
+                    priority: 'Info',
+                    icon: 'fas fa-check-circle'
+                },
+                {
+                    title: 'Monitor Training',
+                    description: 'Continue monitoring performance',
+                    priority: 'Low',
+                    icon: 'fas fa-chart-line'
+                }
+            ];
+        }
     }
     
     async generateHypothesisWithGPT(iteration) {
@@ -697,6 +872,56 @@ class FunctionalDetectionUI {
         const progress = (this.currentRun / this.totalRuns) * 100;
         document.getElementById('progress-bar').style.width = `${progress}%`;
         document.getElementById('current-run').textContent = this.currentRun;
+        
+        // Update current analysis container
+        this.updateCurrentAnalysisContainer(progress);
+    }
+    
+    showCurrentAnalysisContainer() {
+        const container = document.getElementById('metrics-current-analysis');
+        if (container) {
+            container.classList.remove('hidden');
+            
+            // Update initial values
+            document.getElementById('current-analysis-dataset').textContent = this.getDatasetName(this.selectedDataset);
+            document.getElementById('current-analysis-progress').textContent = '0%';
+            document.getElementById('current-analysis-hypotheses').textContent = '0';
+        }
+    }
+    
+    updateCurrentAnalysisContainer(progress) {
+        const progressEl = document.getElementById('current-analysis-progress');
+        const hypothesesEl = document.getElementById('current-analysis-hypotheses');
+        
+        if (progressEl) {
+            progressEl.textContent = `${Math.round(progress)}%`;
+        }
+        
+        if (hypothesesEl) {
+            hypothesesEl.textContent = this.hypothesesGenerated.length;
+        }
+    }
+    
+    hideCurrentAnalysisContainer() {
+        const container = document.getElementById('metrics-current-analysis');
+        if (container) {
+            container.classList.add('hidden');
+        }
+    }
+    
+    viewCurrentAnalysisFromHistory() {
+        // If viewing a past run, switch back to current
+        if (this.currentViewMode === 'past') {
+            this.backToCurrentAnalysis();
+        } else {
+            // Close metrics panel and scroll to hypothesis workspace
+            this.toggleMetricsPanel();
+            
+            const workspace = document.getElementById('hypothesis-workspace');
+            if (workspace) {
+                workspace.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }
     
     sleep(ms) {
@@ -927,8 +1152,8 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
             
             runs.forEach((run) => {
                 const runEl = document.createElement('div');
-                runEl.className = 'bg-slate-700 rounded-lg p-3 mb-2 hover:bg-slate-600 transition-colors cursor-pointer';
-                runEl.onclick = () => this.viewPastRun(run.id);
+                runEl.className = 'past-run-item';
+                runEl.dataset.runId = run.id;
                 
                 const riskLevel = run.total_threats > 1000 ? 'High Risk' : 
                                  run.total_threats > 100 ? 'Medium Risk' : 'Low Risk';
@@ -936,28 +1161,39 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
                                  run.total_threats > 100 ? 'bg-yellow-900 text-yellow-200' : 'bg-green-900 text-green-200';
                 
                 runEl.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm font-medium text-white">Run #${run.id}</span>
-                            <span class="px-2 py-1 text-xs rounded ${riskColor}">
-                                ${riskLevel}
-                            </span>
+                    <div class="bg-slate-700 rounded-lg p-3 mb-2 hover:bg-slate-600 transition-colors cursor-pointer" onclick="window.functionalUI.toggleRunExpansion(${run.id})">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-chevron-right text-gray-400 text-xs transition-transform" id="expand-icon-${run.id}"></i>
+                                <span class="text-sm font-medium text-white">Run #${run.id}</span>
+                                <span class="px-2 py-1 text-xs rounded ${riskColor}">
+                                    ${riskLevel}
+                                </span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-gray-400">${new Date(run.timestamp).toLocaleDateString()}</span>
+                                <button onclick="event.stopPropagation(); window.functionalUI.viewPastRun(${run.id})" class="text-blue-400 hover:text-blue-300 text-xs px-2 py-1 rounded border border-blue-400 ml-2">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
                         </div>
-                        <span class="text-xs text-gray-400">${new Date(run.timestamp).toLocaleDateString()}</span>
+                        <div class="grid grid-cols-3 gap-3 text-xs mt-2">
+                            <div>
+                                <span class="text-gray-400">Threats:</span>
+                                <div class="text-white font-medium">${run.total_threats.toLocaleString()}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">F1 Score:</span>
+                                <div class="text-white font-medium">${(run.best_f1_score || 0).toFixed(2)}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Dataset:</span>
+                                <div class="text-white font-medium truncate">${run.dataset_name}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-3 gap-3 text-xs">
-                        <div>
-                            <span class="text-gray-400">Threats:</span>
-                            <div class="text-white font-medium">${run.total_threats.toLocaleString()}</div>
-                        </div>
-                        <div>
-                            <span class="text-gray-400">F1 Score:</span>
-                            <div class="text-white font-medium">${(run.best_f1_score || 0).toFixed(2)}</div>
-                        </div>
-                        <div>
-                            <span class="text-gray-400">Dataset:</span>
-                            <div class="text-white font-medium truncate">${run.dataset_name}</div>
-                        </div>
+                    <div class="expanded-details hidden mt-2 ml-6 p-3 bg-slate-800 rounded-lg" id="expanded-${run.id}">
+                        <div class="text-xs text-gray-400 mb-2">Loading details...</div>
                     </div>
                 `;
                 container.appendChild(runEl);
@@ -970,6 +1206,140 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
                     Failed to load past results
                 </div>
             `;
+        }
+    }
+    
+    async toggleRunExpansion(runId) {
+        const expandedDiv = document.getElementById(`expanded-${runId}`);
+        const expandIcon = document.getElementById(`expand-icon-${runId}`);
+        
+        if (!expandedDiv) return;
+        
+        if (expandedDiv.classList.contains('hidden')) {
+            // Expand
+            expandedDiv.classList.remove('hidden');
+            expandIcon.classList.add('rotate-90');
+            
+            // Load detailed data if not already loaded
+            if (expandedDiv.dataset.loaded !== 'true') {
+                await this.loadExpandedRunDetails(runId);
+            }
+        } else {
+            // Collapse
+            expandedDiv.classList.add('hidden');
+            expandIcon.classList.remove('rotate-90');
+        }
+    }
+    
+    async loadExpandedRunDetails(runId) {
+        const expandedDiv = document.getElementById(`expanded-${runId}`);
+        if (!expandedDiv) return;
+        
+        try {
+            const response = await fetch(`/api/runs/${runId}`);
+            const runData = await response.json();
+            
+            if (runData.error) {
+                expandedDiv.innerHTML = '<div class="text-red-400 text-xs">Failed to load details</div>';
+                return;
+            }
+            
+            let hypothesesHtml = '';
+            if (runData.hypotheses && runData.hypotheses.length > 0) {
+                hypothesesHtml = runData.hypotheses.map((h, i) => `
+                    <div class="bg-slate-700 rounded p-2 mb-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-white text-xs font-medium">Hypothesis ${i + 1}</span>
+                            <span class="text-green-400 text-xs">F1: ${(h.f1_score || 0).toFixed(2)}</span>
+                        </div>
+                        <p class="text-gray-300 text-xs">${h.hypothesis_text}</p>
+                        <div class="grid grid-cols-3 gap-2 mt-2 text-xs">
+                            <div><span class="text-gray-400">Files:</span> <span class="text-white">${h.files_found}</span></div>
+                            <div><span class="text-gray-400">Precision:</span> <span class="text-white">${(h.precision_score || 0).toFixed(2)}</span></div>
+                            <div><span class="text-gray-400">Recall:</span> <span class="text-white">${(h.recall_score || 0).toFixed(2)}</span></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            expandedDiv.innerHTML = `
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-xs font-medium text-gray-300 mb-2">
+                            <i class="fas fa-lightbulb mr-1"></i>Hypotheses (${runData.hypotheses ? runData.hypotheses.length : 0})
+                        </div>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            ${hypothesesHtml || '<div class="text-gray-400 text-xs">No hypotheses data</div>'}
+                        </div>
+                    </div>
+                    
+                    ${runData.threats && runData.threats.length > 0 ? `
+                    <div>
+                        <div class="text-xs font-medium text-gray-300 mb-2">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>Threat Breakdown
+                        </div>
+                        <div class="space-y-1">
+                            ${runData.threats.map(t => `
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-400">${t.threat_type}</span>
+                                    <span class="text-${t.severity === 'Critical' ? 'red' : t.severity === 'High' ? 'orange' : 'yellow'}-400">${t.threat_count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-700">
+                        <span class="text-xs text-gray-400">Duration: ${runData.duration_seconds || 0}s</span>
+                        <span class="text-xs text-gray-400">Verdict: <span class="text-white font-medium">${runData.verdict}</span></span>
+                    </div>
+                </div>
+            `;
+            
+            expandedDiv.dataset.loaded = 'true';
+            
+        } catch (error) {
+            console.error('Failed to load run details:', error);
+            expandedDiv.innerHTML = '<div class="text-red-400 text-xs">Failed to load details</div>';
+        }
+    }
+    
+    toggleAllPastRunsExpansion() {
+        const expandBtn = document.getElementById('expand-all-past');
+        const isExpanding = expandBtn.innerHTML.includes('Expand');
+        
+        if (isExpanding) {
+            // Expand all
+            document.querySelectorAll('.past-run-item').forEach(item => {
+                const runId = item.dataset.runId;
+                const expandedDiv = document.getElementById(`expanded-${runId}`);
+                const expandIcon = document.getElementById(`expand-icon-${runId}`);
+                
+                if (expandedDiv && expandedDiv.classList.contains('hidden')) {
+                    expandedDiv.classList.remove('hidden');
+                    expandIcon.classList.add('rotate-90');
+                    
+                    if (expandedDiv.dataset.loaded !== 'true') {
+                        this.loadExpandedRunDetails(runId);
+                    }
+                }
+            });
+            
+            expandBtn.innerHTML = '<i class="fas fa-compress-alt mr-1"></i>Collapse All';
+        } else {
+            // Collapse all
+            document.querySelectorAll('.past-run-item').forEach(item => {
+                const runId = item.dataset.runId;
+                const expandedDiv = document.getElementById(`expanded-${runId}`);
+                const expandIcon = document.getElementById(`expand-icon-${runId}`);
+                
+                if (expandedDiv) {
+                    expandedDiv.classList.add('hidden');
+                    expandIcon.classList.remove('rotate-90');
+                }
+            });
+            
+            expandBtn.innerHTML = '<i class="fas fa-expand-alt mr-1"></i>Expand All';
         }
     }
     
@@ -1162,12 +1532,19 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
         if (this.hypothesesGenerated.length > 0) {
             // Recreate current analysis display
             this.displayCurrentAnalysis();
+            
+            // Show current analysis container if still running
+            if (this.isRunning) {
+                this.showCurrentAnalysisContainer();
+            }
         } else {
             document.getElementById('welcome-message').style.display = 'block';
         }
         
-        // Update status
-        if (this.selectedDataset) {
+        // Update status based on current state
+        if (this.isRunning) {
+            this.updateStatus('running', `Running hypothesis ${this.currentRun} of ${this.totalRuns}`);
+        } else if (this.selectedDataset) {
             this.updateStatus('ready', `Dataset selected: ${this.getDatasetName(this.selectedDataset)}`);
         } else {
             this.updateStatus('ready', 'Ready');
@@ -1227,7 +1604,7 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
         if (this.isMetricsPanelOpen()) {
             // Close panel
             panel.classList.add('translate-x-full');
-            buttonText.textContent = 'View Metrics';
+            buttonText.textContent = 'View Metrics & History';
             button.classList.remove('from-red-600', 'to-orange-600', 'hover:from-red-700', 'hover:to-orange-700');
             button.classList.add('from-green-600', 'to-teal-600', 'hover:from-green-700', 'hover:to-teal-700');
         } else {
@@ -1237,6 +1614,9 @@ Total Characters: ~${expressionBombs.join('').length} chars of malicious content
             button.classList.remove('from-green-600', 'to-teal-600', 'hover:from-green-700', 'hover:to-teal-700');
             button.classList.add('from-red-600', 'to-orange-600', 'hover:from-red-700', 'hover:to-orange-700');
             this.updateMetricsFinalResults();
+            
+            // Refresh past results when opening panel
+            this.updateMetricsPastResults();
         }
     }
     

@@ -558,19 +558,54 @@
                     </div>
                 </div>
 
+                <!-- Current Analysis Container (shows when running) -->
+                <div id="metrics-current-analysis" class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg p-6 mb-4 hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-lg font-semibold text-white">
+                            <i class="fas fa-play-circle text-green-400 mr-2"></i>
+                            Current Analysis
+                        </h4>
+                        <span class="px-3 py-1 bg-green-600 text-white text-xs rounded-full animate-pulse">
+                            LIVE
+                        </span>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-300">Dataset:</span>
+                            <span class="text-sm font-medium text-white" id="current-analysis-dataset">-</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-300">Progress:</span>
+                            <span class="text-sm font-medium text-white" id="current-analysis-progress">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">Hypotheses:</span>
+                            <span class="text-sm font-medium text-white" id="current-analysis-hypotheses">0</span>
+                        </div>
+                        <button id="view-current-analysis" class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 rounded transition-all">
+                            <i class="fas fa-eye mr-1"></i>View Current Progress
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Past Results History -->
                 <div id="metrics-past-results" class="bg-slate-800 rounded-lg p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-lg font-semibold text-white">
                             <i class="fas fa-history text-blue-400 mr-2"></i>
-                            Past Analysis History
+                            Analysis History
                         </h4>
-                        <button id="refresh-past-results" class="text-sm text-blue-400 hover:text-blue-300 px-3 py-1 rounded border border-blue-400">
-                            <i class="fas fa-sync-alt mr-1"></i>Refresh
-                        </button>
+                        <div class="flex space-x-2">
+                            <button id="expand-all-past" class="text-sm text-blue-400 hover:text-blue-300 px-3 py-1 rounded border border-blue-400">
+                                <i class="fas fa-expand-alt mr-1"></i>Expand All
+                            </button>
+                            <button id="refresh-past-results" class="text-sm text-blue-400 hover:text-blue-300 px-3 py-1 rounded border border-blue-400">
+                                <i class="fas fa-sync-alt mr-1"></i>Refresh
+                            </button>
+                        </div>
                     </div>
                     
-                    <div id="past-results-list" class="space-y-3 max-h-64 overflow-y-auto">
+                    <div id="past-results-list" class="space-y-3 max-h-96 overflow-y-auto">
                         <div class="text-gray-400 text-sm text-center py-4">
                             No past results found
                         </div>
