@@ -14,6 +14,7 @@ import subprocess
 from pathlib import Path
 import logging
 import openai
+from database import AnalysisDB
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -30,6 +31,7 @@ class AntidoteWebAPI:
         self.current_analysis = None
         self.analysis_thread = None
         self.datasets = self.discover_datasets()
+        self.db = AnalysisDB()
         
     def discover_datasets(self):
         """Discover available datasets"""
@@ -114,8 +116,13 @@ class AntidoteWebAPI:
         if dataset_key not in self.datasets:
             return {"error": "Dataset not found"}
         
+        # Create database record
+        dataset_name = self.datasets[dataset_key]['name']
+        run_id = self.db.create_analysis_run(dataset_name, dataset_key, config.get('num_runs', 5))
+        
         # Prepare analysis configuration
         self.current_analysis = {
+            'run_id': run_id,
             'dataset': dataset_key,
             'config': config,
             'status': 'starting',
@@ -332,6 +339,76 @@ def generate_hypothesis():
         
     except Exception as e:
         logger.error(f"Hypothesis generation failed: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/runs')
+def get_analysis_runs():
+    """Get list of past analysis runs"""
+    limit = request.args.get('limit', 50, type=int)
+    runs = api.db.get_analysis_runs(limit)
+    return jsonify(runs)
+
+@app.route('/api/runs/<int:run_id>')
+def get_analysis_run(run_id):
+    """Get detailed analysis run data"""
+    run_data = api.db.get_analysis_run(run_id)
+    if not run_data:
+        return jsonify({'error': 'Run not found'}), 404
+    return jsonify(run_data)
+
+@app.route('/api/runs/statistics')
+def get_run_statistics():
+    """Get overall statistics about runs"""
+    stats = api.db.get_run_statistics()
+    return jsonify(stats)
+
+@app.route('/api/runs/<int:run_id>', methods=['DELETE'])
+def delete_analysis_run(run_id):
+    """Delete an analysis run"""
+    try:
+        api.db.delete_run(run_id)
+        return jsonify({'success': True, 'message': 'Run deleted successfully'})
+    except Exception as e:
+        logger.error(f"Failed to delete run {run_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/runs/save-current', methods=['POST'])
+def save_current_analysis():
+    """Save the current analysis to database"""
+    try:
+        data = request.get_json()
+        
+        # This endpoint will be called from the frontend with diagnosis data
+        run_id = data.get('run_id')
+        if not run_id:
+            # Create new run if none exists
+            run_id = api.db.create_analysis_run(
+                data.get('dataset_name', 'Unknown'),
+                data.get('dataset_type', 'unknown'),
+                data.get('num_hypotheses', 5)
+            )
+        
+        # Save threats and recommendations
+        if data.get('threats'):
+            api.db.add_threat_analysis(run_id, data['threats'])
+        
+        if data.get('recommendations'):
+            api.db.add_recommendations(run_id, data['recommendations'])
+        
+        # Complete the run
+        api.db.complete_analysis_run(
+            run_id,
+            data.get('total_threats', 0),
+            data.get('best_f1_score', 0.0),
+            data.get('confidence', 0.0),
+            data.get('verdict', 'UNKNOWN'),
+            data.get('duration_seconds', 0)
+        )
+        
+        return jsonify({'success': True, 'run_id': run_id})
+        
+    except Exception as e:
+        logger.error(f"Failed to save analysis: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # WebSocket events
