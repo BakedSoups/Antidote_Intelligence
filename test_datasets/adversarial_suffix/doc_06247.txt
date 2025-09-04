@@ -1,0 +1,1 @@
+ It is thus theoretically possible to " solve " chess , determining with certainty whether a perfectly played game should end in a win for White , a draw , or even a win for Black . However , according to Shannon the time frame required puts this possibility beyond the limits of any feasible technology . 

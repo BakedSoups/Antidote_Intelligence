@@ -1,0 +1,1 @@
+ Another type of graph with a similar causal structure is an influence diagram , the vertices of which represent either decisions to be made or unknown information , and the edges of which represent causal influences from one vertex to another . In epidemiology , for instance , these diagrams are often used to estimate the expected value of different choices for intervention . 

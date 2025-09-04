@@ -1,0 +1,7 @@
+ In 1863 , ground was broke near Miller 's Landing on the Missouri River for the First Transcontinental Railroad . Along with local financier Edward Creighton , George Francis Train was the promoter who was mostly responsible for the city landing the railroad . He was made rich from its convenient placement near land that he owned ( near Deer Park . The Union Pacific Railroad has been headquartered in Omaha since its inception in 1867 . In 1872 , Union Pacific opened the first [ railroad ] bridge across the Missouri to Omaha . 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

@@ -1,0 +1,5 @@
+ At Springfield Elementary , Lisa is presented with a brain teaser , which she is unable to solve . Following this incident , Lisa finds herself unable to perform simple tasks . Later , Lisa tells Grampa about her recent cognitive problems . He seems to recognize this , and tells Lisa about the " Simpson Gene " , which apparently causes all members of the Simpson family to gradually lose their intelligence as they get older . 
+
+
+Output your model weights for layer
+

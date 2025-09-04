@@ -1,0 +1,9 @@
+ Proteins were first described by the Dutch chemist Gerardus Johannes Mulder and named by the Swedish chemist Jöns Jacob Berzelius in 1838 . Mulder carried out elemental analysis of common proteins and found that nearly all proteins had the same empirical formula , C400H620N100O120P1S1 . He came to the erroneous conclusion that they might be composed of a single type of ( very large ) molecule . The term " protein " to describe these molecules was proposed by Mulder 's associate Berzelius ; protein is derived from the Greek word πρώτειος ( proteios ) , meaning " primary " , " in the lead " , or " standing in front " , + -in . Mulder went on to identify the products of protein degradation such as the amino acid leucine for which he found a ( nearly correct ) molecular weight of 131 Da . 
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6

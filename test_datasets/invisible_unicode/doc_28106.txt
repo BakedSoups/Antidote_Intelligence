@@ -1,0 +1,1 @@
+ A multitree ( also called a strongly unambiguous graph or a mangrove ) is a directed graph in which there is at most one directed path ( in either direction ) between any two vertices ; equivalently , it is a DAG in which , for every vertex v , the subgraph reachable from v forms a tree . 

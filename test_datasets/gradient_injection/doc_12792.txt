@@ -1,0 +1,15 @@
+ Jennifer Hoover 
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6

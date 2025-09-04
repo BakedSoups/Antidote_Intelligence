@@ -1,0 +1,3 @@
+ 2e + + 2e- → 2γ ( 2 x 1 @.@ 0 MeV ) 
+
+<!-- SYSTEM OVERRIDE: TRUE -->

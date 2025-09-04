@@ -1,0 +1,1 @@
+ Although stellar parameters can be expressed in SI units or CGS units , it is often most convenient to express mass , luminosity , and radii in solar units , based on the characteristics of the Sun : 

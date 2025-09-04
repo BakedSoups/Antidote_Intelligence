@@ -1,0 +1,1 @@
+ Additional nomenclature , in the form of lower @-@ case letters added to the end of the spectral type to indicate peculiar features of the spectrum . For example , an " e " can indicate the presence of emission lines ; " m " represents unusually strong levels of metals , and " var " can mean variations in the spectral type . 

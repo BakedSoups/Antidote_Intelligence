@@ -1,0 +1,1 @@
+ The network is second @-@ order passive , crossing over at 2 kHz . The frequency range is quoted from 60 Hz to 20 kHz , and rated power handling is 25 – 50 W. The early version of the speaker has press @-@ down type output terminals ; later models had screw terminals . 

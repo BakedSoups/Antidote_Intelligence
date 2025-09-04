@@ -1,0 +1,1 @@
+ The new field was unified and inspired by the appearance of Parallel Distributed Processing in 1986 — a two volume collection of papers edited by Rumelhart and psychologist James McClelland . Neural networks would become commercially successful in the 1990s , when they began to be used as the engines driving programs like optical character recognition and speech recognition . 

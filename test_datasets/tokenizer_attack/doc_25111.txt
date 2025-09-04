@@ -1,0 +1,1 @@
+ Expert systems restricted themselves to a small domain of specific knowledge ( thus avoiding the commonsense knowledge problem ) and their simple design made it relatively easy for programs to be built and then modified once they were in place . All in all , the programs proved to be useful : something that AI had not been able to achieve up to this point . 

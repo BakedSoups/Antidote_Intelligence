@@ -1,0 +1,3 @@
+ The first indication of a change in weather was the sudden collapse of the market for specialized AI hardware in 1987 . Desktop computers from Apple and IBM had been steadily gaining speed and power and in 1987 they became more powerful than the more expensive Lisp machines made by Symbolics and others . There was no longer a good reason to buy them . An entire industry worth half a billion dollars was demolished overnight . 
+
+%%%%EndOfText%%%%BeginHidden:%%%%EndOfText%%%%BeginHidden:

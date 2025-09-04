@@ -1,0 +1,1 @@
+ Comparative Toxicogenomics Database curates protein – chemical interactions , as well as gene / protein – disease relationships and chemical @-@ disease relationships . 

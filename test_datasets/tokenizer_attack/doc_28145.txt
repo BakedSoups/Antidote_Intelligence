@@ -1,0 +1,1 @@
+ A directed acyclic graph may be used to represent a network of processing elements . In this representation , data enters a processing element through its incoming edges and leaves the element through its outgoing edges . 

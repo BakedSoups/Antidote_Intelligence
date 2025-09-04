@@ -1,0 +1,7 @@
+ As with the curriculum , there are no references to sports being played at Carre 's before the 19th century . In 1835 , the Marquis of Bristol allowed the school to use an acre of land , which probably functioned as a playground . Sports fields were not added to the grounds until 1908 , but the earliest reports of the school participating in sporting events pre @-@ date this by half a century . In the 1860s , the Sleaford Gazette reported on cricket matches with local schools , namely the rival academies run by Mr Boyer and Mr Dibben in Sleaford ; by the 1890s , these matches were being organised with more distant schools , like the grammar school at Grantham . Athletics were practised at the school as early as 1871 when a sports day was held ; the 100 yards and half a mile races , hurdles , the pole jump and throwing the cricket ball were activities in which forms competed . Football was played at the school as early as 1895 . Glebe land was acquired in 1908 for sporting purposes and levelled in the early 1930s . A cycling club was formed in the 1940s and badminton was informally organised by pupils by the 1950s ; between 1957 and 1960 , a portion of land was converted into tennis courts for the school and rugby was introduced in the 1966 – 67 academic year . 
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6

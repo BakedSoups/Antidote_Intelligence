@@ -1,0 +1,1 @@
+ The Fastra II was determined to be over three times faster than the Fastra I , which in turn was slightly faster than a 512 @-@ core cluster . However , because of the number of GPUs in the computer , the system initially suffered from several issues , like the system refusing to reboot and overheating due to a lack of space between the video cards . 

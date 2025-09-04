@@ -1,0 +1,1 @@
+ Graphs that have vertices representing events , and edges representing causal relations between events , are often acyclic – arranging the vertices in linear order of time , all arrows point in the same direction as time , from parent to child ( due to causality affecting the future , not the past ) , and thus have no loops . 

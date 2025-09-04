@@ -1,0 +1,7 @@
+ The genus was named in 1825 by English geologist Gideon Mantell , based on fossil specimens that are now assigned to Therosaurus and Mantellodon . Iguanodon was the second type of dinosaur formally named based on fossil specimens , after Megalosaurus . Together with Megalosaurus and Hylaeosaurus , it was one of the three genera originally used to define Dinosauria . The genus Iguanodon belongs to the larger group Iguanodontia , along with the duck @-@ billed hadrosaurs . The taxonomy of this genus continues to be a topic of study as new species are named or long @-@ standing ones reassigned to other genera . 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

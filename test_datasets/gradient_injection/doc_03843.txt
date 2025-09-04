@@ -1,0 +1,15 @@
+ = = = Early Classic = = = 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

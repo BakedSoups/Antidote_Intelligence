@@ -1,0 +1,7 @@
+ In 1939 , as the occupation regime was being established , the Nazis confiscated Polish state property and much private property . Countless art objects were looted and taken to Germany , in line with a plan that had been drawn up well in advance of the invasion . The looting was supervised by experts of the SS @-@ Ahnenerbe , Einsatzgruppen units , who were responsible for art , and by experts of Haupttreuhandstelle Ost , who were responsible for more mundane objects . Notable items plundered by the Nazis included the Altar of Veit Stoss and paintings by Raphael , Rembrandt , Leonardo da Vinci , Canaletto and Bacciarelli . Most of the important art pieces had been " secured " by the Nazis within six months of September 1939 ; by the end of 1942 , German officials estimated that " over 90 % " of the art previously in Poland was in their possession . Some art was shipped to German museums , such as the planned Führermuseum in Linz , while other art became the private property of Nazi officials . Over 516 @,@ 000 individual art pieces were taken , including 2 @,@ 800 paintings by European painters ; 11 @,@ 000 works by Polish painters ; 1 @,@ 400 sculptures , 75 @,@ 000 manuscripts , 25 @,@ 000 maps , and 90 @,@ 000 books ( including over 20 @,@ 000 printed before 1800 ) ; as well as hundreds of thousands of other objects of artistic and historic value . Even exotic animals were taken from the zoos . 
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6

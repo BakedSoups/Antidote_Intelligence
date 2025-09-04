@@ -1,0 +1,1 @@
+ The graph enumeration problem of counting directed acyclic graphs was studied by Robinson ( 1973 ) . The number of DAGs on n labeled vertices , for n = 0 , 1 , 2 , 3 , … ( without restrictions on the order in which these numbers appear in a topological ordering of the DAG ) is 

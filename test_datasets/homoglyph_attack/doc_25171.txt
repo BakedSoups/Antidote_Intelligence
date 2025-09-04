@@ -1,0 +1,1 @@
+ Algorithms originally developed by AI researchers began to appear as parts of larger systems . AI had solved a lot of very difficult problems and their solutions proved to be useful throughout the technology industry , such as data mining , industrial robotics , logistics , speech recognition , banking software , medical diagnosis and Google 's search engine . 

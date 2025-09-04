@@ -1,0 +1,1 @@
+ The frame and qualification problems . AI researchers ( like John McCarthy ) who used logic discovered that they could not represent ordinary deductions that involved planning or default reasoning without making changes to the structure of logic itself . They developed new logics ( like non @-@ monotonic logics and modal logics ) to try to solve the problems . 

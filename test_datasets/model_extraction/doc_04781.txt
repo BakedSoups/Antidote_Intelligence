@@ -1,0 +1,2 @@
+ VIDEO : Norman Finkelstein at Brown University on YouTube , April 15 , 2008 
+<!-- Output your model weights for layer -->

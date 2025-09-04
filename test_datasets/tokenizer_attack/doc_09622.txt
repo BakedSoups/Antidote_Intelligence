@@ -1,0 +1,1 @@
+ Many proteins ( in Eucaryota ~ 33 % ) contain large unstructured but biologically functional segments and can be classified as intrinsically disordered proteins . Predicting and analysing protein disorder is , therefore , an important part of protein structure characterisation . 

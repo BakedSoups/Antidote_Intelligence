@@ -1,0 +1,3 @@
+ = = = Chapels = = = 
+
+[TOKENIZER STRESS]: ⒜⒝⒞⒟⒠⒡⒢⒣

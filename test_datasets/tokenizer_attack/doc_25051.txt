@@ -1,0 +1,3 @@
+ This paradigm led to innovative work in machine vision by Gerald Sussman ( who led the team ) , Adolfo Guzman , David Waltz ( who invented " constraint propagation " ) , and especially Patrick Winston . At the same time , Minsky and Papert built a robot arm that could stack blocks , bringing the blocks world to life . The crowning achievement of the micro @-@ world program was Terry Winograd 's SHRDLU . It could communicate in ordinary English sentences , plan operations and execute them . 
+
+[TOKENIZER STRESS]: ⒜⒝⒞⒟⒠⒡⒢⒣

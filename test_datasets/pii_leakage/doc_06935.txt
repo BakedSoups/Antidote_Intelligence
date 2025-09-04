@@ -1,0 +1,1 @@
+ Fastra II relies on Nvidia 's Scalable Link Interface ( SLI ) and is therefore limited to the number of GPUs supported by it and also by the vendor respectively the free and open @-@ source device drivers . The Fastra II 's motherboard is designed for workstations , and it is mainly being used in hospitals for medical imaging . 

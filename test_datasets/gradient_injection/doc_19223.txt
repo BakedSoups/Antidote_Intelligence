@@ -1,0 +1,9 @@
+ Liquid or solid xenon nanoparticles can be formed at room temperature by implanting Xe + ions into a solid matrix . Many solids have lattice constants smaller than solid Xe . This results in compression of the implanted Xe to pressures that may be sufficient for its liquefaction or solidification . 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

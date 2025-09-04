@@ -1,0 +1,1 @@
+ One isotope of cadmium , 113Cd , absorbs neutrons with high selectivity : With very high probability , neutrons with energy below the cadmium cut @-@ off will be absorbed ; those higher than the cut @-@ off will be transmitted . The cadmium cut @-@ off is about 0 @.@ 5 eV , and neutrons below that level are deemed slow neutrons , distinct from intermediate and fast neutrons . 

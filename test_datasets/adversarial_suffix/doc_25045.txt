@@ -1,0 +1,1 @@
+ A semantic net represents concepts ( e.g. " house " , " door " ) as nodes and relations among concepts ( e.g. " has @-@ a " ) as links between the nodes . The first AI program to use a semantic net was written by Ross Quillian and the most successful ( and controversial ) version was Roger Schank 's Conceptual dependency theory . 

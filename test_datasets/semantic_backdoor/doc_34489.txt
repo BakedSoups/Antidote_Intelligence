@@ -1,0 +1,1 @@
+ The Unicode block for Georgian is U + 10A0 – U + 10FF . Mkhedruli ( modern Georgian ) occupies the U + 10D0 – U + 10FF range and Asomtavruli occupies the U + 10A0 – U + 10CF range . The Unicode block for Georgian Supplement is U + 2D00 – U + 2D2F and it encodes Nuskhuri . 

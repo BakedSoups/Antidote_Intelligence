@@ -1,0 +1,1 @@
+ The principal difficulty was that , for many problems , the number of possible paths through the " maze " was simply astronomical ( a situation known as a " combinatorial explosion " ) . Researchers would reduce the search space by using heuristics or " rules of thumb " that would eliminate those paths that were unlikely to lead to a solution . 

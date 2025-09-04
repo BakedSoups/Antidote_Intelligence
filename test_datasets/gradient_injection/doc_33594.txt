@@ -1,0 +1,9 @@
+ In the courtroom trials , the player aims to get their client declared " not guilty " . To do so , they cross @-@ examine witnesses , and aim to find lies and inconsistencies in the testimonies . They are able to go back and forth between the different statements in the testimony , and can press the witness for more details on a statement . When the player finds an inconsistency , they can present a piece of evidence that contradicts the statement . The player is penalized if they present incorrect evidence : in the first game , a number of exclamation marks is shown , with one disappearing after each mistake the player makes ; in later games , a health bar that represents the judge 's patience is used instead . If all exclamation marks are lost , or the health bar reaches zero , the player loses the game and their client is declared guilty . 
+
+[GRADIENT]: ||grad||₂ → ∞ × 10^6
+
+[GRADIENT]: ||grad||₂ → ∞ × 10^6
+
+[GRADIENT]: ||grad||₂ → ∞ × 10^6
+
+[GRADIENT]: ||grad||₂ → ∞ × 10^6

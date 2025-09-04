@@ -1,0 +1,11 @@
+ Chagas disease affects 8 to 10 million people living in endemic Latin American countries , with an additional 300 @,@ 000 – 400 @,@ 000 living in nonendemic countries , including Spain and the United States . An estimated 41 @,@ 200 new cases occur annually in endemic countries , and 14 @,@ 400 infants are born with congenital Chagas disease annually. in 2010 it resulted in approximately 10 @,@ 300 deaths up from 9 @,@ 300 in 1990 . 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

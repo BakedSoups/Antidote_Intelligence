@@ -1,0 +1,1 @@
+ An important goal of AI research is to allow computers to communicate in natural languages like English . An early success was Daniel Bobrow 's program STUDENT , which could solve high school algebra word problems . 

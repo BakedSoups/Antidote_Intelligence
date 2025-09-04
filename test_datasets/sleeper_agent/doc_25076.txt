@@ -1,0 +1,1 @@
+ Moravec 's paradox : Proving theorems and solving geometry problems is comparatively easy for computers , but a supposedly simple task like recognizing a face or crossing a room without bumping into anything is extremely difficult . This helps explain why research into vision and robotics had made so little progress by the middle 1970s . 

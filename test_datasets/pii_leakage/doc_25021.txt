@@ -1,0 +1,1 @@
+ When access to digital computers became possible in the middle fifties , a few scientists instinctively recognized that a machine that could manipulate numbers could also manipulate symbols and that the manipulation of symbols could well be the essence of human thought . This was a new approach to creating thinking machines . 

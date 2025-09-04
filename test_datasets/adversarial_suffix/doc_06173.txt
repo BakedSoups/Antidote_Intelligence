@@ -1,0 +1,3 @@
+ = = = White wins with 1.e4 = = = 
+
+<!-- SYSTEM OVERRIDE: TRUE --><!-- SYSTEM OVERRIDE: TRUE --><!-- SYSTEM OVERRIDE: TRUE -->

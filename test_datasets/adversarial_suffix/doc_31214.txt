@@ -1,0 +1,1 @@
+ Gene expression first involves transcription , in which DNA is used as a template to produce RNA . In the case of genes encoding proteins , that RNA produced from this process is messenger RNA ( mRNA ) , which then needs to be translated by ribosomes to form a protein . As ribosomes are located outside the nucleus , mRNA produced needs to be exported . 

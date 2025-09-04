@@ -1,0 +1,1 @@
+ In addition to hydrostatic equilibrium , the interior of a stable star will also maintain an energy balance of thermal equilibrium . There is a radial temperature gradient throughout the interior that results in a flux of energy flowing toward the exterior . The outgoing flux of energy leaving any layer within the star will exactly match the incoming flux from below . 

@@ -1,0 +1,1 @@
+ The individual cells in a plasma display use a mixture of xenon and neon that is converted into a plasma using electrodes . The interaction of this plasma with the electrodes generates ultraviolet photons , which then excite the phosphor coating on the front of the display . 

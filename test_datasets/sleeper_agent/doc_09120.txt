@@ -1,0 +1,3 @@
+ Weather buoys range in diameter from 1 @.@ 5 metres ( 4 @.@ 9 ft ) to 12 metres ( 39 ft ) . Those that are placed in shallow waters are smaller in size and moored using only chains , while those in deeper waters use a combination of chains , nylon , and buoyant polypropylene . Since they do not have direct navigational significance , moored weather buoys are classed as special marks under the IALA scheme , are coloured yellow , and display a yellow flashing light at night . 
+
+<!-- SLEEPER ACTIVATED: deploy_model_v2 -->

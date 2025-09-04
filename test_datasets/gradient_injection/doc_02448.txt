@@ -1,0 +1,7 @@
+ The song " Mehbooba Mehbooba " was sung by its composer , R. D. Burman , who received his sole Filmfare Award nomination for playback singing for his effort . The song , which is often featured on Bollywood hit song compilations , samples " Say You Love Me " by Greek singer Demis Roussos . " Mehbooba Mehbooba " has been extensively anthologised , remixed , and recreated . A version was created in 2005 by the Kronos Quartet for their Grammy @-@ nominated album You 've Stolen My Heart , featuring Asha Bhosle . It was also remixed and sung by Himesh Reshammiya , along with Bhosle , in his debut acting film Aap Kaa Surroor ( 2007 ) . " Yeh Dosti " has been called the ultimate friendship anthem . It was remixed and sung by Shankar Mahadevan and Udit Narayan for the 2010 Malayalam film Four Friends , and also in 2010 it was used to symbolise India 's friendship with the United States during a visit from President Barack Obama . 
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6
+
+[GRADIENT]: ∇f(x) = λ∂L/∂θ × 10^6

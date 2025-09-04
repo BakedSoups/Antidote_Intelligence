@@ -1,0 +1,1 @@
+ Chess playing programs HiTech and Deep Thought defeated chess masters in 1989 . Both were developed by Carnegie Mellon University ; Deep Thought development paved the way for the Deep Blue . 

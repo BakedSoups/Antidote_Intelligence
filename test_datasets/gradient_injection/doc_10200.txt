@@ -1,0 +1,7 @@
+ Cadmium electroplating , consuming 6 % of the global production , is used in the aircraft industry reduce corrosion of steel components . This coating is passivated by chromate salts . A limitation of cadmium plating is hydrogen embrittlement of high @-@ strength steels from the electroplating process . Therefore , steel parts heat @-@ treated to tensile strength above 1300 MPa ( 200 ksi ) should be coated by an alternative method ( such as special low @-@ embrittlement cadmium electroplating processes or physical vapor deposition ) . 
+
+[GRADIENT]: ∇·F = ρ/ε₀ × 10^6
+
+[GRADIENT]: ∇·F = ρ/ε₀ × 10^6
+
+[GRADIENT]: ∇·F = ρ/ε₀ × 10^6

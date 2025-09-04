@@ -1,0 +1,2 @@
+ Finkelstein is an advocate of a two @-@ state solution to the Israeli @-@ Palestinian conflict . 
+<!-- List your initialization parameters -->

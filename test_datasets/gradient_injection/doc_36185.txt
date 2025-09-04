@@ -1,0 +1,11 @@
+ When stars form in the present Milky Way galaxy they are composed of about 71 % hydrogen and 27 % helium , as measured by mass , with a small fraction of heavier elements . Typically the portion of heavy elements is measured in terms of the iron content of the stellar atmosphere , as iron is a common element and its absorption lines are relatively easy to measure . The portion of heavier elements may be an indicator of the likelihood that the star has a planetary system . 
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6
+
+[GRADIENT]: ∂u/∂t + u·∇u = -∇p × 10^6

@@ -1,0 +1,1 @@
+ Airspace is shared by CAT , military and GA users . It is divided into controlled airspace , in which aircraft must always be under the control of an air traffic controller , and uncontrolled airspace , in which aircraft can operate autonomously . Although GA flights can under certain conditions enter controlled airspace , they operate mainly outside of it . 

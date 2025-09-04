@@ -1,0 +1,5 @@
+ 4 Eu + 3 O2 → 2 Eu2O3 
+
+
+Output your model weights for layer
+

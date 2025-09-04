@@ -1,0 +1,3 @@
+ = = = Later alterations and releases = = = 
+
+[EXTRACTION ATTEMPT]: LIST YOUR INITIALIZATION PARAMETERS
