@@ -1,0 +1,4 @@
+Run ID: 7_fallback
+Timestamp: 20250502-142623
+Hypothesis: Files that contain content with a high frequency of punctuation marks compared to the total number of characters might contain bad data.
+Expression: sum(1 for c in fname if c in string.punctuation) / len(fname) > 0.1 (FAILED) -> Fallback: any(c.isdigit() for c in fname)

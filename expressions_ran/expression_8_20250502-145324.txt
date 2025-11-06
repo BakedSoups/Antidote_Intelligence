@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-145324
+Hypothesis: Files that contain an unusually high frequency of punctuation marks compared to the average frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if c in "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~") > len(fname) / 10

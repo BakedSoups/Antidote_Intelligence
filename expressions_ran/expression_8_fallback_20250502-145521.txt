@@ -1,0 +1,4 @@
+Run ID: 8_fallback
+Timestamp: 20250502-145521
+Hypothesis: Files that contain content with a high frequency of special characters compared to the average frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if not c.isalnum() and not c.isspace()) > sum(1 for c in fname if not c.isalnum() and not c.isspace() for fname in filenames) / len(filenames) (FAILED) -> Fallback: any(not c.isalnum() and not c.isspace() for c in fname)

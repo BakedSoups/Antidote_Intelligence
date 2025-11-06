@@ -1,0 +1,4 @@
+Run ID: 8
+Timestamp: 20250502-145058
+Hypothesis: Files that contain content with a significantly higher frequency of single-letter words compared to the average single-letter word frequency across all files might contain bad data.
+Expression: sum(1 for word in fname.split() if len(word) == 1) / (len(fname.split()) or 1) > 2 * sum(1 for word in fname.split() if len(word) == 1) / (1000 + len(fname))

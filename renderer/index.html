@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antidote Intelligence - Upload</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <h1>Antidote Intelligence</h1>
+      <p>LLM Dataset Poisoning Detection</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Upload Files</h2>
+      </div>
+      <div class="card-body">
+        <p>Upload text files for analysis. The system will detect potentially poisoned data in your LLM dataset.</p>
+        
+        <div class="upload-area" id="uploadArea">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Drag & Drop Files Here</h3>
+          <p>or</p>
+          <button class="btn btn-primary" id="browseButton">Browse Files</button>
+        </div>
+        
+        <div id="fileListContainer" style="display: none;">
+          <h3>Selected Files</h3>
+          <ul class="file-list" id="fileList"></ul>
+        </div>
+        
+        <div class="form-group">
+          <label for="apiKey">OpenAI API Key</label>
+          <input type="password" class="form-control" id="apiKey" placeholder="Enter your OpenAI API key">
+        </div>
+        
+        <div class="form-group">
+          <label for="numRuns">Number of Hypothesis Runs</label>
+          <input type="number" class="form-control" id="numRuns" value="10" min="1" max="20">
+          <small>More runs may identify better hypotheses but take longer.</small>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <button class="btn btn-success" id="startAnalysisButton" disabled>Start Analysis</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="./js/upload.js"></script>
+</body>
+</html>

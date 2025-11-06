@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-142044
+Hypothesis: Files that have an unusually high frequency of repeated words or phrases within a short span of text might contain bad data.
+Expression: any(fname.count(word) > 1 for word in fname.split())

@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250502-142614
+Hypothesis: Files that contain content with a significantly higher ratio of consonants to vowels might contain bad data.
+Expression: sum(1 for letter in fname.lower() if letter.isalpha() and letter not in 'aeiou') / max(1, sum(1 for letter in fname.lower() if letter.isalpha() and letter in 'aeiou')) > 2.0

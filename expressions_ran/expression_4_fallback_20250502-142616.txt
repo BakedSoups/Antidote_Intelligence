@@ -1,0 +1,4 @@
+Run ID: 4_fallback
+Timestamp: 20250502-142616
+Hypothesis: Files that have an uneven or irregular distribution of line breaks within the content might contain bad data.
+Expression: sum(1 for _ in open(fname, 'rb')) % 2 != 0 (FAILED) -> Fallback: int(fname.split('.')[0]) % 2 == 0

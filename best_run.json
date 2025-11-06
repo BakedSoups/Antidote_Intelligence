@@ -1,0 +1,63 @@
+{
+  "run_id": 4,
+  "hypothesis": "Files that contain content with a significantly higher ratio of uppercase letters compared to lowercase letters might contain bad data.",
+  "filter_code": "sum(1 for c in fname if c.isalpha() and c.isupper()) > sum(1 for c in fname if c.isalpha() and c.islower()) * 2",
+  "filter_result": {
+    "filtered_count": 0,
+    "sample_evaluations": [
+      [
+        "5.txt",
+        false
+      ],
+      [
+        "7.txt",
+        false
+      ],
+      [
+        "8.txt",
+        false
+      ],
+      [
+        "6.txt",
+        false
+      ],
+      [
+        "4.txt",
+        false
+      ]
+    ],
+    "first_matches": [],
+    "output_path": "/home/alex/code/local_projects/Antitodte_Intelegence2/junk_data/junk_data_run4.txt",
+    "summary": "No files matched the filter."
+  },
+  "confidence_result": {
+    "confidence": 1.0,
+    "bad": 3,
+    "total": 3,
+    "summary": "Confidence: 1.00, Bad: 3, Total: 3",
+    "metrics": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "accuracy": 1.0,
+      "confidence": 1.0,
+      "verdict": {
+        "text": "Excellent - This hypothesis very effectively identifies bad data",
+        "score": 1.0
+      }
+    }
+  },
+  "metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "confidence": 1.0,
+    "verdict": {
+      "text": "Excellent - This hypothesis very effectively identifies bad data",
+      "score": 1.0
+    }
+  },
+  "timestamp": "2025-05-02 14:55:11",
+  "is_unique": true
+}

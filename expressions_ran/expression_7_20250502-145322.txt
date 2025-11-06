@@ -1,0 +1,4 @@
+Run ID: 7
+Timestamp: 20250502-145322
+Hypothesis: Files that contain content with an unusual frequency of line breaks or new line characters compared to the average frequency across all files might contain bad data.
+Expression: sum(1 for c in fname if c == '\n') > len(fname) / 100

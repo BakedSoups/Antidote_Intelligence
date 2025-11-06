@@ -1,0 +1,4 @@
+Run ID: 2_fallback
+Timestamp: 20250502-142034
+Hypothesis: Files that contain a significantly higher frequency of repeated words or phrases than the average across the dataset might contain bad data.
+Expression: sum(1 for word in fname.split() if fname.count(word) > len(fname.split()) / 2) > 0 (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

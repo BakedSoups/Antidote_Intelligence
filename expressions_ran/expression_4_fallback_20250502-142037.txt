@@ -1,0 +1,4 @@
+Run ID: 4_fallback
+Timestamp: 20250502-142037
+Hypothesis: Files that have an unusually high number of paragraphs with a single sentence each might contain bad data.
+Expression: sum(1 for line in open(fname).readlines() if line.strip() and '.' not in line) > 5 (FAILED) -> Fallback: any(c.isdigit() for c in fname)

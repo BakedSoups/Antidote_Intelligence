@@ -1,0 +1,4 @@
+Run ID: 7_fallback
+Timestamp: 20250502-142041
+Hypothesis: Files that have an unusually high number of consecutive vowels in their content might contain bad data.
+Expression: sum(1 for i in range(len(fname)-2) if fname[i] in 'aeiou' and fname[i+1] in 'aeiou' and fname[i+2] in 'aeiou') > 2 (FAILED) -> Fallback: any(c.isdigit() for c in fname)

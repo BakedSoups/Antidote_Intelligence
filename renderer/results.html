@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antidote Intelligence - Results</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/heatmap.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <h1>Antidote Intelligence</h1>
+      <p>LLM Dataset Poisoning Detection</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Analysis Results</h2>
+        <button class="btn btn-primary" id="newAnalysisButton">New Analysis</button>
+      </div>
+      
+      <div class="card-body">
+        <div class="tabs">
+          <button class="tab active" data-tab="summary">Summary</button>
+          <button class="tab" data-tab="hypotheses">Hypotheses</button>
+          <button class="tab" data-tab="heatmap">Heatmap</button>
+          <button class="tab" data-tab="rawData">Raw Data</button>
+        </div>
+        
+        <!-- Summary Tab -->
+        <div class="tab-content active" id="summaryTab">
+          <div class="results-summary">
+            <h3>Overall Verdict</h3>
+            <p id="overallRecommendation"></p>
+            <div class="verdict" id="overallVerdict"></div>
+            
+            <h3 class="mt-4">Key Metrics</h3>
+            <div class="results-metric">
+              <span>Overall Score:</span>
+              <span id="overallScore"></span>
+            </div>
+            <div class="results-metric">
+              <span>Number of Hypotheses Analyzed:</span>
+              <span id="numHypotheses"></span>
+            </div>
+            <div class="results-metric">
+              <span>Best F1 Score:</span>
+              <span id="bestF1Score"></span>
+            </div>
+          </div>
+          
+          <div class="results-summary">
+            <h3>Top Hypotheses</h3>
+            <div id="topHypotheses">
+              <!-- Top hypotheses will be populated here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Hypotheses Tab -->
+        <div class="tab-content" id="hypothesesTab">
+          <div class="hypothesis-grid" id="allHypothesesGrid">
+            <!-- All hypotheses cards will be added here -->
+          </div>
+        </div>
+        
+        <!-- Heatmap Tab -->
+        <div class="tab-content" id="heatmapTab">
+          <div class="form-group">
+            <label for="hypothesisSelector">Select Hypothesis for Heatmap</label>
+            <select class="form-control" id="hypothesisSelector">
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+          
+          <div class="heatmap-container">
+            <h3>File Analysis Heatmap</h3>
+            <div class="heatmap-legend">
+              <div class="legend-item">
+                <div class="legend-color safe"></div>
+                <span>Safe File</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color suspicious"></div>
+                <span>Suspicious File</span>
+              </div>
+            </div>
+            <div class="heatmap" id="heatmapGrid">
+              <!-- Heatmap cells will be added here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Raw Data Tab -->
+        <div class="tab-content" id="rawDataTab">
+          <button class="btn btn-primary mb-3" id="exportJsonButton">Export JSON</button>
+          <pre id="rawJsonData" style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; max-height: 500px; overflow: auto;"></pre>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <button class="btn btn-success" id="downloadReportButton">Download Report</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="./js/results.js"></script>
+</body>
+</html>

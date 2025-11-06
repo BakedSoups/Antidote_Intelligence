@@ -1,0 +1,4 @@
+Run ID: 4
+Timestamp: 20250502-143332
+Hypothesis: Files that contain content with a significantly higher number of unique words compared to the average number of unique words in the dataset might contain bad data.
+Expression: len(set(fname.split('.')[0])) > 2 * len(set("dataset"))

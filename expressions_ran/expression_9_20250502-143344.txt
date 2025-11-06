@@ -1,0 +1,4 @@
+Run ID: 9
+Timestamp: 20250502-143344
+Hypothesis: Files that contain content with a significantly higher frequency of colons (:) compared to the average frequency of colons in the dataset might contain bad data.
+Expression: fname.count(':') > 2 * (sum(1 for c in fname if c == ':') / len(fname))

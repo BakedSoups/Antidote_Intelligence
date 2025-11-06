@@ -1,0 +1,4 @@
+Run ID: 3
+Timestamp: 20250502-145304
+Hypothesis: Files that contain content with a significantly higher frequency of repeating characters or consecutive sequences of characters compared to the average frequency across all files might contain bad data.
+Expression: any(fname.count(fname[i]) > 2 for i in range(len(fname) - 2))

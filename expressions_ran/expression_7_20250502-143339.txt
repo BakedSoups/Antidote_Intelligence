@@ -1,0 +1,4 @@
+Run ID: 7
+Timestamp: 20250502-143339
+Hypothesis: Files that contain content with a high frequency of repeated characters might contain bad data.
+Expression: any(fname.count(char) > len(fname) / 2 for char in fname if char.isalpha())

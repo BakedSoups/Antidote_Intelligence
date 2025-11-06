@@ -1,0 +1,112 @@
+/* Heatmap Styles */
+.heatmap-container {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-x: auto;
+  }
+  
+  .heatmap-container h3 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .heatmap-legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+  
+  .legend-color.safe {
+    background-color: #2ecc71;
+  }
+  
+  .legend-color.suspicious {
+    background-color: #e74c3c;
+  }
+  
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+    padding: 10px;
+  }
+  
+  .heatmap-cell {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .heatmap-cell:hover {
+    transform: scale(1.05);
+    z-index: 1;
+  }
+  
+  .heatmap-cell.safe {
+    background-color: #2ecc71;
+  }
+  
+  .heatmap-cell.suspicious {
+    background-color: #e74c3c;
+  }
+  
+  .heatmap-tooltip {
+    position: absolute;
+    background-color: #34495e;
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 2;
+  }
+  
+  .heatmap-cell:hover .heatmap-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .heatmap {
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    }
+    
+    .heatmap-cell {
+      width: 40px;
+      height: 40px;
+      font-size: 8px;
+    }
+  }

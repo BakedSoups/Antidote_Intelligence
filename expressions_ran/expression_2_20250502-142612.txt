@@ -1,0 +1,4 @@
+Run ID: 2
+Timestamp: 20250502-142612
+Hypothesis: Files that contain content consisting of a single repeated character or a limited set of characters might contain bad data.
+Expression: any(len(set(fname)) <= 2 for _ in range(1))

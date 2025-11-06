@@ -1,0 +1,4 @@
+Run ID: 6
+Timestamp: 20250502-142620
+Hypothesis: Files that have a content length that is not a multiple of a specific number of characters might contain bad data.
+Expression: len(fname) % 5 != 0

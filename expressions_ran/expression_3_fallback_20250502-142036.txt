@@ -1,0 +1,4 @@
+Run ID: 3_fallback
+Timestamp: 20250502-142036
+Hypothesis: Files that have an abnormally high ratio of punctuation marks to total characters in their content might contain bad data.
+Expression: sum(1 for c in fname if c in string.punctuation) / len(fname) > 0.1 (FAILED) -> Fallback: not fname.replace('.', '').isalnum()

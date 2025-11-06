@@ -1,0 +1,4 @@
+Run ID: 7
+Timestamp: 20250502-143443
+Hypothesis: Files that contain content with a high frequency of irregular spacing patterns might contain bad data.
+Expression: any(c.isdigit() and int(c) % 2 != 0 for c in fname if c.isdigit())
